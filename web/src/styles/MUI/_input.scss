@@ -1,0 +1,26 @@
+.mui-input {
+  &_qty {
+    width: 50px;
+
+    .MuiInputBase-input {
+        text-align: center;
+    }
+  }
+
+  &_small {
+    width: 90px;
+
+    .MuiInputBase-input {
+      text-align: center;
+    }
+  }
+
+  &_project {
+    width: 300px;
+  }
+
+  &_model {
+    margin-top: 16px !important;
+    width: 100%;
+  }
+}
