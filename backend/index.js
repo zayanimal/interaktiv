@@ -8,17 +8,23 @@ const client = new Client({
     port: 5432
 });
 
-client.connect();
-client
-    .query('SELECT * FROM users')
-    .then(rows => {
-        http.createServer((req, res) => {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.write(JSON.stringify(rows.rows));
-            res.end();
+// client.connect();
+// client
+//     .query('SELECT * FROM users')
+//     .then(rows => {
+//         http.createServer((req, res) => {
+//             res.writeHead(200, { 'Content-Type': 'application/json' });
+//             res.write(JSON.stringify(rows.rows));
+//             res.end();
             
-        }).listen(3000);
+//         }).listen(3000);
 
-        client.end();
-    })
-    .catch(err => console.log(err));
+//         client.end();
+//     })
+//     .catch(err => console.log(err));
+
+http.createServer((req, res) => {
+    res.write('hellooooooo');
+    res.end();
+    
+}).listen(3000);
