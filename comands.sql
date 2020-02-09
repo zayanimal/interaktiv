@@ -20,3 +20,6 @@ values (4, 'NUTS');
 insert into order_partnumber values
 ((select order_id from orders order by order_id desc limit 1), 2, 8, 113),
 ((select order_id from orders order by order_id desc limit 1), 4, 4, 310);
+
+-- обновление данных таблиц, как добавить новую строку если нет совпадений?
+update part_numbers set cost = 125 where model = 'DES-1210-28';
