@@ -1,24 +1,6 @@
-const http = require('http');
-const { Client } = require('pg');
-const client = new Client({
-    user: 'postgres',
-    host: 'db',
-    database: 'postgres',
-    password: 'secret',
-    port: 5432
-});
+const express = require('express');
+const app = express();
+const api = require('./api/routes');
 
-client.connect();
-client
-    .query('SELECT * FROM iskor.orders')
-    .then(rows => {
-        http.createServer((req, res) => {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.write(JSON.stringify(rows.rows));
-            res.end();
-            
-        }).listen(3000);
-
-        client.end();
-    })
-    .catch(err => console.log(err));
+app.use('/api', api);
+app.listen(3000);
