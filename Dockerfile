@@ -4,9 +4,9 @@ WORKDIR /var/www/interaktiv
 
 COPY ./backend/package*.json ./
 
-RUN npm install -g nodemon
+RUN npm install -g nodemon && npm install -g typescript
 
-CMD npm install && nodemon index.js
+CMD npm install && npm run dev
 
 EXPOSE 3000
 

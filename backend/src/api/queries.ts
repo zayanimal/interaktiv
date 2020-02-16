@@ -1,10 +1,11 @@
-const promise = require('bluebird');
-const options = { promiseLib: promise };
-const pgp = require('pg-promise')(options);
+import { Request, Response, NextFunction } from 'express';
+import * as promise from 'bluebird';
+import pgPromise from 'pg-promise';
+const pgp = pgPromise({ promiseLib: promise });
 const connectionString = 'postgres://postgres:secret@db:5432/postgres';
 const db = pgp(connectionString);
 
-function getOrders(req, res, next) {
+function getOrders(req: Request, res: Response, next: NextFunction) {
     db.any('select * from iskor.orders')
         .then(data => {
             res.status(200)
@@ -17,7 +18,7 @@ function getOrders(req, res, next) {
         .catch(err => next(err));
 }
 
-function getCustomers(req, res, next) {
+function getCustomers(req: Request, res: Response, next: NextFunction) {
     db.any('select * from iskor.customers')
         .then(data => {
             res.status(200)
@@ -30,7 +31,7 @@ function getCustomers(req, res, next) {
         .catch(err => next(err));
 }
 
-module.exports = {
+export {
     getOrders,
     getCustomers
-};
+}
