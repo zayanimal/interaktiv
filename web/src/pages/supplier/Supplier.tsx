@@ -1,7 +1,7 @@
 import React from 'react';
-import Page from '../../views/Page';
+import Page from '@views/Layout';
 import SupplierRes from './SupplierRes';
-import Stock from '../../views/Stock';
+import Stock from '@views/Stock';
 import {
     Table,
     TableBody,
@@ -17,9 +17,9 @@ import { Switch, Route, Link, useRouteMatch } from 'react-router-dom';
 
 const Supplier: React.FC = () => {
     const { path } = useRouteMatch();
-    
+
     return (
-        <Page stock={true}>
+        <Page>
             <Switch>
                 <Route exact path={path}>
                         <TableContainer>
@@ -45,14 +45,14 @@ const Supplier: React.FC = () => {
                                         <TableCell align="center">11 234$</TableCell>
                                         <TableCell align="center">А-1230</TableCell>
                                         <TableCell align="center">
-                                            <Chip 
+                                            <Chip
                                                 avatar={<Avatar>D</Avatar>}
                                                 color="primary"
                                                 label="Утверждено"/>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Link to={`${path}/id`} className="non-decoration">
-                                                <Button 
+                                                <Button
                                                     variant="contained"
                                                     color="secondary"
                                                     size="small"
@@ -68,13 +68,13 @@ const Supplier: React.FC = () => {
                                         <TableCell align="center">22 123$</TableCell>
                                         <TableCell align="center">А-1231</TableCell>
                                         <TableCell align="center">
-                                            <Chip 
+                                            <Chip
                                                 avatar={<Avatar>D</Avatar>}
                                                 label="В ожидании"/>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Link to={`${path}/id`} className="non-decoration">
-                                                <Button 
+                                                <Button
                                                     variant="contained"
                                                     color="secondary"
                                                     size="small"
@@ -90,13 +90,13 @@ const Supplier: React.FC = () => {
                                         <TableCell align="center">8 500$</TableCell>
                                         <TableCell align="center">А-1232</TableCell>
                                         <TableCell align="center">
-                                            <Chip 
+                                            <Chip
                                                 avatar={<Avatar>D</Avatar>}
                                                 label="В ожидании"/>
                                         </TableCell>
                                         <TableCell align="center">
                                             <Link to={`${path}/id`} className="non-decoration">
-                                                <Button 
+                                                <Button
                                                     variant="contained"
                                                     color="secondary"
                                                     size="small"

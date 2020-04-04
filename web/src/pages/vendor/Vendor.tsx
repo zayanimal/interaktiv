@@ -1,5 +1,5 @@
 import React from 'react';
-import Page from '../../views/Page';
+import Page from '@views/Layout';
 import VendorRes from './VendorRes';
 import {
     Table,
@@ -14,9 +14,9 @@ import { Switch, Route, Link, useRouteMatch } from 'react-router-dom';
 
 const Vendor: React.FC = () => {
     const { path } = useRouteMatch();
-    
+
     return (
-        <Page stock={true}>
+        <Page>
             <Switch>
                 <Route exact path={path}>
                     <TableContainer>
@@ -40,7 +40,7 @@ const Vendor: React.FC = () => {
                                     <TableCell align="center">11 234$</TableCell>
                                     <TableCell align="center">
                                         <Link to={`${path}/id`} className="non-decoration">
-                                            <Button 
+                                            <Button
                                                 variant="contained"
                                                 color="secondary"
                                                 size="small"
@@ -56,7 +56,7 @@ const Vendor: React.FC = () => {
                                     <TableCell align="center">22 123$</TableCell>
                                     <TableCell align="center">
                                         <Link to={`${path}/id`} className="non-decoration">
-                                            <Button 
+                                            <Button
                                                 variant="contained"
                                                 color="secondary"
                                                 size="small"
@@ -72,7 +72,7 @@ const Vendor: React.FC = () => {
                                     <TableCell align="center">8 500$</TableCell>
                                     <TableCell align="center">
                                         <Link to={`${path}/id`} className="non-decoration">
-                                            <Button 
+                                            <Button
                                                 variant="contained"
                                                 color="secondary"
                                                 size="small"
@@ -84,7 +84,7 @@ const Vendor: React.FC = () => {
                         </Table>
                     </TableContainer>
                 </Route>
-                <Route path={`${path}/id`} component={VendorRes} />           
+                <Route path={`${path}/id`} component={VendorRes} />
             </Switch>
         </Page>
     );

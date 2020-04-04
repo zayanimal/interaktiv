@@ -1,5 +1,5 @@
 import React from 'react';
-import Page from '../../views/Page';
+import Page from '@views/Layout';
 import { Button } from '@material-ui/core';
 import MyRequests from './MyRequests';
 import Request from './Request';
@@ -28,7 +28,7 @@ const Home: React.FC = () => {
                                     Подобрать оборудование
                                 </Button>
                             </Link>
-                            
+
                             <Link to={`${path}/my-requests`} className="controls__item non-decoration">
                                 <Button variant="contained" color="secondary">
                                     Текущие запросы

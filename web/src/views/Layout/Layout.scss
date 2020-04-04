@@ -1,0 +1,12 @@
+.Layout {
+    display: flex;
+
+    &__workspace {
+        width: 100%;
+    }
+
+    &__main {
+        width: 100%;
+        padding: 32px;
+    }
+}

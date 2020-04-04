@@ -1,7 +1,7 @@
 import React from 'react';
-import Page from '../../views/Page';
+import Page from '@views/Layout';
 
-const Admin: React.FC = () => (
+const Admin: React.SFC = () => (
     <Page/>
 );
 

@@ -3,7 +3,7 @@ import Home from './pages/customer/Home';
 import Supplier from './pages/supplier/Supplier';
 import Vendor from './pages/vendor/Vendor';
 import Admin from './pages/admin/Admin';
-import Page from './views/Page';
+import Page from './views/Layout';
 import Auth from './pages/Auth';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
