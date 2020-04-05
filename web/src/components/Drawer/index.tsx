@@ -6,12 +6,16 @@ import PeopleIcon from '@material-ui/icons/People';
 
 import './Drawer.scss';
 
-const Drawer: React.SFC = () => (
+interface DrawerProps {
+    toggle: boolean;
+}
+
+const Drawer: React.SFC<DrawerProps> = ({ toggle }) => (
     <div className="Drawer">
         <div className="Drawer__header">
             <img src={logo} alt="Iskor"/>
         </div>
-
+            { toggle ? 'hello' : 'bye' }
             <ul className="Drawer__list">
                 <li>
                     <NavLink
