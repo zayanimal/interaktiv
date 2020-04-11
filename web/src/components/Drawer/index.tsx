@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '@icons/logo.png';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
@@ -10,12 +10,18 @@ interface DrawerProps {
     toggle: boolean;
 }
 
-const Drawer: React.SFC<DrawerProps> = ({ toggle }) => (
-    <div className="Drawer">
-        <div className="Drawer__header">
-            <img src={logo} alt="Iskor"/>
-        </div>
-            { toggle ? 'hello' : 'bye' }
+const Drawer: React.FC<DrawerProps> = ({ toggle }) => {
+    const [hide, setHide] = useState(toggle);
+
+    useEffect(() => {
+        setTimeout(() => { setHide(toggle) }, 100);
+    });
+
+    return (
+        <div className={toggle ? 'Drawer Drawer_close' : 'Drawer'}>
+            <div className="Drawer__header">
+                <img src={logo} alt="Iskor" hidden={hide} />
+            </div>
             <ul className="Drawer__list">
                 <li>
                     <NavLink
@@ -24,9 +30,7 @@ const Drawer: React.SFC<DrawerProps> = ({ toggle }) => (
                         activeClassName="Drawer__item_focus"
                     >
                         <PeopleIcon className="Drawer__icon"/>
-                        <span className="Drawer__item-text">
-                            Клиенты
-                        </span>
+                        <span className="Drawer__item-text" hidden={hide}>Клиенты</span>
                     </NavLink>
                 </li>
                 <li>
@@ -36,13 +40,12 @@ const Drawer: React.SFC<DrawerProps> = ({ toggle }) => (
                         activeClassName="Drawer__item_focus"
                     >
                         <BusinessCenterIcon className="Drawer__icon"/>
-                        <span className="Drawer__item-text">
-                            Поставщики
-                        </span>
+                        <span className="Drawer__item-text" hidden={hide}>Поставщики</span>
                     </NavLink>
                 </li>
             </ul>
-    </div>
-);
+        </div>
+    );
+};
 
 export default Drawer;

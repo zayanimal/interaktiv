@@ -1,12 +1,19 @@
 .Drawer {
-    padding: 22px;
+    padding: 22px 14px;
     min-width: 230px;
     height: 100vh;
     box-shadow: 4px 0 4px -4px var(--box-shadow);
+    transition: min-width 300ms;
+
+    &_close {
+        min-width: 70px;
+        transition: min-width 300ms;
+    }
 
     &__header {
         display: flex;
         align-items: center;
+        padding: 10px 6px 10px 14px;
         height: 60px;
         width: 100%;
     }
@@ -24,7 +31,6 @@
         margin-bottom: 16px;
 
         &-text {
-            padding-left: 10px;
             color: var(--dark-blue);
         }
 
@@ -35,6 +41,7 @@
     }
 
     &__icon {
+        margin-right: 10px;
         color: var(--dark-blue);
     }
 }
