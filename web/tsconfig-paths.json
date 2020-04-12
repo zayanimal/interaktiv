@@ -3,12 +3,14 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["/*"],
+      "@api/*": ["api/*"],
       "@store/*": ["store/*"],
       "@actions/*": ["store/actions/*"],
       "@selectors/*": ["store/selectors/*"],
       "@images/*": ["assets/images/*"],
       "@icons/*": ["assets/icons/*"],
       "@components/*": ["components/*"],
+      "@containers/*": ["containers/*"],
       "@views/*": ["views/*"],
       "@styles/*": ["styles/*"]
     }

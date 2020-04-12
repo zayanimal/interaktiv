@@ -1,24 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import * as systemActions from '@actions/system.actions';
-import { rootState } from '@store/roots';
+import * as actions from '@actions/system.actions';
+import { rootStateTypes } from '@store/roots';
 import Drawer from '@components/Drawer';
 import Header from '@components/Header';
 
 import './Layout.scss';
 
-const mapStateToProps = (state: rootState) => ({
+const mapStateToProps = (state: rootStateTypes) => ({
     drawerState: state.system.drawer
 });
 
 const mapDispatchToProps = {
-    toggle: systemActions.toggleDrawer
+    toggle: actions.toggleDrawer
 };
 
-type LayoutProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-export type HeaderProps = typeof mapDispatchToProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const Layout: React.SFC<LayoutProps> = ({
+const Layout: React.SFC<Props> = ({
     children,
     toggle,
     drawerState }) => (

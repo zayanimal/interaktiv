@@ -1,5 +1,5 @@
 import React from 'react';
-import Page from '@views/Layout';
+import Page from '@containers/Layout';
 import VendorRes from './VendorRes';
 import {
     Table,

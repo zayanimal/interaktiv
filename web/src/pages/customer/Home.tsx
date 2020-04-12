@@ -1,8 +1,8 @@
 import React from 'react';
-import Page from '@views/Layout';
+import Page from '@containers/Layout';
 import { Button } from '@material-ui/core';
 import MyRequests from './MyRequests';
-import Request from './Request';
+import ProjectRequest from '@containers/ProjectRequest';
 import { Switch, Route, Link, useRouteMatch } from 'react-router-dom';
 
 const Home: React.FC = () => {
@@ -38,7 +38,7 @@ const Home: React.FC = () => {
                     </div>
                 </Route>
                 <Route path={`${path}/my-requests`} component={MyRequests}/>
-                <Route path={`${path}/request`} component={Request}/>
+                <Route path={`${path}/request`} component={ProjectRequest}/>
             </Switch>
         </Page>
     );

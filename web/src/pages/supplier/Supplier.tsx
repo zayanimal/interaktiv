@@ -1,5 +1,5 @@
 import React from 'react';
-import Page from '@views/Layout';
+import Page from '@containers/Layout';
 import SupplierRes from './SupplierRes';
 import Stock from '@views/Stock';
 import {

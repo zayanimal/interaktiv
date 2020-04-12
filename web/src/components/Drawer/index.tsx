@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '@icons/logo.png';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
+import { systemStateTypes } from '@store/reducers/system.reducer';
 import PeopleIcon from '@material-ui/icons/People';
 
 import './Drawer.scss';
 
-interface DrawerProps {
-    toggle: boolean;
+interface Props {
+    toggle: systemStateTypes['drawer'];
 }
 
-const Drawer: React.FC<DrawerProps> = ({ toggle }) => {
+const Drawer: React.FC<Props> = ({ toggle }) => {
     const [hide, setHide] = useState(toggle);
 
     useEffect(() => {

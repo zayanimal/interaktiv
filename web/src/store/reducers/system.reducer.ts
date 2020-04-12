@@ -1,15 +1,15 @@
 import { createReducer, getType } from 'typesafe-actions';
 import * as systemActions from '@actions/system.actions';
 
-interface systemReducer {
+export interface systemStateTypes {
     drawer: boolean;
-}
+};
 
 const initialState = {
     drawer: false
 };
 
-const systemReducer = createReducer<systemReducer>(initialState, {
+const systemReducer = createReducer<systemStateTypes>(initialState, {
     [getType(systemActions.toggleDrawer)]: state => ({
         ...state,
         drawer: !state.drawer
