@@ -1,5 +1,5 @@
 import { Epic } from 'redux-observable';
-import { forkJoin,  from, of } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { isActionOf } from 'typesafe-actions';
 import { map, filter, switchMap, catchError, take } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export const fetchPriceListEpic: Epic = action$ => action$.pipe(
                     return of({ error: true, message: err.message })
                 })
             ),
-            price: from([price])
+            price: of(price)
         }).pipe(
             take(1),
             map(fetchPriceList.success),

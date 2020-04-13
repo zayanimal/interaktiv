@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { Subject, of } from 'rxjs';
+import { map, switchMap, debounceTime } from 'rxjs/operators';
 import * as actions from '@actions/projectRequest.actions';
 import { priceTypes } from '@store/reducers/projectRequest.reducer';
 import { rootStateTypes } from '@store/roots';
@@ -36,17 +38,17 @@ const ProjectRequest: React.FC<Props> = ({ fetchPrice, modelsData }) => {
         fetchPrice();
     });
 
-
-    const findModel = (event: any) => {
-        event.persist();
-        const value: string = event.target.value;
-
-        if (modelsData.length > 0) {
-            setSelected(
-                modelsData.filter(({model}) => model.includes(value.toUpperCase()))
-            );
-        }
-    };
+    const findModel = new Subject();
+    findModel.pipe(
+        map((e: any) => {
+            e.persist();
+            return e.target.value;
+        }),
+        debounceTime(500),
+        switchMap((value: string) =>
+            of(modelsData.filter(({model}) => model.includes(value.toUpperCase()) && value !== ''))
+        )
+    ).subscribe(setSelected);
 
     return (
         <>
@@ -57,7 +59,7 @@ const ProjectRequest: React.FC<Props> = ({ fetchPrice, modelsData }) => {
                         size="small"
                         label="Найти модель"
                         variant="outlined"
-                        onChange={findModel}
+                        onChange={e => findModel.next(e)}
                     />
                     <Paper hidden={selected.length < 1}>
                         <p className="indent">Выберите модель</p>
