@@ -12,6 +12,7 @@
       "@components/*": ["components/*"],
       "@containers/*": ["containers/*"],
       "@views/*": ["views/*"],
+      "@utils/*": ["utils/*"],
       "@styles/*": ["styles/*"]
     }
   }

@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Subject, of } from 'rxjs';
-import { map, switchMap, debounceTime } from 'rxjs/operators';
 import * as actions from '@actions/projectRequest.actions';
-import { priceTypes } from '@store/reducers/projectRequest.reducer';
 import { rootStateTypes } from '@store/roots';
 import { DeleteOutline } from '@material-ui/icons';
 import {
@@ -15,11 +12,8 @@ import {
     TableHead,
     TableRow,
     Button,
-    Grid,
-    Paper,
-    List,
-    ListItem,
-    ListItemText } from '@material-ui/core';
+    Grid } from '@material-ui/core';
+import PartnumbersList from '@components/PartnumbersList';
 
 const mapStateToProps = (state: rootStateTypes) => ({
     modelsData: state.projectRequest.modelsData
@@ -32,45 +26,18 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const ProjectRequest: React.FC<Props> = ({ fetchPrice, modelsData }) => {
-    const [selected, setSelected] = useState<priceTypes[]>([]);
 
     useEffect(() => {
         fetchPrice();
     });
 
-    const findModel = new Subject();
-    findModel.pipe(
-        map((e: any) => {
-            e.persist();
-            return e.target.value;
-        }),
-        debounceTime(500),
-        switchMap((value: string) =>
-            of(modelsData.filter(({model}) => model.includes(value.toUpperCase()) && value !== ''))
-        )
-    ).subscribe(setSelected);
-
     return (
         <>
             <Grid container spacing={8}>
                 <Grid item xs={3}>
-                    <TextField
-                        className="mui-input_model"
-                        size="small"
-                        label="Найти модель"
-                        variant="outlined"
-                        onChange={e => findModel.next(e)}
+                    <PartnumbersList
+                        models={modelsData}
                     />
-                    <Paper hidden={selected.length < 1}>
-                        <p className="indent">Выберите модель</p>
-                        <List component="nav">
-                                { selected.map((m, i) => (
-                                    <ListItem key={i} button>
-                                        <ListItemText primary={m.model} />
-                                    </ListItem>
-                                ))}
-                        </List>
-                    </Paper>
                 </Grid>
                 <Grid item xs={9}>
                     <TableContainer>
