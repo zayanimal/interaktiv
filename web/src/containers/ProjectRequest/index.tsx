@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '@actions/projectRequest.actions';
 import { rootStateTypes } from '@store/roots';
+import { numToRub, numToUsd } from '@utils/formatters';
 import { DeleteOutline } from '@material-ui/icons';
 import {
     TextField,
@@ -16,20 +17,37 @@ import {
 import PartnumbersList from '@components/PartnumbersList';
 
 const mapStateToProps = (state: rootStateTypes) => ({
-    modelsData: state.projectRequest.modelsData
+    rate: state.projectRequest.rate,
+    modelsData: state.projectRequest.modelsData,
+    modelsDataInOrder: state.projectRequest.modelsDataInOrder
 });
 
 const mapDispatchToProps = {
-    fetchPrice: actions.fetchPriceList.request
+    fetchPrice: actions.fetchPriceList.request,
+    cleanPrice: actions.cleanPriceList,
+    putModelInOrder: actions.putModelInOrder
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const ProjectRequest: React.FC<Props> = ({ fetchPrice, modelsData }) => {
+const ProjectRequest: React.FC<Props> = ({
+    fetchPrice,
+    cleanPrice,
+    rate,
+    modelsData,
+    modelsDataInOrder,
+    putModelInOrder
+}) => {
 
     useEffect(() => {
         fetchPrice();
-    });
+
+        return () => { cleanPrice() };
+    }, [fetchPrice, cleanPrice]);
+
+    const orderHandler = (value: string | null): void => {
+        putModelInOrder(modelsData.find(v => v.model === value));
+    };
 
     return (
         <>
@@ -37,6 +55,7 @@ const ProjectRequest: React.FC<Props> = ({ fetchPrice, modelsData }) => {
                 <Grid item xs={3}>
                     <PartnumbersList
                         models={modelsData}
+                        onPick={orderHandler}
                     />
                 </Grid>
                 <Grid item xs={9}>
@@ -52,27 +71,29 @@ const ProjectRequest: React.FC<Props> = ({ fetchPrice, modelsData }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell>DES-1210-28/ME</TableCell>
-                                    <TableCell align="center">
-                                        <TextField
-                                            size="small"
-                                            type="number"
-                                            className="mui-input_qty"
-                                        />
-                                    </TableCell>
-                                    <TableCell align="center">345 $</TableCell>
-                                    <TableCell align="center">22 770 р.</TableCell>
-                                    <TableCell align="center">
-                                        <Button variant="contained" color="secondary" size="small">
-                                            <DeleteOutline />
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
+                                { modelsDataInOrder.map((v, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell>{v.model}</TableCell>
+                                        <TableCell align="center">
+                                            <TextField
+                                                size="small"
+                                                type="number"
+                                                className="mui-input_qty"
+                                            />
+                                        </TableCell>
+                                        <TableCell align="center">{numToUsd(v.price)}</TableCell>
+                                        <TableCell align="center">{numToRub(v.price * rate)}</TableCell>
+                                        <TableCell align="center">
+                                            <Button variant="contained" color="secondary" size="small">
+                                                <DeleteOutline />
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <div className="controls">
+                    {/* <div className="controls">
                         <div>
                             <Button
                                 className="controls__item"
@@ -87,7 +108,7 @@ const ProjectRequest: React.FC<Props> = ({ fetchPrice, modelsData }) => {
                             variant="contained"
                             disabled
                             color="primary">Запросить спец. условия</Button>
-                    </div>
+                    </div> */}
                 </Grid>
             </Grid>
         </>
