@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, ChangeEvent } from 'react';
+import React, { MouseEvent, ChangeEvent } from 'react';
 import { Subject, of } from 'rxjs';
 import {
     map,
@@ -20,11 +20,17 @@ const cn = bem('PartnumbersList');
 
 interface Props {
     models: priceTypes[];
+    selected: priceTypes[];
+    setSelected: (value: priceTypes[]) => void;
     onPick: (value: string | null) => void;
 };
 
-const PartnumbersList: React.SFC<Props> = ({ models, onPick }) => {
-    const [selected, setSelected] = useState<priceTypes[]>([]);
+const PartnumbersList: React.SFC<Props> = ({
+    models,
+    onPick,
+    selected,
+    setSelected
+}) => {
 
     const listHandler = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
@@ -56,7 +62,7 @@ const PartnumbersList: React.SFC<Props> = ({ models, onPick }) => {
             <Paper hidden={selected.length < 1} className={cn('paper')}>
                 <List onClick={listHandler} component="nav">
                         { selected.map((m, i) => (
-                            <ListItem key={i} button>
+                            <ListItem key={i + Math.random()} button>
                                 <ListItemText primary={m.model} />
                             </ListItem>
                         ))}
