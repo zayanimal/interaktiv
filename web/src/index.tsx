@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import configureStore from '@store/configureStore';
-import App from './App';
-import '@styles/style.scss';
+import configureStore from '@system/store/configureStore';
+import { App } from '@system/components/App';
+import './base/styles/style.scss';
 
 const store = configureStore();
 

@@ -1,0 +1,12 @@
+.RequestPartnumbers {
+
+    &__input {
+        margin-top: 16px !important;
+        width: 100%;
+    }
+
+    &__paper {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+}
