@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Link, useRouteMatch } from 'react-router-dom';
+import { setHeaderTitleType } from '@system/store/actions/system.actions'
 import { RequestContent } from '@customer/components/RequestContent';
 import {
     Table,
@@ -12,8 +13,11 @@ import {
     Button
 } from '@material-ui/core';
 
-const RequestsList: React.FC = () => {
+const RequestsList: React.SFC<{ setHeaderTitle: setHeaderTitleType }> = (props) => {
+    const { setHeaderTitle } = props;
     const { path } = useRouteMatch();
+
+    useEffect(() => { setHeaderTitle('Мои проекты') });
 
     return (
         <Switch>

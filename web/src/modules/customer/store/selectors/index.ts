@@ -1,6 +1,6 @@
-import * as request from './request.selectors';
+import * as requestSelectors from './request.selectors';
 
 
 export {
-    request
+    requestSelectors
 };

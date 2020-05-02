@@ -1,63 +1,57 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '@customer/store/actions/request.actions';
-import { request } from '@customer/store/selectors'
+import { systemActions } from '@system/store/actions';
+import { requestActions }  from '@customer/store/actions';
+import { requestSelectors } from '@customer/store/selectors'
 import { rootStateTypes } from '@system/store/roots';
-// import { numToRub, numToUsd } from '@utils/formatters';
-// import { DeleteOutline } from '@material-ui/icons';
-import {
-//     TextField,
-//     Table,
-//     TableBody,
-//     TableCell,
-//     TableContainer,
-//     TableHead,
-//     TableRow,
-//     Button,
-    Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { RequestTable } from '@customer/components/RequestTable';
 import { RequestPartnumbers } from '@customer/components/RequestPartnumbers';
 
 const mapStateToProps = (state: rootStateTypes) => ({
-    rate: request.state(state).rate,
-    modelsData: request.state(state).modelsData,
-    modelsDataInOrder: request.state(state).modelsDataInOrder,
-    modelsSelected: request.state(state).modelsSelected,
+    rate: requestSelectors.rate(state),
+    modelsData: requestSelectors.modelsData(state),
+    modelsDataInOrder: requestSelectors.modelsDataInOrder(state),
+    modelsSelected: requestSelectors.modelsSelected(state)
 });
 
 const mapDispatchToProps = {
-    fetchPrice: actions.fetchPriceList.request,
-    changePrice: actions.changePriceList,
-    setSelectedModels: actions.setSelectedModels,
-    cleanPrice: actions.cleanPriceList,
-    putModelInOrder: actions.putModelInOrder,
-    putModelInModelsData: actions.putModelInModelsData,
-    putModelInModelsSelected: actions.putModelInModelsSelected,
-    deleteModelInOrder: actions.deleteModelInOrder
+    fetchPrice: requestActions.fetchPriceList.request,
+    changePrice: requestActions.changePriceList,
+    setSelectedModels: requestActions.setSelectedModels,
+    cleanPrice: requestActions.cleanPriceList,
+    putModelInOrder: requestActions.putModelInOrder,
+    putModelInModelsData: requestActions.putModelInModelsData,
+    putModelInModelsSelected: requestActions.putModelInModelsSelected,
+    deleteModelInOrder: requestActions.deleteModelInOrder,
+    setHeaderTitle: systemActions.setHeaderTitle
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const Request: React.FC<Props> = ({
-    fetchPrice,
-    changePrice,
-    modelsSelected,
-    setSelectedModels,
-    cleanPrice,
-    rate,
-    modelsData,
-    modelsDataInOrder,
-    putModelInOrder,
-    putModelInModelsData,
-    putModelInModelsSelected,
-    deleteModelInOrder
-}) => {
+const Request: React.FC<Props> = props => {
+    const {
+        fetchPrice,
+        changePrice,
+        modelsSelected,
+        setSelectedModels,
+        cleanPrice,
+        rate,
+        modelsData,
+        modelsDataInOrder,
+        putModelInOrder,
+        putModelInModelsData,
+        putModelInModelsSelected,
+        deleteModelInOrder,
+        setHeaderTitle
+    } = props;
 
     useEffect(() => {
         fetchPrice();
+        setHeaderTitle('Новый проект');
 
         return () => { cleanPrice() };
-    }, [fetchPrice, cleanPrice]);
+    }, [fetchPrice, cleanPrice, setHeaderTitle]);
 
     const orderHandler = (value: string | null): void => {
         setSelectedModels(modelsSelected.filter(v => v.model !== value));
@@ -89,59 +83,6 @@ const Request: React.FC<Props> = ({
                     data={modelsDataInOrder}
                     onDelete={deleteHandler}
                 />
-                    {/* <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Модель</TableCell>
-                                    <TableCell align="center">Кол-во</TableCell>
-                                    <TableCell align="center">Цена $</TableCell>
-                                    <TableCell align="center">Цена р.</TableCell>
-                                    <TableCell align="center">Действие</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                { modelsDataInOrder.map((v, i) => (
-                                    <TableRow key={i}>
-                                        <TableCell>{v.model}</TableCell>
-                                        <TableCell align="center">
-                                            <TextField
-                                                size="small"
-                                                type="number"
-                                                className="mui-input_qty"
-                                            />
-                                        </TableCell>
-                                        <TableCell align="center">{numToUsd(v.price)}</TableCell>
-                                        <TableCell align="center">{numToRub(v.price * rate)}</TableCell>
-                                        <TableCell scope="row" align="center" onClick={(e) => {
-                                                e.persist();
-                                                console.log(e);
-                                        }}>
-                                            <Button variant="contained" color="secondary" size="small">
-                                                <DeleteOutline />
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer> */}
-                    {/* <div className="controls">
-                        <div>
-                            <Button
-                                className="controls__item"
-                                variant="contained"
-                                color="secondary">Очистить</Button>
-                            <Button
-                                className="controls__item"
-                                variant="contained"
-                                color="secondary">Скачать</Button>
-                        </div>
-                        <Button
-                            variant="contained"
-                            disabled
-                            color="primary">Запросить спец. условия</Button>
-                    </div> */}
                 </Grid>
             </Grid>
         </>

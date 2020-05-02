@@ -1,5 +1,5 @@
-import * as request from './request.actions';
+import * as requestActions from './request.actions';
 
 export {
-    request
+    requestActions
 };
