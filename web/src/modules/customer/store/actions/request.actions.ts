@@ -1,8 +1,13 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
 
 interface priceTypes {
+    id: number;
     model: string;
     price: number | string;
+}
+
+interface priceTypesCount extends priceTypes {
+    count: number;
 }
 
 interface priceRateTypes {
@@ -11,17 +16,15 @@ interface priceRateTypes {
 }
 
 export const fetchPriceList = createAsyncAction(
-    '[PROJECT_REQ] FETCH_PRICE_REQUEST',
-    '[PROJECT_REQ] FETCH_PRICE_SUCCESS',
-    '[PROJECT_REQ] FETCH_PRICE_FAILURE'
+    '[CUSTOMER] FETCH_PRICE_REQUEST',
+    '[CUSTOMER] FETCH_PRICE_SUCCESS',
+    '[CUSTOMER] FETCH_PRICE_FAILURE'
 )<undefined, priceRateTypes, string>();
 
-export const changePriceList = createAction('[PROJECT_REQ] CHANGE_PRICE_LIST')<priceTypes[]>();
-export const setSelectedModels = createAction('[PROJECT_REQ] SET_SELECTED_MODELS')<priceTypes[]>();
-export const cleanPriceList = createAction('[PROJECT_REQ] CLEAN_PRICE_LIST')();
+export const setSelectedModels = createAction('[CUSTOMER] SET_SELECTED_MODELS')<priceTypes[]>();
+export const cleanPriceList = createAction('[CUSTOMER] CLEAN_PRICE_LIST')();
 
-export const putModelInModelsSelected = createAction('[PROJECT_REQ] PUT_MODEL_IN_MODELS_SELECTED')<priceTypes | undefined>();
-export const putModelInModelsData = createAction('[PROJECT_REQ] PUT_MODEL_IN_MODELS_DATA')<priceTypes | undefined>();
-
-export const putModelInOrder = createAction('[PROJECT_REQ] PUT_MODEL_IN_ORDER')<priceTypes | undefined>();
-export const deleteModelInOrder = createAction('[PROJECT_REQ] DELETE_MODEL_IN_ORDER')<priceTypes[]>();
+export const putModelInOrder = createAction('[CUSTOMER] PUT_MODEL_IN_ORDER')<priceTypesCount | undefined>();
+export const deleteModelInOrder = createAction('[CUSTOMER] DELETE_MODEL_IN_ORDER')<priceTypesCount[]>();
+export const updateModelInOrder = createAction('[CUSTOMER] UPDATE_MODEL_IN_ORDER')<priceTypesCount[]>();
+export const showList = createAction('[CUSTOMER] REQUEST_SHOW_LIST')<boolean | undefined>();

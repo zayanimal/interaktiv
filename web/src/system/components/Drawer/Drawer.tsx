@@ -21,7 +21,7 @@ const Drawer: React.FC<Props> = props => {
         if (toggle) {
             setHide(toggle);
         } else {
-            setTimeout(() => { setHide(toggle) }, 150);
+            setTimeout(() => { setHide(toggle) }, 200);
         }
     }, [toggle]);
 

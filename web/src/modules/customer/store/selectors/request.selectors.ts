@@ -9,3 +9,5 @@ export const modelsData = (state: rootStateTypes) => requestState(state).modelsD
 export const modelsDataInOrder = (state: rootStateTypes) => requestState(state).modelsDataInOrder;
 
 export const modelsSelected = (state: rootStateTypes) => requestState(state).modelsSelected;
+
+export const listState = (state: rootStateTypes) => requestState(state).showList;

@@ -1,0 +1,14 @@
+.Request {
+    &__select {
+        display: flex;
+    }
+
+    &__col1 {
+        width: 20%;
+        margin-right: 3%;
+    }
+
+    &__col2 {
+        width: 77%;
+    }
+}

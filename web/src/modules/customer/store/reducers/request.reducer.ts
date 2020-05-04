@@ -2,15 +2,21 @@ import { createReducer, getType } from 'typesafe-actions';
 import { requestActions } from '@customer/store/actions';
 
 export interface priceTypes {
+    id: number;
     model: string;
     price: number;
+}
+
+export interface priceTypesCount extends priceTypes {
+    count: number;
 }
 
 interface projectRequestTypes {
     rate: number;
     modelsData: priceTypes[];
-    modelsDataInOrder: priceTypes[];
+    modelsDataInOrder: priceTypesCount[];
     modelsSelected: priceTypes[];
+    showList: boolean;
 }
 
 const initialState = {
@@ -18,6 +24,7 @@ const initialState = {
     modelsData: [],
     modelsDataInOrder: [],
     modelsSelected: [],
+    showList: false
 };
 
 const requestReducer = createReducer<projectRequestTypes>(initialState, {
@@ -26,22 +33,10 @@ const requestReducer = createReducer<projectRequestTypes>(initialState, {
         rate: payload.rate.Valute.USD.Value,
         modelsData: payload.price
     }),
-    [getType(requestActions.changePriceList)]: (state, { payload }) => ({
-        ...state,
-        modelsData: payload
-    }),
     [getType(requestActions.cleanPriceList)]: state => ({
         ...state,
         modelsData: [],
         modelsSelected: []
-    }),
-    [getType(requestActions.putModelInModelsData)]: (state, { payload }) => ({
-        ...state,
-        modelsData: [...state.modelsData, payload].sort()
-    }),
-    [getType(requestActions.putModelInModelsSelected)]: (state, { payload }) => ({
-        ...state,
-        modelsSelected: [...state.modelsSelected, payload].sort()
     }),
     [getType(requestActions.setSelectedModels)]: (state, { payload }) => ({
         ...state,
@@ -54,6 +49,14 @@ const requestReducer = createReducer<projectRequestTypes>(initialState, {
     [getType(requestActions.deleteModelInOrder)]: (state, { payload }) => ({
         ...state,
         modelsDataInOrder: payload
+    }),
+    [getType(requestActions.updateModelInOrder)]: (state, { payload }) => ({
+        ...state,
+        modelsDataInOrder: payload
+    }),
+    [getType(requestActions.showList)]: (state, { payload }) => ({
+        ...state,
+        showList: payload
     })
 });
 
