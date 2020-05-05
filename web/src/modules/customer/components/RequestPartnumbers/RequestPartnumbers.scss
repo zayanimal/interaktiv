@@ -1,6 +1,6 @@
 .RequestPartnumbers {
     &__input {
-        margin-top: 60px !important;
+        margin-top: 24px !important;
         width: 100%;
     }
 
@@ -13,10 +13,11 @@
         overflow-y: auto;
     }
 
-    &__list {
+    &__item {
         padding: 0 16px;
         display: flex;
         align-items: center;
+        user-select: none;
         cursor: pointer;
 
         &:hover {

@@ -1,9 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, ChangeEvent } from 'react';
 import MaterialTable from 'material-table';
 import { Button, Input } from '@material-ui/core';
 import { DeleteOutline } from '@material-ui/icons';
-import { Subject, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 import { numToRub, numToUsd } from '@utils/formatters';
 import { priceTypesCount } from '@customer/store/reducers/request.reducer';
 import { bem } from '@utils/formatters';
@@ -20,19 +18,14 @@ interface Props {
 
 const RequestTable: React.SFC<Props> = props => {
     const { data, rate, onDelete, onUpdate } = props;
+    /** Material-table мутирует объекты расширяя их полем dataTable */
+    const immutableData = useMemo(() => data.map(r => Object.assign({}, r)), [data]);
 
-    const unMutatedData = useMemo(() => data.map(r => Object.assign({}, r)), [data]);
-    const modelUpdate$ = new Subject();
+    const countHandler = useCallback(({ e, id }: { e: ChangeEvent, id: number; }) => {
+        const target = e.target as HTMLInputElement;
 
-    modelUpdate$.pipe(
-        map<any, { count: number; id: number; }>(({ e, id }) => ({
-            count: +e.target.value,
-            id
-        })),
-        switchMap(({ count, id }: { count: number; id: number; }) =>
-            of(data.map(row => row.id === id ? { ...row, count } : row )))
-    ).subscribe(onUpdate);
-
+        onUpdate(data.map(row => (row.id === id ? { ...row, count: +target.value } : row)));
+    }, [data, onUpdate]);
 
     const columns = useMemo(() => [
         {
@@ -47,7 +40,7 @@ const RequestTable: React.SFC<Props> = props => {
                     style={{ width: '40%' }}
                     type="number"
                     value={count}
-                    onChange={e => { modelUpdate$.next({ e, id }) }}
+                    onChange={e => { countHandler({ e, id }) }}
                 />
             )
         },
@@ -75,13 +68,13 @@ const RequestTable: React.SFC<Props> = props => {
                 </Button>
             )
         },
-    ], [rate, onDelete, modelUpdate$]);
+    ], [rate, onDelete, countHandler]);
 
     return (
         <div className={cn()}>
             <MaterialTable
                 columns={columns}
-                data={unMutatedData}
+                data={immutableData}
                 options={{
                     search: false,
                     sorting: false,

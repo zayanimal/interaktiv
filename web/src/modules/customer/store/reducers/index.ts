@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
-import { requestReducer } from './request.reducer';
+import { request } from './request.reducer';
+import { requestDrawer } from './requestDrawer.reducer';
 
 
 export const customerReducer = combineReducers({
-    request: requestReducer
+    request,
+    requestDrawer
 });

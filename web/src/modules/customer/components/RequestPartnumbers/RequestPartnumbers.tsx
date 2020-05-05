@@ -67,7 +67,7 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
                 key={key}
                 style={style}
                 onClick={listHandler}
-                className={cn('list')}
+                className={cn('item')}
             >
                 {selected[index].model}
             </div>

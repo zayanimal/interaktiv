@@ -27,7 +27,7 @@ const initialState = {
     showList: false
 };
 
-const requestReducer = createReducer<projectRequestTypes>(initialState, {
+const request = createReducer<projectRequestTypes>(initialState, {
     [getType(requestActions.fetchPriceList.success)]: (state, { payload }) => ({
         ...state,
         rate: payload.rate.Valute.USD.Value,
@@ -60,4 +60,4 @@ const requestReducer = createReducer<projectRequestTypes>(initialState, {
     })
 });
 
-export { requestReducer };
+export { request };

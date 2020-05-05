@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Button } from '@material-ui/core';
 import { systemActions } from '@system/store/actions';
-import { requestActions }  from '@customer/store/actions';
+import { requestActions, requestDrawerActions }  from '@customer/store/actions';
 import { requestSelectors } from '@customer/store/selectors'
 import { rootStateTypes } from '@system/store/roots';
 import { RequestTable } from '@customer/components/RequestTable';
 import { RequestPartnumbers } from '@customer/components/RequestPartnumbers';
+import { RequestDrawer } from '@customer/containers/RequestDrawer';
 import { bem } from '@utils/formatters';
 import './Request.scss';
 
@@ -27,7 +29,8 @@ const mapDispatchToProps = {
     deleteModelInOrder: requestActions.deleteModelInOrder,
     updateModelInOrder: requestActions.updateModelInOrder,
     setHeaderTitle: systemActions.setHeaderTitle,
-    showList: requestActions.showList
+    showList: requestActions.showList,
+    showDrawer: requestDrawerActions.toggle
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -46,7 +49,8 @@ const Request: React.FC<Props> = props => {
         updateModelInOrder,
         setHeaderTitle,
         listState,
-        showList
+        showList,
+        showDrawer
     } = props;
 
     useEffect(() => {
@@ -57,39 +61,58 @@ const Request: React.FC<Props> = props => {
     }, [fetchPrice, cleanPrice, setHeaderTitle]);
 
     const orderHandler = (value: string | null): void => {
-        if (modelsDataInOrder.some(v => v.model === value)) return;
+        if (modelsDataInOrder.some(({ model }) => model === value)) return;
 
         putModelInOrder({
-            ...Object.assign({}, modelsData.find(v => v.model === value)),
+            ...Object.assign({}, modelsData.find(({ model }) => model === value)),
             count: 1
         });
     };
 
     const deleteHandler = (value: string) => {
-        deleteModelInOrder(modelsDataInOrder.filter(v => v.model !== value));
+        deleteModelInOrder(modelsDataInOrder.filter(({ model }) => model !== value));
     };
 
     return (
-        <div className={cn('select')}>
-            <div className={cn('col1')}>
-                <RequestPartnumbers
-                    selected={modelsSelected}
-                    setSelected={setSelectedModels}
-                    models={modelsData}
-                    onPick={orderHandler}
-                    listState={listState}
-                    onShowList={showList}
-                />
+        <>
+            <div className={cn('select')}>
+                <div className={cn('col1')}>
+                    <Button
+                        color="secondary"
+                        variant="outlined"
+                        style={{ width: '100%' }}
+                        onClick={showDrawer}
+                    >
+                        Добавить заказчика
+                    </Button>
+                    <RequestPartnumbers
+                        selected={modelsSelected}
+                        setSelected={setSelectedModels}
+                        models={modelsData}
+                        onPick={orderHandler}
+                        listState={listState}
+                        onShowList={showList}
+                    />
+                </div>
+                <div className={cn('col2')}>
+                    <RequestTable
+                        rate={rate}
+                        data={modelsDataInOrder}
+                        onUpdate={updateModelInOrder}
+                        onDelete={deleteHandler}
+                    />
+                    <div className={cn('controls')} hidden={modelsDataInOrder.length === 0} >
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                        >
+                            Отправить запрос
+                        </Button>
+                    </div>
+                </div>
             </div>
-            <div className={cn('col2')}>
-                <RequestTable
-                    rate={rate}
-                    data={modelsDataInOrder}
-                    onUpdate={updateModelInOrder}
-                    onDelete={deleteHandler}
-                />
-            </div>
-        </div>
+            <RequestDrawer />
+        </>
     );
 };
 
