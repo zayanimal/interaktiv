@@ -4,8 +4,19 @@
     right: 0;
     width: 0;
     height: calc(100vh - 71px);
-    transition: width 150ms ease-in-out;
+    transition: width 150ms;
     background: #ffffff;
-    box-shadow: -7px 0 7px -7px rgba(0, 0, 0, 0.1);
+    box-shadow: -9px 0 9px -9px rgba(0, 0, 0, 0.1);
     z-index: 11;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        width: 100%;
+        height: 68px;
+        padding: 8px 32px;
+        border-bottom: 1px solid #e0e0e0;
+    }
 }

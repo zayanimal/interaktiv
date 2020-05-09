@@ -10,9 +10,13 @@ interface DrawerTypes {
 };
 
 const requestDrawer = createReducer<DrawerTypes>(initialState, {
-    [getType(requestDrawerActions.toggle)]: (state) => ({
+    [getType(requestDrawerActions.open)]: (state) => ({
         ...state,
-        openDrawer: !state.openDrawer
+        openDrawer: true
+    }),
+    [getType(requestDrawerActions.close)]: (state) => ({
+        ...state,
+        openDrawer: false
     })
 });
 

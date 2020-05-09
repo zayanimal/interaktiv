@@ -1,4 +1,4 @@
-import React, { useEffect, MouseEvent, ChangeEvent, KeyboardEvent} from 'react';
+import React, { useEffect, MouseEvent, ChangeEvent } from 'react';
 import { Subject, of } from 'rxjs';
 import { map, debounceTime, switchMap } from 'rxjs/operators';
 import { priceTypes } from '@customer/store/reducers/request.reducer';
@@ -34,11 +34,17 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
         } else {
             onShowList(false);
         }
-    }, [selected, onShowList]);
 
-    const keyHandler = (e: KeyboardEvent) => {
-        if (e.keyCode === 27) onShowList(false);
-    };
+        const keyHandler = (e: KeyboardEvent) => {
+            if (e.keyCode === 27) onShowList(false);
+        };
+
+        document.addEventListener("keydown", keyHandler, false);
+
+        return () => {
+          document.removeEventListener("keydown", keyHandler, false);
+        };
+    }, [selected, onShowList]);
 
     const listHandler = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
@@ -77,14 +83,13 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
     return (
         <>
             <TextField
-                onKeyDown={keyHandler}
                 className={cn('input')}
                 size="small"
                 label="Найти модель"
                 variant="outlined"
                 onChange={(e: ChangeEvent) => { findModel$.next(e) }}
             />
-            {listState ?
+            {listState &&
                 <List
                     style={{ width: '100%', outline: 'none' }}
                     className={cn('paper')}
@@ -93,7 +98,8 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
                     rowCount={selected.length}
                     rowHeight={40}
                     rowRenderer={rowRenderer}
-                /> : null}
+                />
+            }
         </>
     );
 };

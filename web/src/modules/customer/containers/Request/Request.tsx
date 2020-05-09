@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { systemActions } from '@system/store/actions';
 import { requestActions, requestDrawerActions }  from '@customer/store/actions';
-import { requestSelectors } from '@customer/store/selectors'
+import { requestSelectors } from '@customer/store/selectors';
 import { rootStateTypes } from '@system/store/roots';
 import { RequestTable } from '@customer/components/RequestTable';
 import { RequestPartnumbers } from '@customer/components/RequestPartnumbers';
@@ -30,7 +30,7 @@ const mapDispatchToProps = {
     updateModelInOrder: requestActions.updateModelInOrder,
     setHeaderTitle: systemActions.setHeaderTitle,
     showList: requestActions.showList,
-    showDrawer: requestDrawerActions.toggle
+    showDrawer: requestDrawerActions.open
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -83,7 +83,7 @@ const Request: React.FC<Props> = props => {
                         style={{ width: '100%' }}
                         onClick={showDrawer}
                     >
-                        Добавить заказчика
+                        Заказчик
                     </Button>
                     <RequestPartnumbers
                         selected={modelsSelected}

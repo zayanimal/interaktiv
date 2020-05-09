@@ -1,3 +1,4 @@
 import { createAction } from 'typesafe-actions';
 
-export const toggle = createAction('[CUSTOMER] TOGGLE_DRAWER')<undefined>();
+export const open = createAction('[CUSTOMER] OPEN_DRAWER')<undefined>();
+export const close = createAction('[CUSTOMER] CLOSE_DRAWER')<undefined>();

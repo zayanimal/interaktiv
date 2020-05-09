@@ -23,7 +23,12 @@ const mapDispatchToProps = {
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Layout: React.SFC<Props> = props => {
-    const { drawerState, toggle, headerTitle, setHeaderTitle } = props;
+    const {
+        drawerState,
+        toggle,
+        headerTitle,
+        setHeaderTitle,
+    } = props;
 
     return (
         <div className="Layout">
