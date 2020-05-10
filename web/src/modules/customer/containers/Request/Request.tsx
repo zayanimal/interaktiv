@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { systemActions } from '@system/store/actions';
 import { requestActions, requestDrawerActions }  from '@customer/store/actions';
-import { requestSelectors } from '@customer/store/selectors';
+import { requestSelectors, requestDrawerSelectors } from '@customer/store/selectors';
 import { rootStateTypes } from '@system/store/roots';
 import { RequestTable } from '@customer/components/RequestTable';
 import { RequestPartnumbers } from '@customer/components/RequestPartnumbers';
@@ -18,7 +18,8 @@ const mapStateToProps = (state: rootStateTypes) => ({
     modelsData: requestSelectors.modelsData(state),
     modelsDataInOrder: requestSelectors.modelsDataInOrder(state),
     modelsSelected: requestSelectors.modelsSelected(state),
-    listState: requestSelectors.listState(state)
+    listState: requestSelectors.listState(state),
+    validation: requestDrawerSelectors.validation(state)
 });
 
 const mapDispatchToProps = {
@@ -50,7 +51,8 @@ const Request: React.FC<Props> = props => {
         setHeaderTitle,
         listState,
         showList,
-        showDrawer
+        showDrawer,
+        validation
     } = props;
 
     useEffect(() => {
@@ -105,6 +107,7 @@ const Request: React.FC<Props> = props => {
                         <Button
                             variant="outlined"
                             color="primary"
+                            disabled={!validation}
                         >
                             Отправить запрос
                         </Button>

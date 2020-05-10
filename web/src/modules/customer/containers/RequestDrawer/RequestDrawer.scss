@@ -1,5 +1,7 @@
 .RequestDrawer {
+    height: 100%;
     padding: 22px;
+    overflow-y: auto;
 
     &__row {
         display: flex;
@@ -8,7 +10,7 @@
         padding-bottom: 32px;
 
         &:last-child {
-            padding-bottom: 0;
+            padding-bottom: 62px;
         }
     }
 }

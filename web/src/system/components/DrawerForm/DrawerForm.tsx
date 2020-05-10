@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
 import { Transition } from 'react-transition-group';
@@ -8,22 +8,22 @@ import './DrawerForm.scss';
 const cn = bem('DrawerForm');
 
 const transitionStyles = {
-    entering: { width: 450 },
-    entered:  { width: 450 },
-    exiting:  { width: 0 },
-    exited:  { width: 0 },
-    unmounted: { width: 0 }
+    entering: { transform: 'translateX(0)' },
+    entered:  { transform: 'translateX(0)' },
+    exiting:  { transform: 'translateX(100%)' },
+    exited:  { transform: 'translateX(100%)' },
+    unmounted: { transform: 'translateX(100%)' }
 };
 
 interface Props {
     label?: string;
+    width?: string;
     toggle: boolean;
     onClose: () => void;
 };
 
 const DrawerForm: React.SFC<Props> = (props) => {
-    const { label, toggle, onClose, children } = props;
-    const [visible, setVisible] = useState(false);
+    const { label, width, toggle, onClose, children } = props;
 
     const drawer = useRef<HTMLHeadingElement>(null);
 
@@ -31,7 +31,18 @@ const DrawerForm: React.SFC<Props> = (props) => {
         const handleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
 
-            if (!drawer.current?.contains(target)) {
+            /** Обработка закрытия дровера в случаях когда открыт Popover материал */
+            const closeHandler = (target: HTMLElement) => {
+                const popover = target.closest('.MuiPopover-root');
+
+                if (popover !== null || target.getAttribute('aria-hidden')) {
+                    return false;
+                } else {
+                    return !drawer.current?.contains(target);
+                }
+            };
+
+            if (closeHandler(target)) {
                 onClose();
             }
         };
@@ -46,29 +57,23 @@ const DrawerForm: React.SFC<Props> = (props) => {
     return (
         <Transition
             in={toggle}
-            timeout={150}
-            onEntered={() => { setVisible(true) }}
-            onExiting={() => { setVisible(false) }}
+            timeout={200}
         >
             {state => (
                 <div
                     ref={drawer}
-                    style={{...transitionStyles[state]}}
+                    style={{...transitionStyles[state], width: `${width}px` }}
                     className={cn()}
                 >
-                    {visible &&
-                        <>
-                            <div
-                                className={cn('header')}
-                            >
-                                {label}
-                                <IconButton size="small" onClick={onClose}>
-                                    <Close />
-                                </IconButton>
-                            </div>
-                            {children}
-                        </>
-                    }
+                    <div
+                        className={cn('header')}
+                    >
+                        {label}
+                        <IconButton size="small" onClick={onClose}>
+                            <Close />
+                        </IconButton>
+                    </div>
+                    {children}
                 </div>
             )}
         </Transition>
@@ -76,6 +81,7 @@ const DrawerForm: React.SFC<Props> = (props) => {
 };
 
 DrawerForm.defaultProps = {
+    width: '450',
     onClose: () => {}
 };
 
