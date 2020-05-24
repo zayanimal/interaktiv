@@ -13,6 +13,7 @@ export interface priceTypesCount extends priceTypes {
 
 interface projectRequestTypes {
     rate: number;
+    partnumber: string,
     modelsData: priceTypes[];
     modelsDataInOrder: priceTypesCount[];
     modelsSelected: priceTypes[];
@@ -21,6 +22,7 @@ interface projectRequestTypes {
 
 const initialState = {
     rate: 0,
+    partnumber: '',
     modelsData: [],
     modelsDataInOrder: [],
     modelsSelected: [],
@@ -33,27 +35,46 @@ const request = createReducer<projectRequestTypes>(initialState, {
         rate: payload.rate.Valute.USD.Value,
         modelsData: payload.price
     }),
+
     [getType(requestActions.cleanPriceList)]: state => ({
         ...state,
         modelsData: [],
         modelsSelected: []
     }),
+
+    [getType(requestActions.setPartnumber)]: (state, { payload }) => ({
+        ...state,
+        partnumber: payload
+    }),
+
     [getType(requestActions.setSelectedModels)]: (state, { payload }) => ({
         ...state,
         modelsSelected: payload
     }),
+
     [getType(requestActions.putModelInOrder)]: (state, { payload }) => ({
         ...state,
         modelsDataInOrder: [...state.modelsDataInOrder, payload]
     }),
+
     [getType(requestActions.deleteModelInOrder)]: (state, { payload }) => ({
         ...state,
         modelsDataInOrder: payload
     }),
+
     [getType(requestActions.updateModelInOrder)]: (state, { payload }) => ({
         ...state,
         modelsDataInOrder: payload
     }),
+
+    [getType(requestActions.clearOrder)]: (state) => ({
+        ...state,
+        partnumber: '',
+        modelsDataInOrder: [],
+        modelsSelected: [],
+        showList: false
+    }),
+
     [getType(requestActions.showList)]: (state, { payload }) => ({
         ...state,
         showList: payload

@@ -1,20 +1,24 @@
-import * as React from 'react';
+import React from 'react';
+import { set } from 'local-storage';
 import IconButton from '@material-ui/core/IconButton';
-import { toggleDrawerType } from 'system/store/actions/system.actions';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import './Header.scss';
 
 interface Props {
-    toggle: toggleDrawerType;
+    state: boolean;
     title: string;
+    setState: (v: boolean) => void;
 }
 
 const Header: React.SFC<Props> = props => {
-    const { toggle, title } = props;
+    const { state, setState, title } = props;
 
     return (
         <div className="Header">
-            <IconButton size="medium" onClick={toggle}>
+            <IconButton size="medium" onClick={() => {
+                setState(!state);
+                set('drawerState', !state);
+            }}>
                 <MoreVertIcon fontSize="inherit"/>
             </IconButton>
             <div className="Header__toolbar">

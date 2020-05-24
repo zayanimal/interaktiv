@@ -1,4 +1,4 @@
-import * as systemSelectors from './systemSelectors';
+import * as systemSelectors from './system.selectors';
 
 export {
     systemSelectors

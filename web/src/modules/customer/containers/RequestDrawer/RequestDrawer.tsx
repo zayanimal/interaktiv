@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { DrawerForm } from '@system/components/DrawerForm';
 import { requestDrawerActions } from '@customer/store/actions';
@@ -15,17 +15,23 @@ const cn = bem('RequestDrawer');
 const mapStateToProps = (state: rootStateTypes) => ({
     open: requestDrawerSelectors.openDrawer(state),
     customer: requestDrawerSelectors.customer(state),
+    customerError: requestDrawerSelectors.customerError(state),
     city: requestDrawerSelectors.city(state),
+    cityError: requestDrawerSelectors.cityError(state),
     date: requestDrawerSelectors.date(state),
-    comment: requestDrawerSelectors.comment(state)
+    comment: requestDrawerSelectors.comment(state),
+    commentError: requestDrawerSelectors.commentError(state)
 });
 
 const mapDispatchToProps = {
     close: requestDrawerActions.close,
     setCustomer: requestDrawerActions.setCustomer,
+    setCustomerError: requestDrawerActions.setCustomerError,
     setCity: requestDrawerActions.setCity,
+    setCityError: requestDrawerActions.setCityError,
     setDate: requestDrawerActions.setDate,
     setComment: requestDrawerActions.setComment,
+    setCommentError: requestDrawerActions.setCommentError,
     setValid: requestDrawerActions.setValid
 };
 
@@ -38,29 +44,41 @@ const RequestDrawer: React.FC<Props> = (props) => {
 
         customer,
         setCustomer,
+        customerError,
+        setCustomerError,
 
         city,
         setCity,
+        cityError,
+        setCityError,
 
         date,
         setDate,
 
         comment,
         setComment,
+        commentError,
+        setCommentError,
 
         setValid
     } = props;
 
-    // TODO: Продумать логику валидации
-
-    const [custError, setCustError] = useState(true);
     const [custHelpText, setCustHelpText] = useState('Обязательное поле');
-
-    const [cityError, setCityError] = useState(false);
     const [cityHelpText, setCityHelpText] = useState('Местонахождение заказчика');
-
-    const [commentError, setCommentError] = useState(false);
     const [commentHelpText, setCommentHelpText] = useState('Прочие сведения о заказчике, пожелания');
+
+    useEffect(() => {
+        if (!customerError && !cityError && !commentError) {
+            setValid(true);
+        } else {
+            setValid(false);
+        }
+    }, [
+        customerError,
+        cityError,
+        commentError,
+        setValid
+    ]);
 
     const customerHandler = (e: ChangeEvent) => {
         const target = e.target as HTMLInputElement;
@@ -68,16 +86,13 @@ const RequestDrawer: React.FC<Props> = (props) => {
         setCustomer(target.value);
 
         if (validation.empty(target.value)) {
-            setCustError(true);
-            setValid(false);
+            setCustomerError(true);
             setCustHelpText('Обязательное поле');
         } else if (validation.length(target.value, 70)) {
-            setCustError(true);
-            setValid(false);
+            setCustomerError(true);
             setCustHelpText('Превышена длина текста');
         } else {
-            setCustError(false);
-            setValid(true);
+            setCustomerError(false);
             setCustHelpText('Обязательное поле');
         }
     };
@@ -89,15 +104,12 @@ const RequestDrawer: React.FC<Props> = (props) => {
 
         if (validation.translit(target.value)) {
             setCityError(true);
-            setValid(false);
             setCityHelpText('Только русские буквы');
         } else if (validation.length(target.value, 40)) {
             setCityError(true);
-            setValid(false);
             setCityHelpText('Превышена длина текста');
         } else {
             setCityError(false);
-            setValid(true);
             setCityHelpText('Местонахождение заказчика');
         }
     };
@@ -117,15 +129,12 @@ const RequestDrawer: React.FC<Props> = (props) => {
 
         if (validation.translit(target.value)) {
             setCommentError(true);
-            setValid(false);
             setCommentHelpText('Только русские буквы');
         } else if (validation.length(target.value, 250)) {
             setCommentError(true);
-            setValid(false);
             setCommentHelpText('Превышена длина текста');
         } else {
             setCommentError(false);
-            setValid(true);
             setCommentHelpText('Прочие сведения о заказчике, пожелания');
         }
     };
@@ -143,7 +152,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
                         label="Название заказчика"
                         onChange={customerHandler}
                         value={customer}
-                        error={custError}
+                        error={customerError}
                         size="small"
                         fullWidth
                         multiline

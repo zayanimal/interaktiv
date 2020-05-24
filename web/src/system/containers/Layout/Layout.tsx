@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom';
+import { get } from 'local-storage';
 import { systemActions } from '@system/store/actions';
 import { rootStateTypes } from '@system/store/roots';
 import { Drawer } from '@system/components/Drawer';
 import { Header } from '@system/components/Header';
+import { Notification } from '@system/components/Notification';
 import { RequestsList } from '@customer/containers/RequestsList';
 import { Request } from '@customer/containers/Request';
 import { systemSelectors } from '@system/store/selectors';
@@ -12,12 +14,16 @@ import './Layout.scss';
 
 const mapStateToProps = (state: rootStateTypes) => ({
     drawerState: systemSelectors.drawer(state),
-    headerTitle: systemSelectors.headerTitle(state)
+    headerTitle: systemSelectors.headerTitle(state),
+    typeNotification: systemSelectors.typeNotification(state),
+    messageNotification: systemSelectors.messageNotification(state),
+    openNotification: systemSelectors.openNotification(state)
 });
 
 const mapDispatchToProps = {
-    toggle: systemActions.toggleDrawer,
-    setHeaderTitle: systemActions.setHeaderTitle
+    setDrawerState: systemActions.setDrawerState,
+    setHeaderTitle: systemActions.setHeaderTitle,
+    closeNotification: systemActions.closeNotification
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -25,16 +31,23 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 const Layout: React.SFC<Props> = props => {
     const {
         drawerState,
-        toggle,
         headerTitle,
+        setDrawerState,
         setHeaderTitle,
+        typeNotification,
+        messageNotification,
+        openNotification,
+        closeNotification
     } = props;
+
+    // TODO: решить баг нажатия кнопки хедера
+    const lsDrawerState: boolean | null = get('drawerState');
 
     return (
         <div className="Layout">
-            <Drawer toggle={drawerState} />
+            <Drawer toggle={lsDrawerState !== null ? lsDrawerState : drawerState} />
             <div className="Layout__workspace">
-                <Header toggle={toggle} title={headerTitle} />
+                <Header state={drawerState} setState={setDrawerState} title={headerTitle} />
                 <div className="Layout__main">
                     <Switch>
                         <Route path={'/projects'}>
@@ -44,6 +57,12 @@ const Layout: React.SFC<Props> = props => {
                     </Switch>
                 </div>
             </div>
+            <Notification
+                type={typeNotification}
+                message={messageNotification}
+                open={openNotification}
+                onClose={closeNotification}
+            />
         </div>
     );
 };

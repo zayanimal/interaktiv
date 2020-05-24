@@ -1,6 +1,6 @@
 import React, { useEffect, MouseEvent, ChangeEvent } from 'react';
-import { Subject, of } from 'rxjs';
-import { map, debounceTime, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { priceTypes } from '@customer/store/reducers/request.reducer';
 import { bem } from '@utils/formatters';
 import { TextField } from '@material-ui/core';
@@ -10,9 +10,11 @@ import './RequestPartnumbers.scss';
 const cn = bem('RequestPartnumbers');
 
 interface Props {
+    partnumber: string;
     models: priceTypes[];
     selected: priceTypes[];
     listState: boolean;
+    setPartnumber: (value: string) => void;
     setSelected: (value: priceTypes[]) => void;
     onPick: (value: string | null) => void;
     onShowList: (value: boolean | undefined) => void;
@@ -20,6 +22,8 @@ interface Props {
 
 const RequestPartnumbers: React.SFC<Props> = (props) => {
     const {
+        partnumber,
+        setPartnumber,
         models,
         listState,
         onShowList,
@@ -51,14 +55,12 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
         onPick(target.textContent);
     };
 
-    const findModel$ = new Subject();
+    const findModel$ = new Subject<string>();
 
     findModel$.pipe(
-        map<any, string>(e => e.target.value),
-        debounceTime(300),
-        switchMap((value: string) =>
-            of(models.filter(({ model }) => model.includes(value.toUpperCase()) && value !== ''))
-        )
+        map(v => v.trim()),
+        tap(setPartnumber),
+        map(value => models.filter(({ model }) => model.includes(value.toUpperCase()) && value !== '')),
     ).subscribe(setSelected);
 
     const rowRenderer: ListRowRenderer = (props) => {
@@ -87,7 +89,11 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
                 size="small"
                 label="Найти модель"
                 variant="outlined"
-                onChange={(e: ChangeEvent) => { findModel$.next(e) }}
+                value={partnumber}
+                onChange={(e: ChangeEvent) => {
+                    const target = e.target as HTMLInputElement;
+                    findModel$.next(target.value);
+                }}
             />
             {listState &&
                 <List

@@ -15,6 +15,7 @@ const cn = bem('Request');
 
 const mapStateToProps = (state: rootStateTypes) => ({
     rate: requestSelectors.rate(state),
+    partnumber: requestSelectors.partnumber(state),
     modelsData: requestSelectors.modelsData(state),
     modelsDataInOrder: requestSelectors.modelsDataInOrder(state),
     modelsSelected: requestSelectors.modelsSelected(state),
@@ -24,6 +25,8 @@ const mapStateToProps = (state: rootStateTypes) => ({
 
 const mapDispatchToProps = {
     fetchPrice: requestActions.fetchPriceList.request,
+    sendNewProject: requestActions.sendNewProject,
+    setPartnumber: requestActions.setPartnumber,
     setSelectedModels: requestActions.setSelectedModels,
     cleanPrice: requestActions.cleanPriceList,
     putModelInOrder: requestActions.putModelInOrder,
@@ -39,7 +42,10 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 const Request: React.FC<Props> = props => {
     const {
         fetchPrice,
+        sendNewProject,
         modelsSelected,
+        partnumber,
+        setPartnumber,
         setSelectedModels,
         cleanPrice,
         rate,
@@ -88,6 +94,8 @@ const Request: React.FC<Props> = props => {
                         Заказчик
                     </Button>
                     <RequestPartnumbers
+                        partnumber={partnumber}
+                        setPartnumber={setPartnumber}
                         selected={modelsSelected}
                         setSelected={setSelectedModels}
                         models={modelsData}
@@ -108,6 +116,7 @@ const Request: React.FC<Props> = props => {
                             variant="outlined"
                             color="primary"
                             disabled={!validation}
+                            onClick={sendNewProject}
                         >
                             Отправить запрос
                         </Button>

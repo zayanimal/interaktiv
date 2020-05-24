@@ -3,14 +3,13 @@ import { NavLink } from 'react-router-dom';
 import logo from '@icons/logo.png';
 import Ballot from '@material-ui/icons/Ballot';
 import AddBox from '@material-ui/icons/AddBox';
-import { systemStateTypes } from '@system/store/reducers/system.reducer';
 import { bem } from '@utils/formatters';
 import './Drawer.scss';
 
 const cn = bem('Drawer');
 
 interface Props {
-    toggle: systemStateTypes['drawer'];
+    toggle: boolean;
 }
 
 const Drawer: React.FC<Props> = props => {

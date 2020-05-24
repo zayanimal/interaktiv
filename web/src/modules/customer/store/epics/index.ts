@@ -1,6 +1,9 @@
 import { combineEpics, Epic } from 'redux-observable';
-import { getPriceListData } from './request.epics';
+import { getRequestPriceListData } from './getRequestPriceListData';
+import { sendRequestNewProject, clearRequestDrawer } from './sendRequestNewProject';
 
 export const customerEpic: Epic = combineEpics(
-    getPriceListData
+    getRequestPriceListData,
+    sendRequestNewProject,
+    clearRequestDrawer
 );

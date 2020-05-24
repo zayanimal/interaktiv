@@ -1,6 +1,10 @@
 import { createAction } from 'typesafe-actions';
 
-export const toggleDrawer = createAction('[SYSTEM] TOGGLE_DRAWER')<undefined>();
-export type toggleDrawerType = typeof toggleDrawer;
+export const setDrawerState = createAction('[SYSTEM] SET_DRAWER_STATE')<boolean>();
 export const setHeaderTitle = createAction('[SYSTEM] SET_HEADER_TITLE')<string>();
-export type setHeaderTitleType = typeof setHeaderTitle;
+
+export const closeNotification = createAction('[SYSTEM] SET_OPEN_NOTIFICATION')();
+export const successNotification = createAction('[SYSTEM] SUCCESS_NOTIFICATION')<string>();
+export const errorNotification = createAction('[SYSTEM] ERROR_NOTIFICATION')<string>();
+export const infoNotification = createAction('[SYSTEM] INFO_NOTIFICATION')<string>();
+export const warningNotification = createAction('[SYSTEM] WARNING_NOTIFICATION')<string>();
