@@ -15,7 +15,7 @@ const cn = bem('Request');
 
 const mapStateToProps = (state: rootStateTypes) => ({
     rate: requestSelectors.rate(state),
-    partnumber: requestSelectors.partnumber(state),
+    clearPartnumber: requestSelectors.clearPartnumber(state),
     modelsData: requestSelectors.modelsData(state),
     modelsDataInOrder: requestSelectors.modelsDataInOrder(state),
     modelsSelected: requestSelectors.modelsSelected(state),
@@ -26,7 +26,7 @@ const mapStateToProps = (state: rootStateTypes) => ({
 const mapDispatchToProps = {
     fetchPrice: requestActions.fetchPriceList.request,
     sendNewProject: requestActions.sendNewProject,
-    setPartnumber: requestActions.setPartnumber,
+    clearInputPartnumber: requestActions.clearInputPartnumber,
     setSelectedModels: requestActions.setSelectedModels,
     cleanPrice: requestActions.cleanPriceList,
     putModelInOrder: requestActions.putModelInOrder,
@@ -44,8 +44,8 @@ const Request: React.FC<Props> = props => {
         fetchPrice,
         sendNewProject,
         modelsSelected,
-        partnumber,
-        setPartnumber,
+        clearPartnumber,
+        clearInputPartnumber,
         setSelectedModels,
         cleanPrice,
         rate,
@@ -94,8 +94,8 @@ const Request: React.FC<Props> = props => {
                         Заказчик
                     </Button>
                     <RequestPartnumbers
-                        partnumber={partnumber}
-                        setPartnumber={setPartnumber}
+                        clearPartnumber={clearPartnumber}
+                        clearInputPartnumber={clearInputPartnumber}
                         selected={modelsSelected}
                         setSelected={setSelectedModels}
                         models={modelsData}
@@ -128,6 +128,6 @@ const Request: React.FC<Props> = props => {
     );
 };
 
-const RequestConncted = connect(mapStateToProps, mapDispatchToProps)(Request);
+const RequestConnected = connect(mapStateToProps, mapDispatchToProps)(Request);
 
-export { RequestConncted as Request };
+export { RequestConnected as Request };

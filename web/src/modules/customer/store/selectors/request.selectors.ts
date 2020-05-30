@@ -4,7 +4,7 @@ export const requestState = (state: rootStateTypes) => state.customer.request;
 
 export const rate = (state: rootStateTypes) => requestState(state).rate;
 
-export const partnumber = (state: rootStateTypes) => requestState(state).partnumber;
+export const clearPartnumber = (state: rootStateTypes) => requestState(state).clearPartnumber;
 
 export const modelsData = (state: rootStateTypes) => requestState(state).modelsData;
 

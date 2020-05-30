@@ -21,7 +21,7 @@ export const fetchPriceList = createAsyncAction(
     '[CUSTOMER] FETCH_PRICE_FAILURE'
 )<undefined, priceRateTypes, string>();
 
-export const setPartnumber = createAction('[CUSTOMER] SET_PARTNUMBER')<string>();
+export const clearInputPartnumber = createAction('[CUSTOMER] SET_PARTNUMBER')();
 
 export const sendNewProject = createAction('[CUSTOMER] SEND_NEW_PROJECT_DATA')();
 export const completeData = createAction('[CUSTOMER] COMPLETE')();
@@ -33,4 +33,4 @@ export const putModelInOrder = createAction('[CUSTOMER] PUT_MODEL_IN_ORDER')<pri
 export const deleteModelInOrder = createAction('[CUSTOMER] DELETE_MODEL_IN_ORDER')<priceTypesCount[]>();
 export const updateModelInOrder = createAction('[CUSTOMER] UPDATE_MODEL_IN_ORDER')<priceTypesCount[]>();
 export const clearOrder = createAction('[CUSTOMER] CLEAR_ORDER')();
-export const showList = createAction('[CUSTOMER] REQUEST_SHOW_LIST')<boolean | undefined>();
+export const showList = createAction('[CUSTOMER] REQUEST_SHOW_LIST')<boolean>();

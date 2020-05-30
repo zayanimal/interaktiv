@@ -1,6 +1,6 @@
 import React, { useEffect, MouseEvent, ChangeEvent } from 'react';
 import { Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, debounceTime } from 'rxjs/operators';
 import { priceTypes } from '@customer/store/reducers/request.reducer';
 import { bem } from '@utils/formatters';
 import { TextField } from '@material-ui/core';
@@ -10,20 +10,19 @@ import './RequestPartnumbers.scss';
 const cn = bem('RequestPartnumbers');
 
 interface Props {
-    partnumber: string;
+    clearPartnumber: boolean;
     models: priceTypes[];
     selected: priceTypes[];
     listState: boolean;
-    setPartnumber: (value: string) => void;
+    clearInputPartnumber: (value: boolean) => void;
     setSelected: (value: priceTypes[]) => void;
     onPick: (value: string | null) => void;
-    onShowList: (value: boolean | undefined) => void;
+    onShowList: (value: boolean) => void;
 };
 
 const RequestPartnumbers: React.SFC<Props> = (props) => {
     const {
-        partnumber,
-        setPartnumber,
+        clearPartnumber,
         models,
         listState,
         onShowList,
@@ -31,6 +30,8 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
         selected,
         setSelected
     } = props;
+
+    const findModel$ = new Subject<string>();
 
     useEffect(() => {
         if (selected.length > 0) {
@@ -40,27 +41,32 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
         }
 
         const keyHandler = (e: KeyboardEvent) => {
-            if (e.keyCode === 27) onShowList(false);
+            if (e.keyCode === 27) setSelected([]);
         };
 
         document.addEventListener("keydown", keyHandler, false);
 
         return () => {
           document.removeEventListener("keydown", keyHandler, false);
+          findModel$.unsubscribe();
         };
-    }, [selected, onShowList]);
+    }, [
+        selected,
+        onShowList,
+        findModel$,
+        clearPartnumber,
+        setSelected
+    ]);
 
     const listHandler = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
         onPick(target.textContent);
     };
 
-    const findModel$ = new Subject<string>();
-
     findModel$.pipe(
+        debounceTime(250),
         map(v => v.trim()),
-        tap(setPartnumber),
-        map(value => models.filter(({ model }) => model.includes(value.toUpperCase()) && value !== '')),
+        map(value => models.filter(({ model }) => model.includes(value.toUpperCase()) && value !== ''))
     ).subscribe(setSelected);
 
     const rowRenderer: ListRowRenderer = (props) => {
@@ -84,17 +90,18 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
 
     return (
         <>
-            <TextField
-                className={cn('input')}
-                size="small"
-                label="Найти модель"
-                variant="outlined"
-                value={partnumber}
-                onChange={(e: ChangeEvent) => {
-                    const target = e.target as HTMLInputElement;
-                    findModel$.next(target.value);
-                }}
-            />
+            {!clearPartnumber &&
+                <TextField
+                    className={cn('input')}
+                    size="small"
+                    label="Найти модель"
+                    variant="outlined"
+                    onChange={(e: ChangeEvent) => {
+                        const target = e.target as HTMLInputElement;
+                        findModel$.next(target.value);
+                    }}
+                />
+            }
             {listState &&
                 <List
                     style={{ width: '100%', outline: 'none' }}

@@ -42,6 +42,9 @@ export const sendRequestNewProject: Epic = (action$, state$) => action$.pipe(
 
 export const clearRequestDrawer: Epic = (action$) => action$.pipe(
     filter(isActionOf(requestActions.clearOrder)),
-    delay(300),
-    map(requestDrawerActions.clearDrawer)
+    delay(0.5),
+    mergeMap(() => [
+        requestActions.clearInputPartnumber(),
+        requestDrawerActions.clearDrawer()
+    ])
 );

@@ -2,7 +2,7 @@ import { Epic } from 'redux-observable';
 import { forkJoin, of } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
 import { isActionOf } from 'typesafe-actions';
-import { map, filter, switchMap, catchError, take } from 'rxjs/operators';
+import { map, filter, switchMap, catchError } from 'rxjs/operators';
 import { requestActions } from '@customer/store/actions';
 import { systemActions } from '@system/store/actions';
 import price from './price.json';
@@ -26,7 +26,6 @@ export const getRequestPriceListData: Epic = action$ => action$.pipe(
             ),
             price: of(price)
         }).pipe(
-            take(1),
             map(requestActions.fetchPriceList.success),
             catchError((mes: string) => of(requestActions.fetchPriceList.failure(mes)))
         )

@@ -1,10 +1,11 @@
-import React, { useMemo, useCallback, ChangeEvent } from 'react';
+import React, { useMemo, ChangeEvent } from 'react';
 import MaterialTable from 'material-table';
 import { Button, Input } from '@material-ui/core';
 import { DeleteOutline } from '@material-ui/icons';
 import { numToRub, numToUsd } from '@utils/formatters';
 import { priceTypesCount } from '@customer/store/reducers/request.reducer';
 import { bem } from '@utils/formatters';
+import clone from 'ramda/src/clone';
 import './RequestTable.scss';
 
 const cn = bem('RequestTable');
@@ -19,56 +20,57 @@ interface Props {
 const RequestTable: React.SFC<Props> = props => {
     const { data, rate, onDelete, onUpdate } = props;
     /** Material-table мутирует объекты расширяя их полем dataTable */
-    const immutableData = useMemo(() => data.map(r => Object.assign({}, r)), [data]);
+    const immutableData = useMemo(() => clone(data), [data]);
 
-    const countHandler = useCallback(({ e, id }: { e: ChangeEvent, id: number; }) => {
-        const target = e.target as HTMLInputElement;
+    const columns = useMemo(() => {
+        const countHandler = ({ e, id }: { e: ChangeEvent, id: number; }) => {
+            const target = e.target as HTMLInputElement;
 
-        onUpdate(data.map(row => (row.id === id ? { ...row, count: +target.value } : row)));
-    }, [data, onUpdate]);
+            onUpdate(data.map(row => (row.id === id ? { ...row, count: +target.value } : row)));
+        };
 
-    const columns = useMemo(() => [
-        {
-            field: 'model',
-            title: 'Модель'
-        },
-        {
-            field: 'count',
-            title: 'Кол-во',
-            render: ({ id, count }: { id: number; count: number; }) => (
-                <Input
-                    style={{ width: '40%' }}
-                    type="number"
-                    value={count}
-                    onChange={e => { countHandler({ e, id }) }}
-                />
-            )
-        },
-        {
-            field: 'price',
-            title: 'Цена $',
-            render: ({ price }: { price: number; }) => numToUsd(price)
-        },
-        {
-            field: 'price',
-            title: 'Цена р.',
-            render: ({ price }: { price: number; }) => numToRub(price * rate)
-        },
-        {
-            field: '',
-            title: 'Действие',
-            render: ({ model }: { model: string; }) => (
-                <Button
-                    onClick={() => onDelete(model)}
-                    variant="contained"
-                    color="secondary"
-                    size="small"
-                >
-                    <DeleteOutline />
-                </Button>
-            )
-        },
-    ], [rate, onDelete, countHandler]);
+        return [
+            {
+                field: 'model',
+                title: 'Модель'
+            },
+            {
+                field: 'count',
+                title: 'Кол-во',
+                render: ({ id, count }: { id: number; count: number; }) => (
+                    <Input
+                        style={{ width: '40%' }}
+                        type="number"
+                        value={count}
+                        onChange={e => { countHandler({ e, id }) }}
+                    />
+                )
+            },
+            {
+                field: 'price',
+                title: 'Цена $',
+                render: ({ price }: { price: number; }) => numToUsd(price)
+            },
+            {
+                field: 'price',
+                title: 'Цена р.',
+                render: ({ price }: { price: number; }) => numToRub(price * rate)
+            },
+            {
+                title: 'Действие',
+                render: ({ model }: { model: string; }) => (
+                    <Button
+                        onClick={() => onDelete(model)}
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                    >
+                        <DeleteOutline />
+                    </Button>
+                )
+            },
+        ]},
+    [rate, onDelete, onUpdate, data]);
 
     return (
         <div className={cn()}>

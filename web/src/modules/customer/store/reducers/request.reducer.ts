@@ -11,9 +11,9 @@ export interface priceTypesCount extends priceTypes {
     count: number;
 }
 
-interface projectRequestTypes {
+interface InitialState {
     rate: number;
-    partnumber: string,
+    clearPartnumber: boolean,
     modelsData: priceTypes[];
     modelsDataInOrder: priceTypesCount[];
     modelsSelected: priceTypes[];
@@ -22,14 +22,14 @@ interface projectRequestTypes {
 
 const initialState = {
     rate: 0,
-    partnumber: '',
+    clearPartnumber: false,
     modelsData: [],
     modelsDataInOrder: [],
     modelsSelected: [],
     showList: false
 };
 
-const request = createReducer<projectRequestTypes>(initialState, {
+const request = createReducer<InitialState>(initialState, {
     [getType(requestActions.fetchPriceList.success)]: (state, { payload }) => ({
         ...state,
         rate: payload.rate.Valute.USD.Value,
@@ -42,9 +42,9 @@ const request = createReducer<projectRequestTypes>(initialState, {
         modelsSelected: []
     }),
 
-    [getType(requestActions.setPartnumber)]: (state, { payload }) => ({
-        ...state,
-        partnumber: payload
+    [getType(requestActions.clearInputPartnumber)]: state => ({
+            ...state,
+            clearPartnumber: false
     }),
 
     [getType(requestActions.setSelectedModels)]: (state, { payload }) => ({
@@ -69,7 +69,7 @@ const request = createReducer<projectRequestTypes>(initialState, {
 
     [getType(requestActions.clearOrder)]: (state) => ({
         ...state,
-        partnumber: '',
+        clearPartnumber: true,
         modelsDataInOrder: [],
         modelsSelected: [],
         showList: false
