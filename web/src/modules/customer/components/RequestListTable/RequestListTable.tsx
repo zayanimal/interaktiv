@@ -1,81 +1,76 @@
-import React, { useMemo } from 'react';
-import MaterialTable from 'material-table';
+import { Requests } from '@customer/store/reducers/requestsList.reducer';
 import { Button, Chip } from '@material-ui/core';
 import { bem } from '@utils/formatters';
+import { formatDistance } from 'date-fns';
+import Ru from 'date-fns/locale/ru';
+import MaterialTable from 'material-table';
+import React, { useMemo } from 'react';
 import './RequestListTable.scss';
 
 const cn = bem('RequestListTable');
 
-interface Props {
+type Status = Pick<Requests, 'status'>;
+type CreationDate = Pick<Requests, 'creationDate'>;
 
-};
+interface Props {
+    data: Requests[];
+}
+
+const stringDateReverse = (str: string) => str.split('.').reverse().join('.');
+const waitingTime = (date: string) => formatDistance(
+    new Date(),
+    new Date(stringDateReverse(date)),
+    { locale: Ru }
+);
 
 const RequestListTable: React.SFC<Props> = (props) => {
-    // const {
+    const { data } = props;
 
-    // } = props;
-
-    const columns = useMemo(() => {
-
-        return [
-            {
-                field: 'id',
-                title: 'ID',
-            },
-            {
-                field: 'creationDate',
-                title: 'Дата создания'
-            },
-            {
-                field: 'pending',
-                title: 'В ожидании'
-            },
-            {
-                field: 'endUser',
-                title: 'Заказчик'
-            },
-            {
-                field: 'status',
-                title: 'Статус',
-                render: ({ status }: { status: string }) => (
-                    <Chip color="primary" label={status} />
-                )
-            },
-            {
-                title: 'Действие',
-                render: () => (
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        size="small"
-                    >
-                        Перейти
-                    </Button>
-                )
-            },
-        ]},
+    const columns = useMemo(() => [
+        {
+            field: 'id',
+            title: 'ID',
+        },
+        {
+            field: 'creationDate',
+            title: 'Дата создания',
+        },
+        {
+            field: 'pending',
+            title: 'В ожидании',
+            render: ({ creationDate }: CreationDate) => waitingTime(creationDate)
+        },
+        {
+            field: 'endUser',
+            title: 'Заказчик'
+        },
+        {
+            field: 'status',
+            title: 'Статус',
+            render: ({ status }: Status) => (
+                <Chip color="primary" label={status} />
+            )
+        },
+        {
+            title: 'Действие',
+            render: () => (
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                >
+                    Перейти
+                </Button>
+            )
+        },
+    ],
     []);
 
     return (
         <div className={cn()}>
             <MaterialTable
                 columns={columns}
-                data={[
-                    {
-                        id: 1,
-                        creationDate: '01.01.2020',
-                        pending: '11 часов',
-                        endUser: 'Hellooo',
-                        status: 'На обработке'
-                    },
-                    {
-                        id: 2,
-                        creationDate: '02.01.2020',
-                        pending: '5 часов',
-                        endUser: 'Privet',
-                        status: 'На обработке'
-                    }
-                ]}
+                data={data}
                 options={{
                     search: false,
                     sorting: false,

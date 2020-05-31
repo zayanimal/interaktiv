@@ -1,5 +1,5 @@
-import { createReducer, getType } from 'typesafe-actions';
 import { requestActions } from '@customer/store/actions';
+import { createReducer, getType } from 'typesafe-actions';
 
 export interface priceTypes {
     id: number;
@@ -36,15 +36,15 @@ const request = createReducer<InitialState>(initialState, {
         modelsData: payload.price
     }),
 
-    [getType(requestActions.cleanPriceList)]: state => ({
+    [getType(requestActions.cleanPriceList)]: (state) => ({
         ...state,
         modelsData: [],
         modelsSelected: []
     }),
 
-    [getType(requestActions.clearInputPartnumber)]: state => ({
-            ...state,
-            clearPartnumber: false
+    [getType(requestActions.clearInputPartnumber)]: (state) => ({
+        ...state,
+        clearPartnumber: false
     }),
 
     [getType(requestActions.setSelectedModels)]: (state, { payload }) => ({

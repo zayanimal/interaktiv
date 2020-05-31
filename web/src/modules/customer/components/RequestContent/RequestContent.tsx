@@ -1,20 +1,19 @@
-import React, { Fragment } from 'react';
 import {
-    Table,
+    Button,
+    Chip, Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
-    Button,
-    Chip
+    TableRow
 } from '@material-ui/core';
+import React from 'react';
 
 const RequestContent: React.FC = () => (
-    <Fragment>
+    <>
         <div className="customer__header">
-            <Chip className="customer__header-item" label="Запрос 123"/>
-            <Chip className="customer__header-item" label="ЖК Тушино"/>
+            <Chip className="customer__header-item" label="Запрос 123" />
+            <Chip className="customer__header-item" label="ЖК Тушино" />
         </div>
         <TableContainer>
             <Table>
@@ -61,14 +60,20 @@ const RequestContent: React.FC = () => (
                 <Button
                     className="controls__item"
                     variant="contained"
-                    color="secondary">Скачать</Button>
+                    color="secondary"
+                >
+                    Скачать
+                </Button>
                 <Button
                     className="controls__item"
                     variant="contained"
-                    color="secondary">Скопировать</Button>
+                    color="secondary"
+                >
+                    Скопировать
+                </Button>
             </div>
         </div>
-    </Fragment>
+    </>
 );
 
 export { RequestContent };

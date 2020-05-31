@@ -1,5 +1,5 @@
-import { createReducer, getType } from 'typesafe-actions';
 import { requestDrawerActions } from '@customer/store/actions';
+import { createReducer, getType } from 'typesafe-actions';
 
 const initialState = {
     openDrawer: false,
@@ -64,16 +64,8 @@ const requestDrawer = createReducer<typeof initialState>(initialState, {
         validation: payload
     }),
 
-    [getType(requestDrawerActions.clearDrawer)]: (state) => ({
-        openDrawer: false,
-        customer: '',
-        customerError: true,
-        city: '',
-        cityError: false,
-        date: new Date((new Date()).getTime() + 604800000),
-        comment: '',
-        commentError: false,
-        validation: false
+    [getType(requestDrawerActions.clearDrawer)]: () => ({
+        ...initialState
     })
 });
 

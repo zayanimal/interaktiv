@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { RequestPartnumbers } from '@customer/components/RequestPartnumbers';
+import { RequestTable } from '@customer/components/RequestTable';
+import { RequestDrawer } from '@customer/containers/RequestDrawer';
+import { requestActions, requestDrawerActions } from '@customer/store/actions';
+import { requestDrawerSelectors, requestSelectors } from '@customer/store/selectors';
 import { Button } from '@material-ui/core';
 import { systemActions } from '@system/store/actions';
-import { requestActions, requestDrawerActions }  from '@customer/store/actions';
-import { requestSelectors, requestDrawerSelectors } from '@customer/store/selectors';
 import { rootStateTypes } from '@system/store/roots';
-import { RequestTable } from '@customer/components/RequestTable';
-import { RequestPartnumbers } from '@customer/components/RequestPartnumbers';
-import { RequestDrawer } from '@customer/containers/RequestDrawer';
 import { bem } from '@utils/formatters';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import './Request.scss';
 
 const cn = bem('Request');
@@ -39,7 +39,7 @@ const mapDispatchToProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const Request: React.FC<Props> = props => {
+const Request: React.FC<Props> = (props) => {
     const {
         fetchPrice,
         sendNewProject,
@@ -65,13 +65,14 @@ const Request: React.FC<Props> = props => {
         fetchPrice();
         setHeaderTitle('Новый проект');
 
-        return () => { cleanPrice() };
+        return () => { cleanPrice(); };
     }, [fetchPrice, cleanPrice, setHeaderTitle]);
 
     const orderHandler = (value: string | null): void => {
         if (modelsDataInOrder.some(({ model }) => model === value)) return;
 
         putModelInOrder({
+            // eslint-disable-next-line prefer-object-spread
             ...Object.assign({}, modelsData.find(({ model }) => model === value)),
             count: 1
         });
@@ -111,7 +112,7 @@ const Request: React.FC<Props> = props => {
                         onUpdate={updateModelInOrder}
                         onDelete={deleteHandler}
                     />
-                    <div className={cn('controls')} hidden={modelsDataInOrder.length === 0} >
+                    <div className={cn('controls')} hidden={modelsDataInOrder.length === 0}>
                         <Button
                             variant="outlined"
                             color="primary"

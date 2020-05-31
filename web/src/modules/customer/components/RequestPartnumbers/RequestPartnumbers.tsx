@@ -1,10 +1,10 @@
-import React, { useEffect, MouseEvent, ChangeEvent } from 'react';
-import { Subject } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
 import { priceTypes } from '@customer/store/reducers/request.reducer';
-import { bem } from '@utils/formatters';
 import { TextField } from '@material-ui/core';
+import { bem } from '@utils/formatters';
+import React, { ChangeEvent, MouseEvent, useEffect } from 'react';
 import { List, ListRowRenderer } from 'react-virtualized';
+import { Subject } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 import './RequestPartnumbers.scss';
 
 const cn = bem('RequestPartnumbers');
@@ -18,7 +18,7 @@ interface Props {
     setSelected: (value: priceTypes[]) => void;
     onPick: (value: string | null) => void;
     onShowList: (value: boolean) => void;
-};
+}
 
 const RequestPartnumbers: React.SFC<Props> = (props) => {
     const {
@@ -44,11 +44,11 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
             if (e.keyCode === 27) setSelected([]);
         };
 
-        document.addEventListener("keydown", keyHandler, false);
+        document.addEventListener('keydown', keyHandler, false);
 
         return () => {
-          document.removeEventListener("keydown", keyHandler, false);
-          findModel$.unsubscribe();
+            document.removeEventListener('keydown', keyHandler, false);
+            findModel$.unsubscribe();
         };
     }, [
         selected,
@@ -65,54 +65,56 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
 
     findModel$.pipe(
         debounceTime(250),
-        map(v => v.trim()),
-        map(value => models.filter(({ model }) => model.includes(value.toUpperCase()) && value !== ''))
+        map((v) => v.trim()),
+        map((value) => models.filter(({ model }) => model.includes(value.toUpperCase()) && value !== ''))
     ).subscribe(setSelected);
 
-    const rowRenderer: ListRowRenderer = (props) => {
+    const rowRenderer: ListRowRenderer = (props2) => {
         const {
             key,
             index,
             style
-        } = props;
+        } = props2;
 
         return (
-            <div
+            <option
                 key={key}
                 style={style}
                 onClick={listHandler}
                 className={cn('item')}
             >
                 {selected[index].model}
-            </div>
+            </option>
         );
-    }
+    };
 
     return (
         <>
-            {!clearPartnumber &&
-                <TextField
-                    className={cn('input')}
-                    size="small"
-                    label="Найти модель"
-                    variant="outlined"
-                    onChange={(e: ChangeEvent) => {
-                        const target = e.target as HTMLInputElement;
-                        findModel$.next(target.value);
-                    }}
-                />
-            }
-            {listState &&
-                <List
-                    style={{ width: '100%', outline: 'none' }}
-                    className={cn('paper')}
-                    height={400}
-                    width={250}
-                    rowCount={selected.length}
-                    rowHeight={40}
-                    rowRenderer={rowRenderer}
-                />
-            }
+            {!clearPartnumber
+                && (
+                    <TextField
+                        className={cn('input')}
+                        size="small"
+                        label="Найти модель"
+                        variant="outlined"
+                        onChange={(e: ChangeEvent) => {
+                            const target = e.target as HTMLInputElement;
+                            findModel$.next(target.value);
+                        }}
+                    />
+                )}
+            {listState
+                && (
+                    <List
+                        style={{ width: '100%', outline: 'none' }}
+                        className={cn('paper')}
+                        height={400}
+                        width={250}
+                        rowCount={selected.length}
+                        rowHeight={40}
+                        rowRenderer={rowRenderer}
+                    />
+                )}
         </>
     );
 };

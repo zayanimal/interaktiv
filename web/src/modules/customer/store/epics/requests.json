@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "status": 1,
+        "creationDate": "01.01.2020",
+        "endUser": "Заказчик 1"
+    },
+    {
+        "id": 2,
+        "status": 1,
+        "creationDate": "12.02.2020",
+        "endUser": "Заказчик 2"
+    },
+    {
+        "id": 3,
+        "status": 2,
+        "creationDate": "21.03.2020",
+        "endUser": "Заказчик 3"
+    },
+    {
+        "id": 4,
+        "status": 2,
+        "creationDate": "12.04.2020",
+        "endUser": "Заказчик 4"
+    }
+]
