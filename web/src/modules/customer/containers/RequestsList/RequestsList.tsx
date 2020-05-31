@@ -1,96 +1,37 @@
-import React, { useEffect } from 'react';
 import { RequestListTable } from '@customer/components/RequestListTable';
-// import {
-//     Table,
-//     TableBody,
-//     TableCell,
-//     TableContainer,
-//     TableHead,
-//     TableRow,
-//     Chip,
-//     Button
-// } from '@material-ui/core';
+import { requestsListActions } from '@customer/store/actions';
+import { systemActions } from '@system/store/actions';
+import { rootStateTypes } from '@system/store/roots';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-interface Props {
-    setHeaderTitle: (v: string) => void;
+const mapStateToProps = (state: rootStateTypes) => ({
+
+});
+
+const mapDispatchToProps = {
+    setHeaderTitle: systemActions.setHeaderTitle,
+    getRequestsList: requestsListActions.getRequestsList.request
 };
 
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+
 const RequestsList: React.SFC<Props> = (props) => {
-    const { setHeaderTitle } = props;
+    const {
+        setHeaderTitle,
+        getRequestsList
+    } = props;
 
     useEffect(() => {
-        setHeaderTitle('Мои проекты')
+        setHeaderTitle('Мои проекты');
+        getRequestsList();
     });
 
     return (
-        <RequestListTable
-
-        />
-        // <TableContainer>
-        //     <Table>
-        //         <TableHead>
-        //             <TableRow>
-        //                 <TableCell>ID</TableCell>
-        //                 <TableCell align="center">Дата создания</TableCell>
-        //                 <TableCell align="center">В ожидании</TableCell>
-        //                 <TableCell align="center">Заказчик</TableCell>
-        //                 <TableCell align="center">Статус</TableCell>
-        //                 <TableCell align="center">Действие</TableCell>
-        //             </TableRow>
-        //         </TableHead>
-        //         <TableBody>
-        //             <TableRow>
-        //                 <TableCell>123</TableCell>
-        //                 <TableCell align="center">01.01.2020</TableCell>
-        //                 <TableCell align="center">5 часов</TableCell>
-        //                 <TableCell align="center">ЖК Чкалов</TableCell>
-        //                 <TableCell align="center">
-        //                     <Chip color="primary" label="Обработано"/>
-        //                 </TableCell>
-        //                 <TableCell align="center">
-        //                     <Button
-        //                         variant="contained"
-        //                         color="secondary"
-        //                         size="small"
-        //                     >Перейти</Button>
-        //                 </TableCell>
-        //             </TableRow>
-        //             <TableRow>
-        //                 <TableCell>123</TableCell>
-        //                 <TableCell align="center">02.01.2020</TableCell>
-        //                 <TableCell align="center">3 часа</TableCell>
-        //                 <TableCell align="center">Царская площадь</TableCell>
-        //                 <TableCell align="center">
-        //                     <Chip label="В ожидании"/>
-        //                 </TableCell>
-        //                 <TableCell align="center">
-        //                     <Button
-        //                         variant="contained"
-        //                         color="secondary"
-        //                         size="small"
-        //                     >Перейти</Button>
-        //                 </TableCell>
-        //             </TableRow>
-        //             <TableRow>
-        //                 <TableCell>123</TableCell>
-        //                 <TableCell align="center">03.01.2020</TableCell>
-        //                 <TableCell align="center">15 часов</TableCell>
-        //                 <TableCell align="center">Икея</TableCell>
-        //                 <TableCell align="center">
-        //                     <Chip label="В ожидании"/>
-        //                 </TableCell>
-        //                 <TableCell align="center">
-        //                     <Button
-        //                         variant="contained"
-        //                         color="secondary"
-        //                         size="small"
-        //                     >Перейти</Button>
-        //                 </TableCell>
-        //             </TableRow>
-        //         </TableBody>
-        //     </Table>
-        // </TableContainer>
+        <RequestListTable />
     );
-}
+};
 
-export { RequestsList };
+const RequestsListConnected = connect(mapStateToProps, mapDispatchToProps)(RequestsList);
+
+export { RequestsListConnected as RequestsList };

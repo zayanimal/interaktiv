@@ -22,7 +22,6 @@ const mapStateToProps = (state: rootStateTypes) => ({
 
 const mapDispatchToProps = {
     setDrawerState: systemActions.setDrawerState,
-    setHeaderTitle: systemActions.setHeaderTitle,
     closeNotification: systemActions.closeNotification
 };
 
@@ -33,7 +32,6 @@ const Layout: React.SFC<Props> = props => {
         drawerState,
         headerTitle,
         setDrawerState,
-        setHeaderTitle,
         typeNotification,
         messageNotification,
         openNotification,
@@ -50,9 +48,7 @@ const Layout: React.SFC<Props> = props => {
                 <Header state={drawerState} setState={setDrawerState} title={headerTitle} />
                 <div className="Layout__main">
                     <Switch>
-                        <Route path={'/projects'}>
-                            <RequestsList setHeaderTitle={setHeaderTitle} />
-                        </Route>
+                        <Route path={'/projects'} component={RequestsList}/>
                         <Route path={'/new-project'} component={Request}/>
                     </Switch>
                 </div>

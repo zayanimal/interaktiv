@@ -11,16 +11,16 @@ interface Props {
 };
 
 const RequestListTable: React.SFC<Props> = (props) => {
-    const {
+    // const {
 
-    } = props;
+    // } = props;
 
     const columns = useMemo(() => {
 
         return [
             {
                 field: 'id',
-                title: 'ID'
+                title: 'ID',
             },
             {
                 field: 'creationDate',

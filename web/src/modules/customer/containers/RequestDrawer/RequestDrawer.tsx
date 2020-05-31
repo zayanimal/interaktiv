@@ -1,13 +1,13 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import { connect } from 'react-redux';
-import { DrawerForm } from '@system/components/DrawerForm';
 import { requestDrawerActions } from '@customer/store/actions';
 import { requestDrawerSelectors } from '@customer/store/selectors';
+import TextField from '@material-ui/core/TextField';
+import { KeyboardDatePicker } from '@material-ui/pickers';
+import { DrawerForm } from '@system/components/DrawerForm';
 import { rootStateTypes } from '@system/store/roots';
 import { bem } from '@utils/formatters';
 import { validation } from '@utils/validators';
-import { KeyboardDatePicker } from '@material-ui/pickers';
-import TextField from '@material-ui/core/TextField';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import './RequestDrawer.scss';
 
 const cn = bem('RequestDrawer');
@@ -125,7 +125,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
     const commentHandler = (e: ChangeEvent) => {
         const target = e.target as HTMLInputElement;
 
-        setComment(target.value)
+        setComment(target.value);
 
         if (validation.translit(target.value)) {
             setCommentError(true);
