@@ -1,16 +1,16 @@
 .RequestDrawer {
     height: 100%;
-    padding: 22px;
+    padding: 1.375em;
     overflow-y: auto;
 
     &__row {
         display: flex;
         justify-content: space-between;
         width: 100%;
-        padding-bottom: 32px;
+        padding-bottom: 2em;
 
         &:last-child {
-            padding-bottom: 62px;
+            padding-bottom: 3.875em;
         }
     }
 }

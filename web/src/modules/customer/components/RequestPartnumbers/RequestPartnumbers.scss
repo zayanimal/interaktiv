@@ -1,20 +1,20 @@
 .RequestPartnumbers {
     &__input {
-        margin-top: 24px !important;
+        margin-top: 2em !important; // перебивка стилей material, так как в доме материал идет позже
         width: 100%;
     }
 
     &__paper {
         width: 100%;
-        margin-top: 6px;
+        margin-top: 0.375em;
         max-height: 60vh;
-        border-radius: 4px;
+        border-radius: 0.25em;
         box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
         overflow-y: auto;
     }
 
     &__item {
-        padding: 0 16px;
+        padding: 0 1em;
         display: flex;
         align-items: center;
         user-select: none;

@@ -13,7 +13,7 @@ export interface priceTypesCount extends priceTypes {
 
 interface InitialState {
     rate: number;
-    clearPartnumber: boolean,
+    modelInput: string,
     modelsData: priceTypes[];
     modelsDataInOrder: priceTypesCount[];
     modelsSelected: priceTypes[];
@@ -22,7 +22,7 @@ interface InitialState {
 
 const initialState = {
     rate: 0,
-    clearPartnumber: false,
+    modelInput: '',
     modelsData: [],
     modelsDataInOrder: [],
     modelsSelected: [],
@@ -42,9 +42,9 @@ const request = createReducer<InitialState>(initialState, {
         modelsSelected: []
     }),
 
-    [getType(requestActions.clearInputPartnumber)]: (state) => ({
+    [getType(requestActions.setModelInputValue)]: (state, { payload }) => ({
         ...state,
-        clearPartnumber: false
+        modelInput: payload
     }),
 
     [getType(requestActions.setSelectedModels)]: (state, { payload }) => ({
@@ -69,7 +69,7 @@ const request = createReducer<InitialState>(initialState, {
 
     [getType(requestActions.clearOrder)]: (state) => ({
         ...state,
-        clearPartnumber: true,
+        modelInput: '',
         modelsDataInOrder: [],
         modelsSelected: [],
         showList: false

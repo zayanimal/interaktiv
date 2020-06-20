@@ -15,7 +15,7 @@ const cn = bem('Request');
 
 const mapStateToProps = (state: rootStateTypes) => ({
     rate: requestSelectors.rate(state),
-    clearPartnumber: requestSelectors.clearPartnumber(state),
+    modelInputValue: requestSelectors.modelInputValue(state),
     modelsData: requestSelectors.modelsData(state),
     modelsDataInOrder: requestSelectors.modelsDataInOrder(state),
     modelsSelected: requestSelectors.modelsSelected(state),
@@ -26,8 +26,8 @@ const mapStateToProps = (state: rootStateTypes) => ({
 const mapDispatchToProps = {
     fetchPrice: requestActions.fetchPriceList.request,
     sendNewProject: requestActions.sendNewProject,
-    clearInputPartnumber: requestActions.clearInputPartnumber,
-    setSelectedModels: requestActions.setSelectedModels,
+    setModelInputValue: requestActions.setModelInputValue,
+    filterModels: requestActions.filterModels,
     cleanPrice: requestActions.cleanPriceList,
     putModelInOrder: requestActions.putModelInOrder,
     deleteModelInOrder: requestActions.deleteModelInOrder,
@@ -44,9 +44,9 @@ const Request: React.FC<Props> = (props) => {
         fetchPrice,
         sendNewProject,
         modelsSelected,
-        clearPartnumber,
-        clearInputPartnumber,
-        setSelectedModels,
+        modelInputValue,
+        setModelInputValue,
+        filterModels,
         cleanPrice,
         rate,
         modelsData,
@@ -95,11 +95,10 @@ const Request: React.FC<Props> = (props) => {
                         Заказчик
                     </Button>
                     <RequestPartnumbers
-                        clearPartnumber={clearPartnumber}
-                        clearInputPartnumber={clearInputPartnumber}
+                        value={modelInputValue}
+                        setValue={setModelInputValue}
                         selected={modelsSelected}
-                        setSelected={setSelectedModels}
-                        models={modelsData}
+                        filterModels={filterModels}
                         onPick={orderHandler}
                         listState={listState}
                         onShowList={showList}

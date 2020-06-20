@@ -3,35 +3,30 @@ import { TextField } from '@material-ui/core';
 import { bem } from '@utils/formatters';
 import React, { ChangeEvent, MouseEvent, useEffect } from 'react';
 import { List, ListRowRenderer } from 'react-virtualized';
-import { Subject } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
 import './RequestPartnumbers.scss';
 
 const cn = bem('RequestPartnumbers');
 
 interface Props {
-    clearPartnumber: boolean;
-    models: priceTypes[];
+    value: string,
     selected: priceTypes[];
     listState: boolean;
-    clearInputPartnumber: (value: boolean) => void;
-    setSelected: (value: priceTypes[]) => void;
+    setValue: (value: string) => void,
+    filterModels: (value: string) => void;
     onPick: (value: string | null) => void;
     onShowList: (value: boolean) => void;
 }
 
 const RequestPartnumbers: React.SFC<Props> = (props) => {
     const {
-        clearPartnumber,
-        models,
+        value,
+        setValue,
         listState,
         onShowList,
         onPick,
         selected,
-        setSelected
+        filterModels
     } = props;
-
-    const findModel$ = new Subject<string>();
 
     useEffect(() => {
         if (selected.length > 0) {
@@ -41,33 +36,24 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
         }
 
         const keyHandler = (e: KeyboardEvent) => {
-            if (e.keyCode === 27) setSelected([]);
+            if (e.keyCode === 27) filterModels('');
         };
 
         document.addEventListener('keydown', keyHandler, false);
 
         return () => {
             document.removeEventListener('keydown', keyHandler, false);
-            findModel$.unsubscribe();
         };
     }, [
         selected,
         onShowList,
-        findModel$,
-        clearPartnumber,
-        setSelected
+        filterModels
     ]);
 
     const listHandler = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
         onPick(target.textContent);
     };
-
-    findModel$.pipe(
-        debounceTime(250),
-        map((v) => v.trim()),
-        map((value) => models.filter(({ model }) => model.includes(value.toUpperCase()) && value !== ''))
-    ).subscribe(setSelected);
 
     const rowRenderer: ListRowRenderer = (props2) => {
         const {
@@ -90,19 +76,19 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
 
     return (
         <>
-            {!clearPartnumber
-                && (
-                    <TextField
-                        className={cn('input')}
-                        size="small"
-                        label="Найти модель"
-                        variant="outlined"
-                        onChange={(e: ChangeEvent) => {
-                            const target = e.target as HTMLInputElement;
-                            findModel$.next(target.value);
-                        }}
-                    />
-                )}
+            <TextField
+                className={cn('input')}
+                size="small"
+                label="Найти модель"
+                variant="outlined"
+                value={value}
+                onChange={(e: ChangeEvent) => {
+                    const target = e.target as HTMLInputElement;
+
+                    setValue(target.value);
+                    filterModels(target.value);
+                }}
+            />
             {listState
                 && (
                     <List

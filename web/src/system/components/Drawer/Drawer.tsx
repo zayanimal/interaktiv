@@ -12,7 +12,7 @@ interface Props {
     toggle: boolean;
 }
 
-const Drawer: React.FC<Props> = props => {
+const Drawer: React.FC<Props> = (props) => {
     const { toggle } = props;
     const [hide, setHide] = useState(toggle);
 
@@ -20,7 +20,7 @@ const Drawer: React.FC<Props> = props => {
         if (toggle) {
             setHide(toggle);
         } else {
-            setTimeout(() => { setHide(toggle) }, 200);
+            setTimeout(() => { setHide(toggle); }, 200);
         }
     }, [toggle]);
 
@@ -46,7 +46,7 @@ const Drawer: React.FC<Props> = props => {
                         className={cn('item')}
                         activeClassName={cn('item_focus')}
                     >
-                        <AddBox className={cn('icon')}/>
+                        <AddBox className={cn('icon')} />
                         <span className={cn('item-text')} hidden={hide}>Новый проект</span>
                     </NavLink>
                 </li>

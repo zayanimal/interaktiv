@@ -1,12 +1,12 @@
 .DrawerForm {
     position: fixed;
-    top: 71px;
+    top: 4.4375em;
     right: 0;
-    height: calc(100vh - 71px);
+    height: calc(100vh - 4.4375em);
     transform: translateX(100%);
     transition: transform 0.2s cubic-bezier(0.820, 0.085, 0.395, 0.895);
     background: #ffffff;
-    box-shadow: -9px 0 9px -9px rgba(0, 0, 0, 0.1);
+    box-shadow: -0.5em 0 0.5em -0.5em rgba(0, 0, 0, 0.1);
     z-index: 11;
 
     &__header {
@@ -15,8 +15,8 @@
         align-items: center;
         font-weight: 600;
         width: 100%;
-        height: 68px;
-        padding: 8px 32px;
+        height: 4.25em;
+        padding: 0.5em 2em;
         border-bottom: 1px solid #e0e0e0;
     }
 }

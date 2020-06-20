@@ -21,11 +21,12 @@ export const fetchPriceList = createAsyncAction(
     '[CUSTOMER] FETCH_PRICE_FAILURE'
 )<undefined, priceRateTypes, string>();
 
-export const clearInputPartnumber = createAction('[CUSTOMER] SET_PARTNUMBER')();
+export const setModelInputValue = createAction('[CUSTOMER] SET_MODEL_INPUT_VALUE')<string>();
 
 export const sendNewProject = createAction('[CUSTOMER] SEND_NEW_PROJECT_DATA')();
 export const completeData = createAction('[CUSTOMER] COMPLETE')();
 
+export const filterModels = createAction('[CUSTOMER] FILTER_MODELS')<string>();
 export const setSelectedModels = createAction('[CUSTOMER] SET_SELECTED_MODELS')<priceTypes[]>();
 export const cleanPriceList = createAction('[CUSTOMER] CLEAN_PRICE_LIST')();
 
