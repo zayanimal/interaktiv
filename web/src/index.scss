@@ -1,5 +1,12 @@
-html {
-    font-size: 1em;
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import '@styles/_colors.scss';
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
     margin: 0;
-    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    color: var(--color-default);
 }

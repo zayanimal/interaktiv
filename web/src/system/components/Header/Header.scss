@@ -4,11 +4,11 @@
     padding: 1.375em 0.875em;
     width: 100%;
     height: 4.375em;
-    box-shadow: 0 0.25em 0.25em -0.25em var(--box-shadow);
+    box-shadow: 0 0.25em 0.25em -0.25em var(--color-box-shadow);
 
     &__toolbar {
         padding-left: 1em;
-        color: var(--dark-blue);
+        color: var(--color-dark-blue);
         font-size: 1.1rem;
         font-weight: 500;
     }

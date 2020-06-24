@@ -1,0 +1,23 @@
+.Auth {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to top left, #878f94, #ffffff);
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        border: 1px solid var(--color-box-shadow);
+        border-radius: 0.25em;
+        padding: 0 1.5em 1.5em 1.5em;
+        margin-bottom: 6.25em;
+        color: var(--color-default);
+
+        .MuiTextField-root {
+            margin-bottom: 1em;
+        }
+    }
+}
