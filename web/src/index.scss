@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 @import '@styles/_colors.scss';
 
-* {
+:root {
     box-sizing: border-box;
+}
+
+*,
+::before,
+::after {
+    box-sizing: inherit;
 }
 
 html, body {

@@ -92,13 +92,20 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
             {listState
                 && (
                     <List
-                        style={{ width: '100%', outline: 'none' }}
                         className={cn('paper')}
                         height={400}
-                        width={250}
+                        width={1}
                         rowCount={selected.length}
                         rowHeight={40}
                         rowRenderer={rowRenderer}
+                        containerStyle={{
+                            width: '100%',
+                            maxWidth: '100%'
+                        }}
+                        style={{
+                            width: '100%',
+                            outline: 'none'
+                        }}
                     />
                 )}
         </>

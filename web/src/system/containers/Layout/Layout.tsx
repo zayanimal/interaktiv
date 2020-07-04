@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { get } from 'local-storage';
 import { systemActions } from '@system/store/actions';
@@ -10,7 +10,10 @@ import { Notification } from '@system/components/Notification';
 import { RequestsList } from '@customer/containers/RequestsList';
 import { Request } from '@customer/containers/Request';
 import { systemSelectors } from '@system/store/selectors';
+import { bem } from '@utils/formatters';
 import './Layout.scss';
+
+const cn = bem('Layout');
 
 const mapStateToProps = (state: rootStateTypes) => ({
     drawerState: systemSelectors.drawer(state),
@@ -27,7 +30,7 @@ const mapDispatchToProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const Layout: React.SFC<Props> = props => {
+const Layout: React.SFC<Props> = (props) => {
     const {
         drawerState,
         headerTitle,
@@ -44,14 +47,17 @@ const Layout: React.SFC<Props> = props => {
     return (
         <div className="Layout">
             <Drawer toggle={lsDrawerState !== null ? lsDrawerState : drawerState} />
-            <div className="Layout__workspace">
-                <Header state={drawerState} setState={setDrawerState} title={headerTitle} />
-                <div className="Layout__main">
-                    <Switch>
-                        <Route path={'/projects'} component={RequestsList}/>
-                        <Route path={'/new-project'} component={Request}/>
-                    </Switch>
-                </div>
+            <div className={cn('main')}>
+                <Header
+                    className={cn('header')}
+                    state={drawerState}
+                    setState={setDrawerState}
+                    title={headerTitle}
+                />
+                <Switch>
+                    <Route path="/projects" component={RequestsList} />
+                    <Route path="/new-project" component={Request} />
+                </Switch>
             </div>
             <Notification
                 type={typeNotification}

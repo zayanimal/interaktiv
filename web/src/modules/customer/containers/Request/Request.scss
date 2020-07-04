@@ -1,16 +1,14 @@
 .Request {
-    &__select {
-        display: flex;
-    }
+    display: flex;
 
     &__col1 {
-        width: 20%;
+        flex: 20%;
         padding-top: 1.25em;
-        margin-right: 3%;
+        margin-right: 2em;
     }
 
     &__col2 {
-        width: 77%;
+        flex: 80%
     }
 
     &__controls {

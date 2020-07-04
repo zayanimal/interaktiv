@@ -84,7 +84,7 @@ const Request: React.FC<Props> = (props) => {
 
     return (
         <>
-            <div className={cn('select')}>
+            <div className={cn()}>
                 <div className={cn('col1')}>
                     <Button
                         color="secondary"
