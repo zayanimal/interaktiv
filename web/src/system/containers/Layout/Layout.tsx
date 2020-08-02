@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-import { get } from 'local-storage';
 import { systemActions } from '@system/store/actions';
 import { rootStateTypes } from '@system/store/roots';
 import { Drawer } from '@system/components/Drawer';
@@ -30,7 +29,7 @@ const mapDispatchToProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const Layout: React.SFC<Props> = (props) => {
+const Layout: React.FC<Props> = (props) => {
     const {
         drawerState,
         headerTitle,
@@ -41,24 +40,24 @@ const Layout: React.SFC<Props> = (props) => {
         closeNotification
     } = props;
 
-    // TODO: решить баг нажатия кнопки хедера
-    const lsDrawerState: boolean | null = get('drawerState');
-
     return (
-        <div className="Layout">
-            <Drawer toggle={lsDrawerState !== null ? lsDrawerState : drawerState} />
-            <div className={cn('main')}>
+        <div className={cn('container')}>
+            <Drawer toggle={drawerState} />
+            <div className={cn('content')}>
                 <Header
                     className={cn('header')}
                     state={drawerState}
                     setState={setDrawerState}
                     title={headerTitle}
                 />
-                <Switch>
-                    <Route path="/projects" component={RequestsList} />
-                    <Route path="/new-project" component={Request} />
-                </Switch>
+                <main className={cn('main')}>
+                    <Switch>
+                        <Route path="/projects" component={RequestsList} />
+                        <Route path="/new-project" component={Request} />
+                    </Switch>
+                </main>
             </div>
+
             <Notification
                 type={typeNotification}
                 message={messageNotification}

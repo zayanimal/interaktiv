@@ -1,12 +1,12 @@
 .Drawer {
-    padding: 1.375em 0.875em;
+    padding: 1.375em 0.665em;
     min-width: 14.375em;
     height: 100vh;
     box-shadow: 0.25em 0 0.25em -0.25em var(--color-box-shadow);
     transition: min-width 300ms;
 
     &_close {
-        min-width: 4.375em;
+        min-width: 3.375em;
         transition: min-width 300ms;
     }
 
@@ -21,16 +21,20 @@
     &__list {
         list-style-type: none;
         padding-inline-start: 0;
+
+        li + li {
+            margin-top: 1em;
+        }
     }
 
     &__item {
         display: flex;
         align-items: center;
         text-decoration: none;
-        padding: 0.625em 0.375em 0.625em 0.875em;
-        margin-bottom: 1em;
+        padding: 0.625em;
 
         &-text {
+            margin-left: 0.625em;
             color: var(--color-dark-blue);
         }
 
@@ -41,7 +45,6 @@
     }
 
     &__icon {
-        margin-right: 0.625em;
         color: var(--color-dark-blue);
     }
 }

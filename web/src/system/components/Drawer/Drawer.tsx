@@ -25,7 +25,7 @@ const Drawer: React.FC<Props> = (props) => {
     }, [toggle]);
 
     return (
-        <div className={toggle ? `${cn()} ${cn()}_close` : cn()}>
+        <aside className={toggle ? cn('', 'close') : cn()}>
             <div className={cn('header')}>
                 <img src={logo} alt="Iskor" hidden={hide} />
             </div>
@@ -51,7 +51,7 @@ const Drawer: React.FC<Props> = (props) => {
                     </NavLink>
                 </li>
             </ul>
-        </div>
+        </aside>
     );
 };
 

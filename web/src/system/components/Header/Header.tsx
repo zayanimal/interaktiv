@@ -1,5 +1,4 @@
 import React from 'react';
-import { set } from 'local-storage';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -16,18 +15,15 @@ const Header: React.SFC<Props> = (props) => {
     } = props;
 
     return (
-        <div className={className}>
+        <header className={className}>
             <IconButton
                 size="medium"
-                onClick={() => {
-                    setState(!state);
-                    set('drawerState', !state);
-                }}
+                onClick={() => { setState(!state); }}
             >
                 <MoreVertIcon fontSize="inherit" />
             </IconButton>
             <h4>{title}</h4>
-        </div>
+        </header>
     );
 };
 
