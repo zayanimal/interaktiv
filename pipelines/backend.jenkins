@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage("docker compose project containers") {
             steps {
-                dir ('.') {
+                dir ('docker') {
                 	sh 'docker-compose up'
                 }
             }
