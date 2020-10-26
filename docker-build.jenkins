@@ -19,7 +19,7 @@ pipeline {
             steps {
                 echo " ===== start building image ===== "
                 dir ('.') {
-                	sh 'docker build -t toolbox:latest . '
+                	sh 'docker build -t zayanimal/toolbox:latest . '
                 }
             }
         }
