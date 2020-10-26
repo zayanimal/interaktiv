@@ -1,29 +1,41 @@
 #!groovy
-// Check ub1 properties
+// Run docker build
 properties([disableConcurrentBuilds()])
 
 pipeline {
     agent {
         label 'master'
     }
+    triggers { pollSCM('* * * * *') }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
     }
     stages {
-        stage("First step") {
+        stage("docker login") {
             steps {
-                sh 'ssh -p 2222 root@127.0.0.1 \'hostname\''
+                echo " ============== docker login =================="
+                withCredentials([usernamePassword(credentialsId: 'zayanimal', usernameVariable: 'zayanimal', passwordVariable: 'rfz96y9uv')]) {
+                    sh """
+                    docker login -u $USERNAME -p $PASSWORD
+                    """
+                }
             }
         }
-        stage("Second step") {
+        stage("create docker image") {
             steps {
-                sh 'ssh -p 2222 root@127.0.0.1 \'uptime\''
+                echo " ============== start building image =================="
+                dir ('toolbox') {
+                	sh 'docker build -t zayanimal/toolbox:latest . '
+                }
             }
         }
-        stage("Third step") {
+        stage("docker push") {
             steps {
-                sh 'ssh -p 2222 root@127.0.0.1 \'hostname\''
+                echo " ============== start pushing image =================="
+                sh '''
+                docker push zayanimal/toolbox:latest
+                '''
             }
         }
     }
