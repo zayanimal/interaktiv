@@ -1,3 +1,3 @@
 FROM alpine
-RUN apk add --no-cache python py-pip
+RUN apk add --update --no-cache curl py-pip python wget busybox-extras netcat-openbsd
 CMD tail -f /dev/null
