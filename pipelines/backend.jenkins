@@ -12,11 +12,10 @@ pipeline {
         timestamps()
     }
     stages {
-        stage("create docker image") {
+        stage("docker compose project containers") {
             steps {
-                echo " ============== start building image =================="
-                dir ('toolbox') {
-                	sh 'docker build . '
+                dir ('.') {
+                	sh 'docker-compose up'
                 }
             }
         }
