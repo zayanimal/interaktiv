@@ -28,6 +28,8 @@ node {
 
     stage('Build_backend') {
         if (checkDirectoryChanges('backend')) {
+            sh "chmod +x jenkins/scripts/docker-stop.sh"
+            sh "./jenkins/scripts/docker-stop.sh"
             docker
                 .image('backend:v1')
                 .run('-d -v $(pwd)/backend:/var/www/interaktiv -p 8000:3000 --name=backend')
