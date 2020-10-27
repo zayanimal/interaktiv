@@ -1,7 +1,13 @@
 #!/bin/bash
 
 # остановить контейнер бэка
-# docker stop $(docker ps --filter "name=backend" -qa)
+
+if [[ -n docker ps --filter "name=backend" -qa ]]; then
+    docker stop $(docker ps --filter "name=backend" -qa)
+fi
+
 
 # удалить контейнер бэка
-# docker rm $(docker ps --filter "name=backend" -qa)
+if [[ -n docker ps --filter "name=backend" -qa ]]; then
+    docker rm $(docker ps --filter "name=backend" -qa)
+fi
