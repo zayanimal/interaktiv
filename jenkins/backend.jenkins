@@ -1,8 +1,6 @@
 #!groovy
 
-properties([
-    disableConcurrentBuilds()
-])
+properties([disableConcurrentBuilds()])
 
 pipeline {
     agent {
@@ -22,10 +20,11 @@ pipeline {
     }
 
     stages {
-        stage("Build") {
+        stage("Build backend") {
+            when { changeset 'backend/*' }
             steps {
                 sh 'chmod +x jenkins/scripts/build.sh'
-                sh './jenkins/scripts/build.sh'
+                sh './jenkins/scripts/backend_build.sh'
             }
         }
     }
