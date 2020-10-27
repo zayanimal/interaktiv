@@ -4,7 +4,7 @@
 def checkDirectoryChanges(path) {
     try {
         sh "git diff --quiet --exit-code HEAD~1..HEAD ${path}/"
-        echo 'Без сборки так как в директории нет изменений'
+        echo ' === Без сборки, в директории нет изменений === '
         return false
     } catch (err) {
         return true
@@ -17,23 +17,24 @@ properties(
         pipelineTriggers([cron('* * * * *')]),
         buildDiscarder(
             logRotator(
-                numToKeepStr: '10',
-                artifactNumToKeepStr: '10'
+                numToKeepStr: '5',
+                artifactNumToKeepStr: '5'
             )
-        ),
-
+        )
     ]
 )
 
 node {
     stage('Build_backend') {
-        if (checkDirectoryChanges('backend/')) {
-            sh "chmod +x jenkins/scripts/backend_build.sh"
-        }
+        // if (checkDirectoryChanges('backend')) {
+            docker
+                .image('backend:v1')
+                .run('-d -v $(pwd)/backend:/var/www/interaktiv -p 3000:3000')
+        // }
     }
 
     stage("Build frontend") {
-        if (checkDirectoryChanges('frontend/')) {
+        if (checkDirectoryChanges('frontend')) {
             sh "chmod +x jenkins/scripts/frontend_build.sh"
         }
     }
