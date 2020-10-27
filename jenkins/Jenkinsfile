@@ -24,6 +24,8 @@ properties(
 )
 
 node {
+    checkout scm
+
     stage('Build_backend') {
         if (checkDirectoryChanges('backend')) {
             docker
