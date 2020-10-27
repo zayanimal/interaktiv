@@ -2,15 +2,6 @@
 
 properties([disableConcurrentBuilds()])
 
-def checkFolderForDiffs(path) {
-    try {
-        sh "git diff --quiet --exit-code HEAD~1..HEAD ${path}"
-        return false
-    } catch (err) {
-        return true
-    }
-}
-
 pipeline {
     agent {
         label 'master'
@@ -30,6 +21,15 @@ pipeline {
 
     stages {
         stage("Build backend") {
+            def checkFolderForDiffs(path) {
+                try {
+                    sh "git diff --quiet --exit-code HEAD~1..HEAD ${path}"
+                    return false
+                } catch (err) {
+                    return true
+                }
+            }
+
             if (checkFolderForDiffs('backend/')) {
                 steps {
                     sh 'chmod +x jenkins/scripts/backend_build.sh'
