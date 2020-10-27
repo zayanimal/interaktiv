@@ -22,7 +22,7 @@ pipeline {
     stages {
         stage("Build backend") {
             steps {
-                sh './jenkins/sripts/backend_build.sh'
+                sh './jenkins/scripts/backend_build.sh'
                 // script {
                 //     try {
                 //         sh "git diff --quiet --exit-code HEAD~1..HEAD backend/"
