@@ -14,7 +14,6 @@ def checkDirectoryChanges(path) {
 properties(
     [
         disableConcurrentBuilds(),
-        pipelineTriggers([cron('* * * * *')]),
         buildDiscarder(
             logRotator(
                 numToKeepStr: '5',
@@ -26,11 +25,11 @@ properties(
 
 node {
     stage('Build_backend') {
-        // if (checkDirectoryChanges('backend')) {
+        if (checkDirectoryChanges('backend')) {
             docker
                 .image('backend:v1')
-                .run('-d -v $(pwd)/backend:/var/www/interaktiv -p 3000:3000')
-        // }
+                .run('-d -v $(pwd)/backend:/var/www/interaktiv -p 8000:3000 --name=backend')
+        }
     }
 
     stage("Build frontend") {
