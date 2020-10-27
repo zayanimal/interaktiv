@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo $(pwd)
+pwd
 
 # docker-compose up
