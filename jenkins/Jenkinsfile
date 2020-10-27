@@ -25,25 +25,29 @@ pipeline {
         timestamps()
     }
 
-    node {
+    stages {
         stage("Build backend") {
             steps {
-                try {
-                    sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
-                    echo 'Без сборки так как в директории нет изменений'
-                } catch (err) {
-                    sh "chmod +x jenkins/scripts/${BACKEND_DIRECTORY}_build.sh"
+                script {
+                    try {
+                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
+                        echo 'Без сборки так как в директории нет изменений'
+                    } catch (err) {
+                        sh "chmod +x jenkins/scripts/${BACKEND_DIRECTORY}_build.sh"
+                    }
                 }
             }
         }
 
         stage("Build frontend") {
             steps {
-                try {
-                    sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}/"
-                    echo 'Без сборки так как в директории нет изменений'
-                } catch (err) {
-                    sh "chmod +x jenkins/scripts/${FRONTEND_DIRECTORY}_build.sh"
+                script {
+                    try {
+                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}/"
+                        echo 'Без сборки так как в директории нет изменений'
+                    } catch (err) {
+                        sh "chmod +x jenkins/scripts/${FRONTEND_DIRECTORY}_build.sh"
+                    }
                 }
             }
         }
