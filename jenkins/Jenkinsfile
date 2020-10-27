@@ -23,7 +23,7 @@ pipeline {
         stage("Build backend") {
             steps {
                 sh 'chmod +x jenkins/scripts/backend_build.sh'
-                sh './jenkins/scripts/backend_build.sh'
+                // sh './jenkins/scripts/backend_build.sh'
             }
         }
     }
