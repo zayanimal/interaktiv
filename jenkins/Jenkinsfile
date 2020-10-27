@@ -22,19 +22,10 @@ pipeline {
     stages {
         stage("Build backend") {
             steps {
-                script {
-                    def checkFolderForDiffs(path) {
-                        try {
-                            sh "git diff --quiet --exit-code HEAD~1..HEAD ${path}"
-                            return false
-                        } catch (err) {
-                            return true
-                        }
-                    }
-
-                    if (checkFolderForDiffs('backend/')) {
-                        sh 'chmod +x jenkins/scripts/backend_build.sh'
-                    }
+                try {
+                    sh "git diff --quiet --exit-code HEAD~1..HEAD backend/"
+                } catch (err) {
+                    sh 'chmod +x jenkins/scripts/backend_build.sh'
                 }
             }
 
