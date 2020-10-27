@@ -3,63 +3,72 @@
 properties([disableConcurrentBuilds()])
 
 node {
-    stage('helo') {
-        if (true) {
-            echo "hellooooo"
+    stage('Build_backend') {
+        try {
+            sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
+            echo 'Без сборки так как в директории нет изменений'
+        } catch (err) {
+            sh "chmod +x jenkins/scripts/${BACKEND_DIRECTORY}_build.sh"
+        }
+    }
+
+    stage("Build frontend") {
+        try {
+            sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}/"
+            echo 'Без сборки так как в директории нет изменений'
+        } catch (err) {
+            sh "chmod +x jenkins/scripts/${FRONTEND_DIRECTORY}_build.sh"
         }
     }
 }
 
 
-pipeline {
-    agent none
+// pipeline {
+//     agent none
 
-    environment {
-        CI = 'true'
-        BACKEND_DIRECTORY = 'backend'
-        FRONTEND_DIRECTORY = 'frontend'
-    }
+//     environment {
+//         CI = 'true'
+//         BACKEND_DIRECTORY = 'backend'
+//         FRONTEND_DIRECTORY = 'frontend'
+//     }
 
-    triggers { pollSCM('* * * * *') }
+//     triggers { pollSCM('* * * * *') }
 
-    options {
-        buildDiscarder(
-            logRotator(
-                numToKeepStr: '10',
-                artifactNumToKeepStr: '10'
-            )
-        )
-        timestamps()
-    }
+//     options {
+//         buildDiscarder(
+//             logRotator(
+//                 numToKeepStr: '10',
+//                 artifactNumToKeepStr: '10'
+//             )
+//         )
+//         timestamps()
+//     }
 
-    stages {
-        stage("Build backend") {
-            steps {
-                // agent {
-                //     docker { image '' }
-                // }
-                script {
-                    try {
-                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
-                        echo 'Без сборки так как в директории нет изменений'
-                    } catch (err) {
-                        sh "chmod +x jenkins/scripts/${BACKEND_DIRECTORY}_build.sh"
-                    }
-                }
-            }
-        }
+//     stages {
+//         stage("Build backend") {
+//             steps {
+//                 script {
+//                     try {
+//                         sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
+//                         echo 'Без сборки так как в директории нет изменений'
+//                     } catch (err) {
+//                         sh "chmod +x jenkins/scripts/${BACKEND_DIRECTORY}_build.sh"
+//                     }
+//                 }
+//             }
+//         }
 
-        stage("Build frontend") {
-            steps {
-                script {
-                    try {
-                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}/"
-                        echo 'Без сборки так как в директории нет изменений'
-                    } catch (err) {
-                        sh "chmod +x jenkins/scripts/${FRONTEND_DIRECTORY}_build.sh"
-                    }
-                }
-            }
-        }
-    }
-}
+//         stage("Build frontend") {
+//             steps {
+//                 script {
+//                     try {
+//                         sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}/"
+//                         echo 'Без сборки так как в директории нет изменений'
+//                     } catch (err) {
+//                         sh "chmod +x jenkins/scripts/${FRONTEND_DIRECTORY}_build.sh"
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
