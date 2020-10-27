@@ -1,3 +1,5 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
-docker-compose up
+echo $(pwd)
+
+# docker-compose up
