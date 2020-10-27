@@ -14,6 +14,15 @@ def checkDirectoryChanges(path) {
 }
 
 node {
+    buildDiscarder(
+        logRotator(
+            numToKeepStr: '10',
+            artifactNumToKeepStr: '10'
+        )
+    )
+
+    timestamps()
+
     stage('Build_backend') {
         if (checkDirectoryChanges('backend/')) {
             sh "chmod +x jenkins/scripts/backend_build.sh"
