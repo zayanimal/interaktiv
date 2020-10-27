@@ -1,6 +1,6 @@
 version: "3.7"
-services: 
-    db: 
+services:
+    db:
         image: postgres:12.1-alpine
         environment:
             POSTGRES_USER: postgres
@@ -13,9 +13,9 @@ services:
             - "5432:5432"
     web:
         build: .
-        ports: 
-            - "3000:3000"
-        volumes: 
+        ports:
+            - "8000:3000"
+        volumes:
             - ./backend:/var/www/interaktiv
         depends_on:
             - db
