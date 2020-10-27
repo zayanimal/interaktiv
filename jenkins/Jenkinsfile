@@ -8,8 +8,8 @@ pipeline {
     }
 
     environment {
-        BACKEND_DIRECTORY = 'backend/'
-        FRONTEND_DIRECTORY = 'frontend/'
+        BACKEND_DIRECTORY = 'backend'
+        FRONTEND_DIRECTORY = 'frontend'
     }
 
     triggers { pollSCM('* * * * *') }
@@ -29,9 +29,10 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}"
+                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
+                        echo 'Без сборки так как в директории нет изменений'
                     } catch (err) {
-                        sh 'chmod +x jenkins/scripts/backend_build.sh'
+                        sh "chmod +x jenkins/scripts/${BACKEND_DIRECTORY}_build.sh"
                     }
                 }
             }
@@ -41,9 +42,10 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}"
+                        sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}/"
+                        echo 'Без сборки так как в директории нет изменений'
                     } catch (err) {
-                        sh 'chmod +x jenkins/scripts/frontend_build.sh'
+                        sh "chmod +x jenkins/scripts/${FRONTEND_DIRECTORY}_build.sh"
                     }
                 }
             }
