@@ -2,10 +2,17 @@
 
 properties([disableConcurrentBuilds()])
 
-pipeline {
-    agent {
-        label 'master'
+node {
+    stage('helo') {
+        if (true) {
+            echo "hellooooo"
+        }
     }
+}
+
+
+pipeline {
+    agent none
 
     environment {
         CI = 'true'
@@ -28,6 +35,9 @@ pipeline {
     stages {
         stage("Build backend") {
             steps {
+                // agent {
+                //     docker { image '' }
+                // }
                 script {
                     try {
                         sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
