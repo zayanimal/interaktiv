@@ -1,26 +1,42 @@
 #!groovy
 
+properties([disableConcurrentBuilds()])
+
 node {
-    stage('Build_backend') {
+    def checkDirectoryChanges(path) {
         try {
-            sh "git diff --quiet --exit-code HEAD~1..HEAD backend/"
+            sh "git diff --quiet --exit-code HEAD~1..HEAD ${path}/"
             echo 'Без сборки так как в директории нет изменений'
+            return false
         } catch (err) {
+            return true
+        }
+    }
+
+    stage('Build_backend') {
+        // try {
+        //     sh "git diff --quiet --exit-code HEAD~1..HEAD backend/"
+        //     echo 'Без сборки так как в директории нет изменений'
+        // } catch (err) {
+        //     sh "chmod +x jenkins/scripts/backend_build.sh"
+        // }
+        if (checkDirectoryChanges('backend/')) {
             sh "chmod +x jenkins/scripts/backend_build.sh"
         }
     }
 
     stage("Build frontend") {
-        try {
-            sh "git diff --quiet --exit-code HEAD~1..HEAD frontend/"
-            echo 'Без сборки так как в директории нет изменений'
-        } catch (err) {
+        // try {
+        //     sh "git diff --quiet --exit-code HEAD~1..HEAD frontend/"
+        //     echo 'Без сборки так как в директории нет изменений'
+        // } catch (err) {
+        //     sh "chmod +x jenkins/scripts/frontend_build.sh"
+        // }
+        if (checkDirectoryChanges('frontend/')) {
             sh "chmod +x jenkins/scripts/frontend_build.sh"
         }
     }
 }
-
-// properties([disableConcurrentBuilds()])
 
 // pipeline {
 //     agent none
