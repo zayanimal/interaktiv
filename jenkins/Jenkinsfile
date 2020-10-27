@@ -1,7 +1,5 @@
 #!groovy
 
-properties([disableConcurrentBuilds()])
-
 node {
     stage('Build_backend') {
         try {
@@ -22,6 +20,7 @@ node {
     }
 }
 
+// properties([disableConcurrentBuilds()])
 
 // pipeline {
 //     agent none
