@@ -25,7 +25,7 @@ pipeline {
         timestamps()
     }
 
-    node() {
+    node {
         stage("Build backend") {
             steps {
                 try {
