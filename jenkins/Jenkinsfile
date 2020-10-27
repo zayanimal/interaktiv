@@ -1,7 +1,5 @@
 #!groovy
 
-properties([disableConcurrentBuilds()])
-
 // утилиты
 def checkDirectoryChanges(path) {
     try {
@@ -13,16 +11,21 @@ def checkDirectoryChanges(path) {
     }
 }
 
+properties(
+    [
+        disableConcurrentBuilds(),
+        pipelineTriggers([cron('* * * * *')]),
+        buildDiscarder(
+            logRotator(
+                numToKeepStr: '10',
+                artifactNumToKeepStr: '10'
+            )
+        ),
+
+    ]
+)
+
 node {
-    buildDiscarder(
-        logRotator(
-            numToKeepStr: '10',
-            artifactNumToKeepStr: '10'
-        )
-    )
-
-    timestamps()
-
     stage('Build_backend') {
         if (checkDirectoryChanges('backend/')) {
             sh "chmod +x jenkins/scripts/backend_build.sh"
@@ -35,53 +38,3 @@ node {
         }
     }
 }
-
-// pipeline {
-//     agent none
-
-//     environment {
-//         CI = 'true'
-//         BACKEND_DIRECTORY = 'backend'
-//         FRONTEND_DIRECTORY = 'frontend'
-//     }
-
-//     triggers { pollSCM('* * * * *') }
-
-//     options {
-//         buildDiscarder(
-//             logRotator(
-//                 numToKeepStr: '10',
-//                 artifactNumToKeepStr: '10'
-//             )
-//         )
-//         timestamps()
-//     }
-
-//     stages {
-//         stage("Build backend") {
-//             steps {
-//                 script {
-//                     try {
-//                         sh "git diff --quiet --exit-code HEAD~1..HEAD ${BACKEND_DIRECTORY}/"
-//                         echo 'Без сборки так как в директории нет изменений'
-//                     } catch (err) {
-//                         sh "chmod +x jenkins/scripts/${BACKEND_DIRECTORY}_build.sh"
-//                     }
-//                 }
-//             }
-//         }
-
-//         stage("Build frontend") {
-//             steps {
-//                 script {
-//                     try {
-//                         sh "git diff --quiet --exit-code HEAD~1..HEAD ${FRONTEND_DIRECTORY}/"
-//                         echo 'Без сборки так как в директории нет изменений'
-//                     } catch (err) {
-//                         sh "chmod +x jenkins/scripts/${FRONTEND_DIRECTORY}_build.sh"
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
