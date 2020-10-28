@@ -35,7 +35,7 @@ node {
             sh "chmod +x jenkins/scripts/docker-stop.sh"
             sh getShellScript('docker-stop')
             docker
-                .image('backend:v1')
+                .image('zayanimal/node-backend:v1')
                 .run('-d -v $(pwd)/backend:/var/www/interaktiv -p 8000:3000 --name=backend')
         }
     }
