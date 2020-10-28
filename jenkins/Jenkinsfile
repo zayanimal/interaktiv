@@ -31,13 +31,13 @@ node {
     checkout scm
 
     stage('Build_backend') {
-        if (checkDirectoryChanges('backend')) {
+        // if (checkDirectoryChanges('backend')) {
             sh "chmod +x jenkins/scripts/docker-stop.sh"
             sh getShellScript('docker-stop')
             docker
                 .image('zayanimal/nest-backend:v1')
-                .run('-d -v backend:/var/www/interaktiv -p 8000:8000 --name=nest-backend')
-        }
+                .run('-d -v $(pwd)/backend:/var/www/interaktiv -p 8000:8000 --name=nest-backend zayanimal/nest-backend:v1')
+        // }
     }
 
     stage("Build frontend") {
