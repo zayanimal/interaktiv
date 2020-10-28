@@ -6,3 +6,5 @@ ENV POSTGRES_DB=postgres
 ENV PGDATA=/var/lib/postgresql/data/pgdata
 
 EXPOSE 5432
+
+# docker run -d -p 5432:5432 -v /usr/local/pgsql/data:/var/lib/postgresql/data/pgdata --name=pgsql zayanimal/pgsql:v1

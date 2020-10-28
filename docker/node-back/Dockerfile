@@ -1,20 +1,28 @@
-FROM node:13.6.0
+FROM node:12.13-alpine As development
 
-WORKDIR /var/www/interaktiv
+WORKDIR /usr/src/app
 
-COPY ./backend/package*.json ./
+COPY package*.json ./
 
-RUN npm install -g nodemon && npm install -g typescript
+RUN npm install --only=development
 
-CMD npm install && npm run dev
+COPY . .
 
-EXPOSE 3000
+RUN npm run build
 
-# Create Node container
-# docker run -d -v $(pwd)/backend:/var/www/interaktiv -p 3000:3000 --network=interaktiv-network --name=interaktiv node-interaktiv
+FROM node:12.13-alpine as production
 
-# Create PostgresSQL container
-# docker container run -d --name=pgsql -p 5432:5432 -e POSTGRES_PASSWORD=secret -e PGDATA=pgdata -v $(pwd)/database/pgsql:/pgdata postgres
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-# Access to bash in container
-# docker exec -it interaktiv bash
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install --only=production
+
+COPY . .
+
+COPY --from=development /usr/src/app/dist ./dist
+
+CMD ["node", "dist/main"]
