@@ -4,6 +4,8 @@ WORKDIR /var/www/interaktiv
 
 COPY ./backend/package*.json ./
 
+RUN npm install -g @nest/cli
+
 RUN npm install
 
 RUN npm run build
