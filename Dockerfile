@@ -2,13 +2,11 @@ FROM node:13.6.0
 
 WORKDIR /var/www/interaktiv
 
-COPY ./backend/package*.json /var/www/interaktiv
+COPY ./backend/package*.json ./
 
 RUN npm install
 
-COPY ./backend /var/www/interaktiv
-
-CMD npm run build && npm run start:prod
+CMD npm run start
 
 EXPOSE 8000
 
