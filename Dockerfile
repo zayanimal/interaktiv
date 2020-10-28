@@ -1,9 +1,8 @@
-FROM node:13.6.0
+FROM node:12.13-alpine
 
 WORKDIR /var/www/interaktiv
 
 COPY ./backend/package*.json ./
-COPY ./backend/tsconfig.build.json ./
 
 RUN npm install
 
