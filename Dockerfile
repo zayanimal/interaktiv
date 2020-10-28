@@ -2,11 +2,11 @@ FROM node:13.6.0
 
 WORKDIR /var/www/interaktiv
 
-COPY ./backend/package*.json ./
+COPY ./backend/package*.json /var/www/interaktiv
 
 RUN npm install
 
-COPY ./backend ./
+COPY ./backend /var/www/interaktiv
 
 CMD npm run build && npm run start:prod
 
