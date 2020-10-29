@@ -2,7 +2,7 @@ FROM node:12.13-alpine
 
 WORKDIR /var/www/interaktiv
 
-COPY ./ ./
+COPY ./* ./
 
 RUN npm install
 
