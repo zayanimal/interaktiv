@@ -4,7 +4,7 @@ WORKDIR /var/www/interaktiv
 
 COPY ./backend/package*.json ./
 
-RUN npm install
+CMD npm install
 
 CMD npm run start
 
