@@ -33,13 +33,6 @@ frontend/coverage
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
 # misc
 .env.local
 .env.development.local
@@ -48,3 +41,6 @@ frontend/coverage
 
 # storybook
 .storybook
+
+# vscode
+.vscode
