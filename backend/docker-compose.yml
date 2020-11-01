@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+    db:
+        image: zayanimal/pgsql:v1
+        volumes:
+            - /usr/local/pgsql/data:/var/lib/postgresql/data/pgdata
+        ports:
+            - "5432:5432"
+    backend:
+        image: zayanimal/nest-backend:v2
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
