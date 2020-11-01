@@ -7,7 +7,7 @@ services:
         ports:
             - "5432:5432"
     backend:
-        image: zayanimal/nest-backend:v2
+        image: zayanimal/nest-backend:v3
         ports:
             - "8000:8000"
         depends_on:
