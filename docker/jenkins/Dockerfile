@@ -25,10 +25,10 @@ USER jenkins
 # chown -R 1000:1000 .
 
 
-docker run -itd -e JENKINS_USER=$(id -u) \
--v /var/run/docker.sock:/var/run/docker.sock \
--v /var/jenkins_home:/var/jenkins_home \
--v $(which docker):/usr/bin/docker \
--p 8880:8080 -p 50000:50000  \
--u root \
-zayanimal/jenkins:v1
+# docker run -itd -e JENKINS_USER=$(id -u) \
+# -v /var/run/docker.sock:/var/run/docker.sock \
+# -v /var/jenkins_home:/var/jenkins_home \
+# -v $(which docker):/usr/bin/docker \
+# -p 8880:8080 -p 50000:50000  \
+# -u root \
+# zayanimal/jenkins:v1
