@@ -1,6 +1,6 @@
 FROM node:12.13-alpine as builder
 WORKDIR /app
-COPY ./package.json ./
+COPY package.json ./
 RUN npm install
 COPY . .
 RUN npm run build
@@ -8,7 +8,7 @@ RUN npm run build
 # Second Stage : Setup command to run your app
 FROM node:12.13-alpine
 WORKDIR /app
-COPY --from=builder /app ./
+COPY --from=builder app .
 EXPOSE 8000
 CMD ["npm", "run", "start:prod"]
 
