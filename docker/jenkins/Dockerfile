@@ -2,7 +2,7 @@ FROM jenkins/jenkins:lts
 USER root
 RUN apt-get update && apt-get install -y apt-transport-https \
        ca-certificates curl gnupg2 \
-       software-properties-common
+       software-properties-common apt-utils
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 RUN apt-key fingerprint 0EBFCD88
 RUN add-apt-repository \
@@ -14,3 +14,10 @@ RUN java -jar /usr/lib/jenkins-plugin-manager.jar --plugins blueocean:1.24.2
 
 # https://github.com/jenkinsci/docker/blob/master/README.md
 # docker run -d -v jenkins_home:/var/jenkins_home -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts
+
+docker run --name zayanimal/jenkins --rm --detach \
+  --privileged --network jenkins --network-alias docker \
+  --env DOCKER_TLS_CERTDIR=/certs \
+  --volume jenkins-docker-certs:/certs/client \
+  --volume jenkins-data:/var/jenkins_home \
+  --publish 2376:2376 docker:dind
