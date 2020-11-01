@@ -1,20 +1,21 @@
-FROM node:12.13-alpine
-
-WORKDIR /var/www/interaktiv
-
-COPY ./backend/package*.json ./
-
+FROM node:12.13-alpine as builder
+WORKDIR /app
+COPY ./package.json ./
 RUN npm install
+COPY . .
+RUN npm run build
 
-CMD npm run start
-
+# Second Stage : Setup command to run your app
+FROM node:12.13-alpine
+WORKDIR /app
+COPY --from=builder /app ./
 EXPOSE 8000
+CMD ["npm", "run", "start:prod"]
 
-# Create Node container
-# docker run -d -v $(pwd)/backend:/var/www/interaktiv -p 3000:3000 --network=interaktiv-network --name=interaktiv node-interaktiv
+# docker run --name nest-backend -d -v /var/jenkins_home/workspace/interaktiv/backend:/var/www/interaktiv -p 8000:8000 zayanimal/nest-backend:v1
 
 # Create PostgresSQL container
-# docker container run -d --name=pgsql -p 5432:5432 -e POSTGRES_PASSWORD=secret -e PGDATA=pgdata -v $(pwd)/database/pgsql:/pgdata postgres
+# docker run --name=pgsql -d -p 5432:5432 -v $(pwd)/database/pgsql:/pgdata postgres
 
 # Access to bash in container
 # docker exec -it interaktiv bash
