@@ -32,10 +32,10 @@ node {
 
     stage('Build_backend') {
         // if (checkDirectoryChanges('backend')) {
-            docker.stop('nest-backend')
+            sh 'docker stop nest-backend'
             sh 'docker rmi zayanimal/nest-backend:v1'
-            docker.build('-t zayanimal/nest-backend:v1 ./backend/')
-            docker.run('run --name nest-backend --rm --network=interaktiv -d -p 8000:8000 zayanimal/nest-backend:v1')
+            sh 'docker build -t zayanimal/nest-backend:v1 ./backend/.'
+            sh 'docker run --name nest-backend --rm --network=interaktiv -d -p 8000:8000 zayanimal/nest-backend:v1'
         // }
     }
 
