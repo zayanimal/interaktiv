@@ -1,11 +1,9 @@
-FROM jenkins:1.596
-
+FROM jenkins:lts
 USER root
-RUN apt-get update \
-      && apt-get install -y sudo \
-      && rm -rf /var/lib/apt/lists/*
-RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
-
+RUN apt-get update && apt-get install -y tree nano curl sudo
+RUN curl https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar xvz -C /tmp/ && mv /tmp/docker/docker /usr/bin/docker
+RUN usermod -a -G sudo jenkins
+RUN echo "jenkins ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER jenkins
 
 # https://github.com/jenkinsci/docker
