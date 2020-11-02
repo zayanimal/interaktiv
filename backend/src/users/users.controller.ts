@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './user.entity';
+import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -22,15 +22,15 @@ export class UsersController {
     //     return this.usersService.create(createUserDto);
     // }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get()
-    // findAll(@Query() params: { username: string }): Promise<User | User[]> {
-    //     if (params?.username) {
-    //         return this.usersService.findName(params.username);
-    //     }
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    findOne(@Query() params: { username: string }): Promise<UserDto | UserDto[]> {
+        if (params?.username) {
+            return this.usersService.findOne({ where: { username: params.username }});
+        }
 
-    //     return this.usersService.findAll();
-    // }
+        return this.usersService.findAll();
+    }
 
     // @UseGuards(JwtAuthGuard)
     // @Get(':id')

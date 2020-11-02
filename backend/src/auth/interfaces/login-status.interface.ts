@@ -1,5 +1,11 @@
-export interface LoginStatus {
+interface LoginSuccess {
     username: string;
-    accessToken: any;
-    expiresIn: any;
+    accessToken: string;
 }
+
+interface LoginError {
+    status: number;
+    message: string;
+}
+
+export type LoginStatus = LoginSuccess | LoginError;

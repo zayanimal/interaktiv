@@ -15,9 +15,12 @@ export class UsersService {
         private readonly usersRepository: Repository<User>,
     ) {}
 
-    /** найти пользователя и обернуть в dto */
     async findOne(options?: object): Promise<UserDto> {
         return toUserDto(await this.usersRepository.findOne(options));
+    }
+
+    async findAll(): Promise<UserDto[]> {
+        return await this.usersRepository.find({ select: ['id', 'username', 'email'] });
     }
 
     /** проверить логин и пароль, в случае успешной проверки вернуть пользователя */
@@ -54,31 +57,4 @@ export class UsersService {
 
         return toUserDto(user);
     }
-
-    // create(createUserDto: CreateUserDto): Promise<User> {
-    //     const user = new User();
-    //     user.username = createUserDto.username;
-    //     user.password = createUserDto.password;
-
-    //     return this.usersRepository.save(user);
-    // }
-
-    // async findAll(): Promise<User[]> {
-    //     return this.usersRepository.find();
-    // }
-
-    // findOne(id: string): Promise<User> {
-    //     return this.usersRepository.findOne(id);
-    // }
-
-    // findName(username: string): Promise<User[]> {
-    //     return this.usersRepository.find({
-    //         where: { username },
-    //         take: 1
-    //     });
-    // }
-
-    // async remove(id: string): Promise<void> {
-    //     await this.usersRepository.delete(id);
-    // }
 }

@@ -1,0 +1,11 @@
+{
+    "name": "development",
+    "type": "postgres",
+    "host": "interaktiv",
+    "port": 5432,
+    "username": "postgres",
+    "password": "secret",
+    "database": "my_database",
+    "synchronize": false,
+    "entities": ["src/**/*.entity.ts"]
+}

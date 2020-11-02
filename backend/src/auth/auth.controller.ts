@@ -22,11 +22,4 @@ export class AuthController {
     public async login(@Body() loginUserDto: LoginUserDto): Promise<LoginStatus> {
         return await this.authService.login(loginUserDto);
     }
-
-
-    // @UseGuards(LocalAuthGuard)
-    // @Post()
-    // login(@Request() req: any) {
-    //     return this.authService.login(req.user);
-    // }
 }

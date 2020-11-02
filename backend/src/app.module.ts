@@ -12,7 +12,7 @@ import { User } from './users/user.entity';
             port: 5432,
             username: 'postgres',
             password: 'secret',
-            database: 'my_database',
+            database: 'interaktiv',
             entities: [User],
             synchronize: true
         }),
