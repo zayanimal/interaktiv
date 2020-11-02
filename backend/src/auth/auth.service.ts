@@ -43,11 +43,11 @@ export class AuthService {
 
     async login(loginUserDto: LoginUserDto): Promise<LoginStatus> {
         try {
-            const user = await this.usersService.findByLogin(loginUserDto);
+            const { id, username } = await this.usersService.findByLogin(loginUserDto);
 
             return {
-                username: user.username,
-                accessToken: this.createToken(user)
+                username,
+                accessToken: this.jwtService.sign({ id, username })
             };
         } catch({ status, message }) {
             return { status, message };
