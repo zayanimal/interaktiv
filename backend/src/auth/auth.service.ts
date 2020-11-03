@@ -17,11 +17,11 @@ export class AuthService {
 
     async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
         try {
-            await this.usersService.create(userDto);
+            await this.usersService.checkExistsAndCreate(userDto);
 
             return {
                 success: true,
-                message: 'user registered',
+                message: 'Пользователь зарегистрирован',
             };
         } catch (err) {
             return {
@@ -32,10 +32,10 @@ export class AuthService {
     }
 
     async validateUser(payload: JwtPayload): Promise<UserDto> {
-        const user = await this.usersService.findByPayload(payload);
+        const user = await this.usersService.findByUsername(payload);
 
         if (!user) {
-            throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+            throw new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED);
         }
 
         return user;
@@ -43,20 +43,17 @@ export class AuthService {
 
     async login(loginUserDto: LoginUserDto): Promise<LoginStatus> {
         try {
-            const { id, username } = await this.usersService.findByLogin(loginUserDto);
+            const { id, username } = await this.usersService.findUserCheckPass(loginUserDto);
 
             return {
                 username,
                 accessToken: this.jwtService.sign({ id, username })
             };
         } catch({ status, message }) {
-            return { status, message };
+            return {
+                status,
+                message
+            };
         }
-    }
-
-    private createToken({ username }: UserDto): any {
-        const user = { username };
-
-        return this.jwtService.sign(user);
     }
 }

@@ -1,25 +1,33 @@
--- select needed schema
-set search_path to iskor;
+create table roles (
+	id uuid primary key,
+	name varchar(30) not null
+);
 
--- auto increment
-create sequence customer_id_seq;
-alter table customers alter column customer_id set default nextval('customer_id_seq');
-alter sequence customer_id_seq owned by customer.customer_id;
+insert into public.roles (id, name) values (uuid_generate_v4(), 'admin');
+insert into public.roles (id, name) values (uuid_generate_v4(), 'customer');
+insert into public.roles (id, name) values (uuid_generate_v4(), 'vendor');
+insert into public.roles (id, name) values (uuid_generate_v4(), 'distributor');
 
--- получить список заказов
-select date, end_user, state from orders where customer_id = 3;
+select * from public.roles;
 
--- получить список моделей заказа
-select model, qty, desired_price, end_user
-from order_partnumber inner join orders using(order_id)
-inner join part_numbers using(part_number_id) where customer_id = 3 and order_id = 5
+create table users (
+	id uuid primary key,
+	username varchar(30) not null,
+	password varchar not null,
+	role_id uuid not null default 'e39d67be-d37c-4f15-8f9a-89b270db61c8',
+	foreign key (role_id) references public.roles (id)
+);
 
--- создать заказ с моделями
-insert into orders (customer_id, end_user)
-values (4, 'NUTS');
-insert into order_partnumber values
-((select order_id from orders order by order_id desc limit 1), 2, 8, 113),
-((select order_id from orders order by order_id desc limit 1), 4, 4, 310);
+insert into public.users (id, username, password) values (uuid_generate_v4(), 'vasya', '123123');
 
--- обновление данных таблиц, как добавить новую строку если нет совпадений?
-update part_numbers set cost = 125 where model = 'DES-1210-28';
+select
+	public.users.id,
+	public.users.username,
+	public.roles.name as role
+from
+	public.users
+left outer join
+	public.roles
+on
+	(public.users.role_id = public.roles.id);
+

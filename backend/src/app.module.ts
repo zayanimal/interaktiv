@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
+import { Users } from './users/users.entity';
 
 @Module({
     imports: [
@@ -12,9 +12,9 @@ import { User } from './users/user.entity';
             port: 5432,
             username: 'postgres',
             password: 'secret',
-            database: 'interaktiv',
-            entities: [User],
-            synchronize: true
+            database: 'my_database',
+            entities: [Users],
+            synchronize: false
         }),
         AuthModule,
         UsersModule

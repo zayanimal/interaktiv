@@ -22,15 +22,15 @@ export class UsersController {
     //     return this.usersService.create(createUserDto);
     // }
 
-    @UseGuards(JwtAuthGuard)
-    @Get()
-    findOne(@Query() params: { username: string }): Promise<UserDto | UserDto[]> {
-        if (params?.username) {
-            return this.usersService.findOne({ where: { username: params.username }});
-        }
+    // @UseGuards(JwtAuthGuard)
+    // @Get()
+    // findOne(@Query() params: { username: string }): Promise<UserDto | UserDto[]> {
+    //     if (params?.username) {
+    //         return this.usersService.findOne({ where: { username: params.username }});
+    //     }
 
-        return this.usersService.findAll();
-    }
+    //     return this.usersService.findAll();
+    // }
 
     // @UseGuards(JwtAuthGuard)
     // @Get(':id')
