@@ -21,7 +21,7 @@ export class AuthService {
 
             return {
                 success: true,
-                message: 'Пользователь зарегистрирован',
+                message: 'Пользователь зарегистрирован'
             };
         } catch (err) {
             return {
