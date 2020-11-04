@@ -1,12 +1,13 @@
+import { Observable, of, from, throwError } from 'rxjs';
+import { switchMap, switchAll, map } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { compare } from 'bcrypt';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { Users } from './entities/users.entity';
-import { toUserDto } from '@shared/mapper';
 
 @Injectable()
 export class UsersService {
@@ -19,46 +20,69 @@ export class UsersService {
      * Проверить есть ли пользователь в базе и соответствует ли его пароль
      * @param param введеные пользователем логин и пароль
      */
-    async findUserCheckPass({ username, password }: LoginUserDto) {
-        const user = await this.usersRepository.findOne({
+    findUserCheckPass({ username, password }: LoginUserDto): Observable<any> {
+        return from(this.usersRepository.findOne({
             where: { username },
             relations: ['roles']
-        });
+        })).pipe(
+            switchMap((user) => (user
+                ? of(user).pipe(
+                    switchMap(async (user) => (await compare(password, user.password)
+                        ? of(user)
+                        : throwError(new HttpException('Неверный пароль', HttpStatus.UNAUTHORIZED)))
+                    )
+                )
+                : throwError(new HttpException('Пользователь не найден', HttpStatus.UNAUTHORIZED)))
+            ),
 
-        if (!user) {
-            throw new HttpException('Пользователь не найден', HttpStatus.UNAUTHORIZED);
-        }
-
-        if (!(await bcrypt.compare(password, user.password))) {
-            throw new HttpException('Неверный пароль', HttpStatus.UNAUTHORIZED);
-        }
-
-        return toUserDto(user);
+            switchAll()
+        );
     }
 
     /**
      * Найти пользователя в базе по имени
      * @param param имя пользователя
      */
-    async findByUsername({ username }: { username: string }): Promise<UserDto> {
-        return toUserDto(await this.usersRepository.findOne({ where: { username } }));
+    findByUsername({ username }: { username: string }): Observable<UserDto> {
+        return from(this.usersRepository.findOne({
+            where: { username },
+            relations: ['roles']
+        })).pipe(
+            switchMap((user) => (user
+                ? of(user).pipe(
+                    map(({ id, username, roles }) => ({ id, username, role: roles.name }))
+                )
+                : throwError(new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED)))
+            )
+        );
     }
 
     /**
      * Проверить существует ли пользователь в базе, если нет создать нового
      * @param userDto логин и пароль пользователя
      */
-    async checkExistsAndCreate(userDto: CreateUserDto): Promise<UserDto> {
+    checkExistsAndCreate(userDto: CreateUserDto): Observable<UserDto> {
         const { username, password } = userDto;
 
-        if (await this.usersRepository.findOne({ where: { username } })) {
-            throw new HttpException('Пользователь уже существует', HttpStatus.BAD_REQUEST);
-        }
+        return from(this.usersRepository.findOne({
+            where: { username },
+            relations: ['roles']
+        })).pipe(
+            switchMap(async (user) => {
+                if (!user) {
+                    const user = this.usersRepository.create({ username, password });
 
-        const user = this.usersRepository.create({ username, password });
+                    await this.usersRepository.save(user);
 
-        await this.usersRepository.save(user);
+                    return of(user).pipe(
+                        map(({ id, username, roles }) => ({ id, username, role: roles.name }))
+                    );
+                } else {
+                    return throwError(new HttpException('Пользователь уже существует', HttpStatus.BAD_REQUEST));
+                }
+            }),
 
-        return toUserDto(user);
+            switchAll()
+        );
     }
 }

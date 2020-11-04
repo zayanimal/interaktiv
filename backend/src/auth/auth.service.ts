@@ -1,9 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '@users/users.service';
 import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
-import { RegistrationStatus } from './interfaces/registration-status.interface';
 import { LoginUserDto } from '@users/dto/login-user.dto';
 import { LoginStatus } from './interfaces/login-status.interface';
 import { JwtPayload } from './interfaces/payload.interface';
@@ -15,45 +16,21 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
-        try {
-            await this.usersService.checkExistsAndCreate(userDto);
-
-            return {
-                success: true,
-                message: 'Пользователь зарегистрирован'
-            };
-        } catch (err) {
-            return {
-                success: false,
-                message: err
-            };
-        }
+    register(userDto: CreateUserDto): Observable<UserDto> {
+        return this.usersService.checkExistsAndCreate(userDto);
     }
 
-    async validateUser(payload: JwtPayload): Promise<UserDto> {
-        const user = await this.usersService.findByUsername(payload);
-
-        if (!user) {
-            throw new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED);
-        }
-
-        return user;
+    validateUser(payload: JwtPayload): Observable<UserDto> {
+        return this.usersService.findByUsername(payload);
     }
 
-    async login(loginUserDto: LoginUserDto): Promise<LoginStatus> {
-        try {
-            const { id, username } = await this.usersService.findUserCheckPass(loginUserDto);
-
-            return {
+    login(loginUserDto: LoginUserDto): Observable<LoginStatus> {
+        return this.usersService.findUserCheckPass(loginUserDto).pipe(
+            map(({ id, username, roles }) => ({
                 username,
-                accessToken: this.jwtService.sign({ id, username })
-            };
-        } catch({ status, message }) {
-            return {
-                status,
-                message
-            };
-        }
+                accessToken: this.jwtService.sign({ id, username }),
+                role: roles.name
+            }))
+        );
     }
 }

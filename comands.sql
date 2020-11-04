@@ -31,5 +31,4 @@ from
 left outer join
 	public.roles
 on
-	(public.users.roleId = public.roles.id);
-
+	"rolesId" = public.roles.id;

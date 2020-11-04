@@ -3,8 +3,8 @@ import {
     Column,
     PrimaryGeneratedColumn,
     BeforeInsert,
-    OneToOne,
-    JoinColumn
+    JoinColumn,
+    ManyToOne
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Roles } from './roles.entity';
@@ -24,7 +24,10 @@ export class Users {
     @Column({ type: 'varchar' })
     password: string;
 
-    @OneToOne(() => Roles)
+    @Column({ type: 'uuid', default: '586ecc04-b76f-42a3-9986-1ddb4c97d3ff' })
+    rolesId: string;
+
+    @ManyToOne(() => Roles, (roles) => roles.users)
     @JoinColumn()
     roles: Roles
 

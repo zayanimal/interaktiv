@@ -1,11 +1,5 @@
-interface LoginSuccess {
+export interface LoginStatus {
     username: string;
     accessToken: string;
+    role: string;
 }
-
-interface LoginError {
-    status: number;
-    message: string;
-}
-
-export type LoginStatus = LoginSuccess | LoginError;

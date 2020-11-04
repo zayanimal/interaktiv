@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
@@ -14,13 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: { username: string }): Promise<UserDto> {
-        const user = await this.authService.validateUser(payload);
-
-        if (!user) {
-            throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
-        }
-
-        return user;
+    validate(payload: { username: string }): Observable<UserDto> {
+        return this.authService.validateUser(payload);
     }
 }

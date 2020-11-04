@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import {
     Body,
     Controller,
@@ -8,10 +9,12 @@ import {
     Post,
     UseGuards
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import { RolesGuard } from '@auth/guards/roles.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
+import { Roles } from '@auth/decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -22,15 +25,14 @@ export class UsersController {
     //     return this.usersService.create(createUserDto);
     // }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get()
-    // findOne(@Query() params: { username: string }): Promise<UserDto | UserDto[]> {
-    //     if (params?.username) {
-    //         return this.usersService.findOne({ where: { username: params.username }});
-    //     }
-
-    //     return this.usersService.findAll();
-    // }
+    @Get()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    findOne(@Query() params: { username: string }): Observable<UserDto | UserDto[]> {
+        if (params?.username) {
+            return this.usersService.findByUsername(params);
+        }
+    }
 
     // @UseGuards(JwtAuthGuard)
     // @Get(':id')

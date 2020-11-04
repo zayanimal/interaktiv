@@ -1,8 +1,17 @@
-import { Controller, Request, Post, UseGuards, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import {
+    Controller,
+    Request,
+    Post,
+    UseGuards,
+    Body,
+    HttpException,
+    HttpStatus
+} from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDto } from '@users/dto/create-user.dto';
-import { RegistrationStatus } from './interfaces/registration-status.interface';
 import { LoginUserDto } from '@users/dto/login-user.dto';
+import { UserDto } from '@users/dto/user.dto';
 import { LoginStatus } from './interfaces/login-status.interface';
 
 @Controller('auth')
@@ -10,17 +19,12 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('register')
-    public async register(@Body() createUserDto: CreateUserDto ): Promise<RegistrationStatus> {
-        const result = await this.authService.register(createUserDto);
-
-        if (!result.success) {
-            throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
-        }
-        return result;
+    public register(@Body() createUserDto: CreateUserDto ): Observable<UserDto> {
+        return this.authService.register(createUserDto);
     }
 
     @Post('login')
-    public async login(@Body() loginUserDto: LoginUserDto): Promise<LoginStatus> {
-        return await this.authService.login(loginUserDto);
+    public login(@Body() loginUserDto: LoginUserDto): Observable<LoginStatus> {
+        return this.authService.login(loginUserDto);
     }
 }
