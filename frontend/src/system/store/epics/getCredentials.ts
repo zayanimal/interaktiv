@@ -3,8 +3,7 @@ import {
     first,
     map,
     switchMap,
-    mergeMap,
-    tap
+    mergeMap
 } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import { Epic } from 'redux-observable';
@@ -25,7 +24,6 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
             },
             body: credentials
         })),
-        first(),
-        tap(console.log)
+        map(systemActions.setTokenAndRole)
     ))
 );
