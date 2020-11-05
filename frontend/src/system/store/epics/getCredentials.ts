@@ -17,7 +17,6 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
     switchMap(() => state$.pipe(
         first(),
         map(systemSelectors.credentials),
-        tap(console.log),
         mergeMap((credentials) => ajax({
             url: 'http://interaktiv:8000/auth/login',
             method: 'POST',
@@ -26,6 +25,7 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
             },
             body: credentials
         })),
-        first()
+        first(),
+        tap(console.log)
     ))
 );
