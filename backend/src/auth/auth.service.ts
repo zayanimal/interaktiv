@@ -25,6 +25,16 @@ export class AuthService {
     }
 
     login(loginUserDto: LoginUserDto): Observable<LoginStatus> {
+        this.usersService.findUserCheckPass(loginUserDto).pipe(
+            map(({ id, username, roles }) => ({
+                username,
+                accessToken: this.jwtService.sign({ id, username }),
+                role: roles.name
+            }))
+        ).subscribe({
+            next: (res) => console.log(res);
+        });
+
         return this.usersService.findUserCheckPass(loginUserDto).pipe(
             map(({ id, username, roles }) => ({
                 username,
