@@ -32,7 +32,7 @@ export class AuthService {
                 role: roles.name
             }))
         ).subscribe({
-            next: (res) => console.log(res);
+            next: (res) => console.log(res)
         });
 
         return this.usersService.findUserCheckPass(loginUserDto).pipe(
