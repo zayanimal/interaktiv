@@ -8,7 +8,6 @@ RUN npm run build
 FROM node:12.13-alpine
 WORKDIR /app
 COPY --from=builder app ./
-EXPOSE 8000
 CMD ["npm", "run", "start:prod"]
 
 # docker run --name nest-backend --rm --network=interaktiv -d -p 8000:8000 zayanimal/nest-backend:v1
