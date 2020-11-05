@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { rootStateTypes } from '@system/store/roots';
 
 export const systemState = (state: rootStateTypes) => state.system;
@@ -10,4 +11,11 @@ export const openNotification = (state: rootStateTypes) => systemState(state).op
 
 export const typeNotification = (state: rootStateTypes) => systemState(state).typeNotification;
 
-export const messageNotification = (state: rootStateTypes) => systemState(state).messageNotification;
+export const messageNotification = (state: rootStateTypes) => systemState(state)
+    .messageNotification;
+
+export const login = (state: rootStateTypes) => systemState(state).login;
+
+export const password = (state: rootStateTypes) => systemState(state).password;
+
+export const credentials = (state: rootStateTypes) => _.pick(systemState(state), ['login', 'password']);
