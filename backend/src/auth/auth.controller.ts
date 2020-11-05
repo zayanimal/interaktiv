@@ -25,6 +25,7 @@ export class AuthController {
 
     @Post('login')
     public login(@Body() loginUserDto: LoginUserDto): Observable<LoginStatus> {
+        console.log(loginUserDto);
         return this.authService.login(loginUserDto);
     }
 }
