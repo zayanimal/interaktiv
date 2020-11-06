@@ -35,6 +35,6 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
 
             return of(systemActions.errorNotification('Ошибка авторизации'));
         }),
-        map(systemActions.setTokenAndRole)
+        map(({ role }) => systemActions.setRole(role))
     ))
 );

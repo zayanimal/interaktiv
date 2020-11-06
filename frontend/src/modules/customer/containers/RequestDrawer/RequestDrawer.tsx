@@ -169,7 +169,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
                         helperText={cityHelpText}
                     />
                 </div>
-                <div className={cn('row')}>
+                {/* <div className={cn('row')}>
                     <KeyboardDatePicker
                         disableToolbar
                         onChange={dateHandler}
@@ -181,7 +181,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
                         minDate={new Date()}
                         helperText="Срок поставки"
                     />
-                </div>
+                </div> */}
                 <div className={cn('row')}>
                     <TextField
                         label="Дополнительная информация"

@@ -1,33 +1,54 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
-import { PrivateRoute } from '@system/components/PrivateRoute';
+import {
+    BrowserRouter, Switch, Route, Redirect
+} from 'react-router-dom';
+import { rootStateTypes } from '@system/store/roots';
 import { Layout } from '@system/containers/Layout';
 import { Auth } from '@system/containers/Auth';
 import { systemActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
-import { tokenService } from '@system/services/token.service';
 
 
-// const mapStateToProps = (state) => ({
+const mapStateToProps = (state: rootStateTypes) => ({
+    isLoggedIn: systemSelectors.isLoggedIn(state)
+});
 
-// });
+const mapDispatchToProps = {
+    checkAuth: systemActions.checkAuth
+};
 
-// const mapDispatchToProps = {
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-// };
+const App: React.FC<Props> = (props) => {
+    const { checkAuth, isLoggedIn } = props;
 
-const App: React.FC = () => (
-    <Switch>
-        <Route path="/auth" component={Auth} />
-        <PrivateRoute
-            path="/"
-            component={Layout}
-            permission={false}
-        />
-    </Switch>
-);
+    useEffect(() => {
+        checkAuth();
+    });
 
-// const AppConnected = connect(mapStateToProps, mapDispatchToProps)(App);
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route
+                    exact
+                    path="/auth"
+                    render={() => (
+                        isLoggedIn ? <Redirect to={{ pathname: '/' }} /> : <Auth />
+                    )}
+                />
 
-export { App };
+                <Route
+                    path="/"
+                    render={() => (
+                        isLoggedIn ? <Layout /> : <Redirect to={{ pathname: '/auth' }} />
+                    )}
+                />
+            </Switch>
+        </BrowserRouter>
+    );
+};
+
+const AppConnected = connect(mapStateToProps, mapDispatchToProps)(App);
+
+export { AppConnected as App };

@@ -1,9 +1,12 @@
 import { createAction } from 'typesafe-actions';
 
-export const setLogin = createAction('[system] SET_LOGIN')<string>();
-export const setPassword = createAction('[system] SET_PASSWORD')<string>();
-export const getCredentials = createAction('[system] GET_CREDENTIALS')();
-export const setTokenAndRole = createAction('[system] SET_TOKEN_AND_ROLE')<unknown>();
+export const setLogin = createAction('[SYSTEM] SET_LOGIN')<string>();
+export const setPassword = createAction('[SYSTEM] SET_PASSWORD')<string>();
+export const getCredentials = createAction('[SYSTEM] GET_CREDENTIALS')();
+export const setRole = createAction('[SYSTEM] SET_ROLE')<string>();
+
+export const checkAuth = createAction('[SYSTEM] CHECK_LOGGED')();
+export const setAuth = createAction('[SYSTEM] SET_AUTH')<boolean>();
 
 export const setDrawerState = createAction('[SYSTEM] SET_DRAWER_STATE')<boolean>();
 export const setHeaderTitle = createAction('[SYSTEM] SET_HEADER_TITLE')<string>();

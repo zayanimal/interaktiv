@@ -8,6 +8,8 @@ export class TokenService {
     constructor(private token: string = getLs<string>('accessToken')) {}
 
     isExpired() {
+        if (!this.token) return true;
+
         const jwt = JSON.parse(atob(this.token.split('.')[1]));
         const exp = jwt && jwt.exp && jwt.exp * 1000;
 
@@ -16,10 +18,6 @@ export class TokenService {
 
     getToken() {
         if (!this.token) { return null; }
-
-        // if (this.isExpired()) {
-
-        // }
 
         return this.token;
     }
@@ -35,7 +33,8 @@ export class TokenService {
     }
 
     isLoggedIn() {
-        return !!this.token;
+        // removeLs('accessToken');
+        return !this.isExpired();
     }
 }
 

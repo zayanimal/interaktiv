@@ -19,3 +19,5 @@ export const login = (state: rootStateTypes) => systemState(state).username;
 export const password = (state: rootStateTypes) => systemState(state).password;
 
 export const credentials = (state: rootStateTypes) => _.pick(systemState(state), ['username', 'password']);
+
+export const isLoggedIn = (state: rootStateTypes) => systemState(state).isLoggedIn;

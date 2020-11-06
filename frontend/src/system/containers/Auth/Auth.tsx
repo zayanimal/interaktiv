@@ -11,7 +11,8 @@ const cn = bem('Auth');
 
 const mapStateToProps = (state: rootStateTypes) => ({
     login: systemSelectors.login(state),
-    password: systemSelectors.password(state)
+    password: systemSelectors.password(state),
+    isLoggedIn: systemSelectors.isLoggedIn(state)
 });
 
 const mapDispatchToProps = {
