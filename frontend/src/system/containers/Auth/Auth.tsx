@@ -31,18 +31,13 @@ const Auth: React.FC<AuthProps> = (props) => {
         getCredentials
     } = props;
 
-    const onChangeLogin = (event: ChangeEvent) => {
-        const target = event.target as HTMLInputElement;
-
-        setLogin(target.value);
+    const onChangeLogin = (event: ChangeEvent<HTMLInputElement>) => {
+        setLogin(event.target.value);
     };
 
-    const onChangePassword = (event: ChangeEvent) => {
-        const target = event.target as HTMLInputElement;
-
-        setPassword(target.value);
+    const onChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
     };
-
 
     return (
         <div className={cn()}>

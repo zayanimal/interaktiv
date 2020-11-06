@@ -6,7 +6,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import ruLocale from 'date-fns/locale/ru';
 import configureStore from '@system/store/configureStore';
-import { App } from '@system/components/App';
+import { App } from '@system/containers/App';
 import './index.scss';
 
 const store = configureStore();

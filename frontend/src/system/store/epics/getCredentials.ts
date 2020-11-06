@@ -1,3 +1,4 @@
+import { of } from 'rxjs';
 import {
     filter,
     first,
@@ -10,6 +11,7 @@ import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
+import { tokenService } from '@system/services/token.service';
 
 export const getCredentials: Epic = (action$, state$) => action$.pipe(
     filter(isActionOf(systemActions.getCredentials)),
@@ -24,6 +26,15 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
             },
             body: credentials
         })),
+        mergeMap((request) => {
+            if (request.status === 201) {
+                tokenService.setToken(request.response.accessToken);
+
+                return of(request.response);
+            }
+
+            return of(systemActions.errorNotification('Ошибка авторизации'));
+        }),
         map(systemActions.setTokenAndRole)
     ))
 );
