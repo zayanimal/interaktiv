@@ -1,0 +1,25 @@
+.Header {
+    align-items: center;
+    padding: .6em .7em;
+    height: 4.1992em;
+    box-shadow: 0 0.25em 0.25em -0.25em var(--color-box-shadow);
+    display: flex;
+    justify-content: space-between;
+
+    * + h4 {
+        display: inline;
+        margin-left: 1em;
+    }
+
+    & + * {
+        padding: 2em;
+    }
+
+    &__user {
+        margin-right: 1em;
+
+        div + button {
+            margin-left: 1em;
+        }
+    }
+}

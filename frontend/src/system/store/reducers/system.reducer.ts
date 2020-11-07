@@ -47,6 +47,14 @@ const systemReducer = createReducer<SystemStateTypes>(initialState, {
         isLoggedIn: payload
     }),
 
+    [getType(systemActions.clearUser)]: (state) => ({
+        ...state,
+        isLoggedIn: false,
+        username: '',
+        password: '',
+        role: ''
+    }),
+
     [getType(systemActions.setDrawerState)]: (state, { payload }) => ({
         ...state,
         drawer: payload

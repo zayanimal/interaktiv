@@ -10,7 +10,7 @@ import './Auth.scss';
 const cn = bem('Auth');
 
 const mapStateToProps = (state: rootStateTypes) => ({
-    login: systemSelectors.login(state),
+    username: systemSelectors.username(state),
     password: systemSelectors.password(state),
     isLoggedIn: systemSelectors.isLoggedIn(state)
 });
@@ -25,7 +25,7 @@ type AuthProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Auth: React.FC<AuthProps> = (props) => {
     const {
-        login,
+        username,
         password,
         setLogin,
         setPassword,
@@ -45,7 +45,7 @@ const Auth: React.FC<AuthProps> = (props) => {
             <form className={cn('form')}>
                 <h3>ISKOR Interaktiv</h3>
                 <TextField
-                    value={login}
+                    value={username}
                     onChange={onChangeLogin}
                     label="Логин"
                     size="small"

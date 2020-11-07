@@ -33,8 +33,13 @@ export class TokenService {
     }
 
     isLoggedIn() {
-        // removeLs('accessToken');
         return !this.isExpired();
+    }
+
+    removeToken() {
+        removeLs('accessToken');
+
+        this.token = '';
     }
 }
 

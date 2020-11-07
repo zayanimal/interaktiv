@@ -14,7 +14,7 @@ export const typeNotification = (state: rootStateTypes) => systemState(state).ty
 export const messageNotification = (state: rootStateTypes) => systemState(state)
     .messageNotification;
 
-export const login = (state: rootStateTypes) => systemState(state).username;
+export const username = (state: rootStateTypes) => systemState(state).username;
 
 export const password = (state: rootStateTypes) => systemState(state).password;
 

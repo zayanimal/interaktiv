@@ -1,8 +1,8 @@
 import { combineEpics, Epic } from 'redux-observable';
-import { getCredentials } from './getCredentials';
-import { checkAuth } from './checkAuth';
+import { getCredentials, checkAuth, logout } from './credentials';
 
 export const systemEpic: Epic = combineEpics(
     getCredentials,
-    checkAuth
+    checkAuth,
+    logout
 );

@@ -7,13 +7,13 @@ interface Props {
     message: string;
     open: boolean;
     onClose: () => void;
-};
+}
 
 const Alert = (props: AlertProps) => (
     <MuiAlert elevation={6} variant="filled" {...props} />
 );
 
-const Notification: React.SFC<Props> = (props) => {
+const Notification: React.FC<Props> = (props) => {
     const {
         type,
         message,
@@ -23,7 +23,7 @@ const Notification: React.SFC<Props> = (props) => {
 
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
 
         onClose();

@@ -19,36 +19,44 @@ const mapStateToProps = (state: rootStateTypes) => ({
     headerTitle: systemSelectors.headerTitle(state),
     typeNotification: systemSelectors.typeNotification(state),
     messageNotification: systemSelectors.messageNotification(state),
-    openNotification: systemSelectors.openNotification(state)
+    openNotification: systemSelectors.openNotification(state),
+    username: systemSelectors.username(state)
 });
 
 const mapDispatchToProps = {
     setDrawerState: systemActions.setDrawerState,
-    closeNotification: systemActions.closeNotification
+    closeNotification: systemActions.closeNotification,
+    onLogOut: systemActions.logOut
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Layout: React.FC<Props> = (props) => {
     const {
+        username,
         drawerState,
         headerTitle,
         setDrawerState,
         typeNotification,
         messageNotification,
         openNotification,
-        closeNotification
+        closeNotification,
+        onLogOut
     } = props;
 
     return (
         <div className={cn('container')}>
-            <Drawer toggle={drawerState} />
+            <Drawer
+                toggle={drawerState}
+            />
             <div className={cn('content')}>
                 <Header
                     className={cn('header')}
                     state={drawerState}
-                    setState={setDrawerState}
                     title={headerTitle}
+                    username={username}
+                    setState={setDrawerState}
+                    onLogOut={onLogOut}
                 />
                 <main className={cn('main')}>
                     <Switch>
