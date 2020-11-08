@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import { rootStateTypes } from '@system/store/roots';
 import { Layout } from '@system/containers/Layout';
-import { Auth } from '@system/containers/Auth';
+import { Auth } from '@system/components/Auth';
 import { systemActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
 
