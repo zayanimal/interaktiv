@@ -24,8 +24,8 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('register')
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('customer')
+    // @UseGuards(JwtAuthGuard, RolesGuard)
+    // @Roles('admin')
     public register(@Body() createUserDto: CreateUserDto ): Observable<UserDto> {
         return this.authService.register(createUserDto);
     }

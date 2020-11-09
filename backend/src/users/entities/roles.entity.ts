@@ -7,7 +7,7 @@ import {
 @Entity()
 export class Roles {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id?: string;
 
     @Column({
         type: 'varchar',

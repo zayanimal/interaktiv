@@ -12,7 +12,7 @@ export class Permissions {
     @Column({
         type: 'varchar',
         length: 50,
-        // unique: true
+        unique: true
     })
     name: string;
 }

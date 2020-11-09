@@ -8,5 +8,8 @@ export class CreateUserDto {
     password: string;
 
     @IsNotEmpty()
+    role: string;
+
+    @IsNotEmpty()
     permissions: string[];
 }

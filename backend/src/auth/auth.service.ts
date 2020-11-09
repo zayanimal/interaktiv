@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '@users/users.service';
@@ -26,10 +26,11 @@ export class AuthService {
 
     login(loginUserDto: LoginUserDto): Observable<LoginStatus> {
         return this.usersService.findUserCheckPass(loginUserDto).pipe(
-            map(({ id, username, roles }) => ({
+            map(({ id, username, roles, permissions }) => ({
                 username,
                 accessToken: this.jwtService.sign({ id, username }),
-                role: roles.name
+                role: roles.name,
+                permissions: permissions.map((perm: { name: string }) => perm.name)
             }))
         );
     }

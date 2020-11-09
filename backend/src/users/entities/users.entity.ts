@@ -27,14 +27,14 @@ export class Users {
     @Column({ type: 'varchar' })
     password: string;
 
-    @Column({ type: 'uuid', default: '586ecc04-b76f-42a3-9986-1ddb4c97d3ff' })
+    @Column({ type: 'uuid', default: 'bbab9d8b-0bda-4f16-ae8d-59334e38a7c8' })
     rolesId: string;
 
     @ManyToOne(() => Roles)
     @JoinColumn()
     roles: Roles;
 
-    @ManyToMany(() => Permissions, { eager: true, cascade: true })
+    @ManyToMany(() => Permissions, { eager: true })
     @JoinTable()
     permissions: Permissions[];
 
