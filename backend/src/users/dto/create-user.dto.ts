@@ -6,4 +6,7 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     password: string;
+
+    @IsNotEmpty()
+    permissions: string[];
 }

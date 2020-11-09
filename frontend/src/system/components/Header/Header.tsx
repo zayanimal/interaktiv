@@ -1,43 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FaceIcon from '@material-ui/icons/Face';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { bem, classes } from '@utils/formatters';
+import { LayoutContext } from '@system/containers/Layout';
+import { bem } from '@utils/formatters';
 import './Header.scss';
 
 const cn = bem('Header');
 
-interface IHeader {
-    className?: string;
-    state: boolean;
-    title: string;
-    username?: string;
-    setState: (v: boolean) => void;
-    onLogOut: () => void;
-}
-
-const Header: React.FC<IHeader> = (props) => {
+const Header: React.FC = () => {
     const {
-        className = '',
-        state,
-        title,
-        username,
-        setState,
-        onLogOut
-    } = props;
+        drawerState = false,
+        headerTitle = '',
+        username = '',
+        setDrawerState = () => {},
+        onLogOut = () => {}
+    } = useContext(LayoutContext);
 
     return (
-        <header className={classes(className, cn())}>
+        <header className={cn()}>
             <div>
                 <IconButton
                     size="medium"
-                    onClick={() => { setState(!state); }}
+                    onClick={() => { setDrawerState(!drawerState); }}
                 >
                     <MoreVertIcon fontSize="inherit" />
                 </IconButton>
-                <h4>{title}</h4>
+                <h4>{headerTitle}</h4>
             </div>
             <div className={cn('user')}>
                 <Chip
@@ -56,7 +47,5 @@ const Header: React.FC<IHeader> = (props) => {
         </header>
     );
 };
-
-Header.defaultProps = { className: '', username: '' };
 
 export { Header };

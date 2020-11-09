@@ -5,14 +5,14 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Roles {
+export class Permissions {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id?: string;
 
     @Column({
         type: 'varchar',
-        length: 30,
-        unique: true
+        length: 50,
+        // unique: true
     })
     name: string;
 }

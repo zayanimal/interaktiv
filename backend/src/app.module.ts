@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { Users } from './users/entities/users.entity';
 import { Roles } from './users/entities/roles.entity';
+import { Permissions } from './users/entities/permissions.entity';
 
 @Module({
     imports: [
@@ -14,7 +15,11 @@ import { Roles } from './users/entities/roles.entity';
             username: 'postgres',
             password: 'secret',
             database: 'interaktiv',
-            entities: [Users, Roles],
+            entities: [
+                Users,
+                Roles,
+                Permissions
+            ],
             synchronize: true
         }),
         AuthModule,

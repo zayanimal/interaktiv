@@ -9,4 +9,6 @@ export class UserDto {
 
     @IsNotEmpty()
     role: string;
+
+    permissions?: string[];
 }

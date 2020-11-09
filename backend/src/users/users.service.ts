@@ -62,20 +62,30 @@ export class UsersService {
      * @param userDto логин и пароль пользователя
      */
     checkExistsAndCreate(userDto: CreateUserDto): Observable<UserDto> {
-        const { username, password } = userDto;
+        const { username, password, permissions } = userDto;
 
         return from(this.usersRepository.findOne({
             where: { username },
-            relations: ['roles']
+            relations: ['roles', 'permissions']
         })).pipe(
             switchMap(async (user) => {
                 if (!user) {
-                    const user = this.usersRepository.create({ username, password });
+                    const newUser = this.usersRepository.create({ username, password });
+                    console.log('first', newUser);
 
-                    await this.usersRepository.save(user);
+                    newUser.permissions = permissions.map((permission) => ({ name: permission }));
 
-                    return of(user).pipe(
-                        map(({ id, username, roles }) => ({ id, username, role: roles.name }))
+                    await this.usersRepository.save(newUser);
+
+                    console.log('second', newUser);
+
+                    return of(newUser).pipe(
+                        map(({ id, username, roles, permissions }) => ({
+                            id,
+                            username,
+                            role: roles.name,
+                            permissions: permissions.map((perm) => perm?.name)
+                        }))
                     );
                 } else {
                     return throwError(new HttpException('Пользователь уже существует', HttpStatus.BAD_REQUEST));

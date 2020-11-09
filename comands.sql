@@ -32,3 +32,40 @@ left outer join
 	public.roles
 on
 	"rolesId" = public.roles.id;
+
+
+
+
+select
+ 	public.users.id,
+ 	public.users.username,
+ 	public.roles.name as role,
+	public.permissions.name as permission
+from
+ 	public.users
+join
+ 	public.roles
+on
+	"rolesId" = public.roles.id
+join
+	public.rolespermissions
+on
+	"rolesId" = public.rolespermissions.roleid
+join
+	public.permissions
+on
+	"permissionid" = public.permissions.id;
+
+
+
+-- 73b71694-9d9f-4cc6-915d-8fd4eb5a7797 admin
+-- 586ecc04-b76f-42a3-9986-1ddb4c97d3ff customer
+-- 65bfe98f-835e-4b90-adfe-5091fb8828c2 vendor
+-- 01d79d4c-8c6c-447c-929f-abbd879caa25 distributor
+
+
+-- 67c6a705-3c8b-4283-8df4-8604659059ae
+-- 52f4dd37-abb3-4832-aa11-8f933fb50771
+-- f71fa5e8-faf6-419d-8a77-6285232a60cb
+-- e0b09cc6-8a9a-411e-bef5-2589c77b8266
+-- a2a94bcb-22d7-4b77-b9b9-23792d4366f3

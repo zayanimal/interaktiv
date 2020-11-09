@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '@icons/logo.png';
 import Ballot from '@material-ui/icons/Ballot';
 import AddBox from '@material-ui/icons/AddBox';
+import { LayoutContext } from '@system/containers/Layout';
 import { bem } from '@utils/formatters';
 import './Drawer.scss';
 
 const cn = bem('Drawer');
 
-interface Props {
-    toggle: boolean;
-}
+const Drawer: React.FC = () => {
+    const { drawerState } = useContext(LayoutContext);
 
-const Drawer: React.FC<Props> = (props) => {
-    const { toggle } = props;
-    const [hide, setHide] = useState(toggle);
+    const [hide, setHide] = useState(drawerState);
 
     useEffect(() => {
-        if (toggle) {
-            setHide(toggle);
+        if (drawerState) {
+            setHide(drawerState);
         } else {
-            setTimeout(() => { setHide(toggle); }, 200);
+            setTimeout(() => { setHide(drawerState); }, 200);
         }
-    }, [toggle]);
+    }, [drawerState]);
 
     return (
-        <aside className={toggle ? cn('', 'close') : cn()}>
+        <aside className={drawerState ? cn('', 'close') : cn()}>
             <div className={cn('header')}>
                 <img src={logo} alt="Iskor" hidden={hide} />
             </div>
