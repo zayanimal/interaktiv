@@ -4,14 +4,15 @@ import {
     first,
     map,
     switchMap,
-    mergeMap
+    mergeMap,
+    catchError
 } from 'rxjs/operators';
-import { ajax } from 'rxjs/ajax';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
 import { tokenService } from '@system/services/token.service';
+import { apiService } from '@system/services/api.service';
 
 /**
  * Проверка прав доступа и установка метаданных пользователя
@@ -23,32 +24,25 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
     switchMap(() => state$.pipe(
         first(),
         map(systemSelectors.credentials),
-        mergeMap((credentials) => ajax({
-            url: 'http://interaktiv:8000/auth/login',
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: credentials
-        })),
+        mergeMap((credentials) => apiService.post$('auth/login', credentials)),
         mergeMap((request) => {
-            if (request.status === 201) {
-                tokenService.setToken(request.response.accessToken);
+            tokenService.setToken(request.response.accessToken);
 
-                return of(request.response);
-            }
-
-            return of(systemActions.errorNotification('Ошибка авторизации'));
+            return of(systemActions.setAuth(request.response));
         }),
-        map(({ role }) => systemActions.setRole(role))
+        catchError((err) => of(systemActions.errorNotification(err.response.message)))
     ))
 );
 
 /**
- * Проверка локал стораджа на валидность токена
+ * Проверка состояния авторизации текущего пользователя
  * @param action$
  */
-export const checkAuth: Epic = (action$) => action$.pipe(
+export const getCurrentUser: Epic = (action$) => action$.pipe(
     filter(isActionOf(systemActions.checkAuth)),
-    map(() => systemActions.setAuth(tokenService.isLoggedIn())),
+    mergeMap(() => apiService.get$('auth/current')),
+    map((request) => systemActions.setAuth(request.response)),
+    catchError(() => of(systemActions.errorNotification('Вы не авторизованы')))
 );
 
 /**

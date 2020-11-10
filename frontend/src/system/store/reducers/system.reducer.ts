@@ -2,9 +2,10 @@ import { createReducer, getType } from 'typesafe-actions';
 import * as systemActions from '@system/store/actions/system.actions';
 
 export interface SystemStateTypes {
+    isLoggedIn: boolean;
     username: string;
     password: string;
-    isLoggedIn: boolean;
+    permissions: string[];
     role: string;
     drawer: boolean;
     headerTitle: string;
@@ -14,9 +15,10 @@ export interface SystemStateTypes {
 }
 
 const initialState: SystemStateTypes = {
+    isLoggedIn: false,
     username: '',
     password: '',
-    isLoggedIn: false,
+    permissions: [],
     role: '',
     drawer: false,
     headerTitle: '',
@@ -36,15 +38,12 @@ const systemReducer = createReducer<SystemStateTypes>(initialState, {
         password: payload
     }),
 
-    [getType(systemActions.setRole)]: (state, { payload }) => ({
-        ...state,
-        role: payload,
-        isLoggedIn: true
-    }),
-
     [getType(systemActions.setAuth)]: (state, { payload }) => ({
         ...state,
-        isLoggedIn: payload
+        isLoggedIn: true,
+        username: payload.username,
+        permissions: payload.permissions,
+        role: payload.role
     }),
 
     [getType(systemActions.clearUser)]: (state) => ({
@@ -52,6 +51,7 @@ const systemReducer = createReducer<SystemStateTypes>(initialState, {
         isLoggedIn: false,
         username: '',
         password: '',
+        permissions: [],
         role: ''
     }),
 

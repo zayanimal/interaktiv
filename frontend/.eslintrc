@@ -12,7 +12,8 @@
         "react/prop-types": "off",
         "comma-dangle": "off",
         "react/jsx-indent-props": ["error", 4],
-        "react/jsx-props-no-spreading": "off"
+        "react/jsx-props-no-spreading": "off",
+        "lines-between-class-members": "off"
     },
     "parserOptions": {
         "project": "./tsconfig.json"

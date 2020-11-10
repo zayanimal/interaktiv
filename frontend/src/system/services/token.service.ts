@@ -17,7 +17,7 @@ export class TokenService {
     }
 
     getToken() {
-        if (!this.token) { return null; }
+        if (!this.token) { return ''; }
 
         return this.token;
     }
