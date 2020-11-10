@@ -53,11 +53,8 @@ export class UsersService {
      * Найти пользователя в базе по имени
      * @param param имя пользователя
      */
-    findByUsername({ username }: { username: string }): Observable<UserDto> {
-        return from(this.usersRepository.findOne({
-            where: { username },
-            relations: ['roles', 'permissions']
-        })).pipe(
+    findByUsername(username: string): Observable<UserDto> {
+        return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
             switchMap((user) => (user
                 ? of(user).pipe(
                     map(({ id, username, roles, permissions }) => ({
@@ -92,8 +89,7 @@ export class UsersService {
 
                     if (!roleId) {
                         return throwError(
-                            new HttpException('Введена неверная роль',
-                            HttpStatus.BAD_REQUEST)
+                            new HttpException('Введена неверная роль', HttpStatus.BAD_REQUEST)
                         );
                     }
 
@@ -105,8 +101,7 @@ export class UsersService {
 
                     if (!foundPerm.length || (foundPerm.length !== permissions.length)) {
                         return throwError(
-                            new HttpException('Введены неверные права',
-                            HttpStatus.BAD_REQUEST)
+                            new HttpException('Введены неверные права', HttpStatus.BAD_REQUEST)
                         );
                     }
 
@@ -117,23 +112,28 @@ export class UsersService {
 
                     await this.usersRepository.save(newUser);
 
-                    return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
-                        map(({ id, username, roles, permissions }) => ({
-                            id,
-                            username,
-                            role: roles.name,
-                            permissions: permissions.map((perm) => perm?.name)
-                        }))
-                    );
+                    return this.findByUsername(username);
                 } else {
                     return throwError(
-                        new HttpException('Пользователь уже существует',
-                        HttpStatus.BAD_REQUEST)
+                        new HttpException('Пользователь уже существует', HttpStatus.BAD_REQUEST)
                     );
                 }
             }),
 
             switchAll()
+        );
+    }
+
+
+    /**
+     * Удалить пользователя
+     * @param userName
+     */
+    removeUser(username: string) {
+        return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
+            switchMap((user) => from(this.usersRepository.remove(user)).pipe(
+                map(() => ({ message: `Пользователь ${username} удалён` }))
+            ))
         );
     }
 }

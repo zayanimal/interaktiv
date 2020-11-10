@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -21,7 +21,7 @@ export class AuthService {
     }
 
     validateUser(payload: JwtPayload): Observable<UserDto> {
-        return this.usersService.findByUsername(payload);
+        return this.usersService.findByUsername(payload.username);
     }
 
     login(loginUserDto: LoginUserDto): Observable<LoginStatus> {

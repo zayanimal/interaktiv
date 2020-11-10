@@ -5,9 +5,7 @@ import {
     Get,
     Post,
     UseGuards,
-    Body,
-    HttpException,
-    HttpStatus
+    Body
 } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
@@ -24,9 +22,9 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('register')
-    // @UseGuards(JwtAuthGuard, RolesGuard)
-    // @Roles('admin')
-    public register(@Body() createUserDto: CreateUserDto ): Observable<UserDto> {
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    public register(@Body() createUserDto: CreateUserDto): Observable<UserDto> {
         return this.authService.register(createUserDto);
     }
 
