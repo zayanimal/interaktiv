@@ -1,13 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-type Component = React.FC | React.Component;
-
 interface Props {
     path: string;
-    endPath: string;
     exact?: boolean;
-    component?: Component;
     permission: boolean;
 }
 
@@ -15,9 +11,7 @@ export const PrivateRoute: React.FC<Props> = (props) => {
     const {
         children,
         path,
-        endPath = '/',
         exact = false,
-        component,
         permission = false
     } = props;
 
@@ -25,10 +19,17 @@ export const PrivateRoute: React.FC<Props> = (props) => {
         <Route
             exact={exact}
             path={path}
-            render={() => (
+            render={({ location }) => (
                 permission
-                    ? (component || children)
-                    : (<Redirect to={{ pathname: endPath }} />)
+                    ? children
+                    : (
+                        <Redirect
+                            to={{
+                                pathname: '/auth',
+                                state: { from: location }
+                            }}
+                        />
+                    )
             )}
         />
     );

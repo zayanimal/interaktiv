@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { of, from } from 'rxjs';
 import {
     filter,
     first,
@@ -42,7 +42,10 @@ export const getCurrentUser: Epic = (action$) => action$.pipe(
     filter(isActionOf(systemActions.checkAuth)),
     mergeMap(() => apiService.get$('auth/current')),
     map((request) => systemActions.setAuth(request.response)),
-    catchError(() => of(systemActions.errorNotification('Вы не авторизованы')))
+    catchError(() => from([
+        systemActions.clearUser(),
+        systemActions.errorNotification('Вы не авторизованы')
+    ]))
 );
 
 /**

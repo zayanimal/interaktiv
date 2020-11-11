@@ -1,6 +1,9 @@
 import React, { createContext, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import {
+    Switch, Route, useHistory, useLocation
+} from 'react-router-dom';
+import { Location } from '@system/interfaces/location.interface';
 import { systemActions } from '@system/store/actions';
 import { rootStateTypes } from '@system/store/roots';
 import { Drawer } from '@system/components/Drawer';
@@ -15,6 +18,7 @@ import './Layout.scss';
 const cn = bem('Layout');
 
 const mapStateToProps = (state: rootStateTypes) => ({
+    authFetched: systemSelectors.authFetched(state),
     isLoggedIn: systemSelectors.isLoggedIn(state),
     drawerState: systemSelectors.drawer(state),
     headerTitle: systemSelectors.headerTitle(state),
@@ -36,11 +40,20 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 export const LayoutContext = createContext<Partial<Props>>({});
 
 const Layout: React.FC<Props> = (props) => {
-    const { isLoggedIn, checkAuth } = props;
+    const { isLoggedIn } = props;
+    // const history = useHistory();
+    // // const location: Location = useLocation();
+    // // const { from } = location?.state || { from: { pathname: '/' } };
 
-    useEffect(() => {
-        checkAuth();
-    });
+    // useEffect(() => {
+    //     if (!authFetched) { checkAuth(); }
+
+    //     if (authFetched && isLoggedIn) {
+    //         history.push('/projects');
+    //     } else if (authFetched) {
+    //         history.push('/auth');
+    //     }
+    // }, [checkAuth, authFetched, isLoggedIn, history]); // eslint-disable-line
 
     return (
         <div className={cn('container')}>
@@ -51,20 +64,8 @@ const Layout: React.FC<Props> = (props) => {
                     {isLoggedIn && <Header />}
 
                     <Switch>
-                        <Route
-                            exact
-                            path="/auth"
-                            render={() => (
-                                isLoggedIn ? <Redirect to={{ pathname: '/' }} /> : <Auth />
-                            )}
-                        />
-
-                        <Route
-                            path="/"
-                            render={() => (
-                                isLoggedIn ? <Main /> : <Redirect to={{ pathname: '/auth' }} />
-                            )}
-                        />
+                        <Route path="/auth" component={Auth} />
+                        <Route path="/" component={Main} />
                     </Switch>
                 </div>
 
