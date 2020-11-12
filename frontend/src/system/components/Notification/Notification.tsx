@@ -1,19 +1,19 @@
-import React, { SyntheticEvent, useContext } from 'react';
+import React, { SyntheticEvent } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import { LayoutContext } from '@system/containers/Layout';
+import { LayoutProps } from '@system/containers/Layout';
 
 const Alert = (props: AlertProps) => (
     <MuiAlert elevation={6} variant="filled" {...props} />
 );
 
-const Notification: React.FC = () => {
+const Notification: React.FC<LayoutProps> = (props) => {
     const {
         typeNotification,
         messageNotification,
         openNotification,
         closeNotification = () => {}
-    } = useContext(LayoutContext);
+    } = props;
 
     const handleClose = (event?: SyntheticEvent, reason?: string) => {
         if (reason === 'clickaway') {

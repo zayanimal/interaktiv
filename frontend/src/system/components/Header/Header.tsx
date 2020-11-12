@@ -1,23 +1,23 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FaceIcon from '@material-ui/icons/Face';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { LayoutContext } from '@system/containers/Layout';
+import { LayoutProps } from '@system/containers/Layout';
 import { bem } from '@utils/formatters';
 import './Header.scss';
 
 const cn = bem('Header');
 
-const Header: React.FC = () => {
+const Header: React.FC<LayoutProps> = (props) => {
     const {
         drawerState = false,
         headerTitle = '',
         username = '',
         setDrawerState = () => {},
         onLogOut = () => {}
-    } = useContext(LayoutContext);
+    } = props;
 
     return (
         <header className={cn()}>

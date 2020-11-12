@@ -44,13 +44,14 @@ const systemReducer = createReducer<SystemStateTypes>(initialState, {
         ...state,
         authFetched: true,
         isLoggedIn: true,
-        username: payload.username,
-        permissions: payload.permissions,
-        role: payload.role
+        username: payload?.username,
+        permissions: payload?.permissions,
+        role: payload?.role
     }),
 
     [getType(systemActions.clearUser)]: (state) => ({
         ...state,
+        authFetched: true,
         isLoggedIn: false,
         username: '',
         password: '',

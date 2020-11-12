@@ -1,36 +1,25 @@
 import React, { ChangeEvent } from 'react';
-import { connect } from 'react-redux';
-import { rootStateTypes } from '@system/store/roots';
+import { Redirect, useLocation } from 'react-router-dom';
 import { TextField, Button } from '@material-ui/core';
-import { systemActions } from '@system/store/actions';
-import { systemSelectors } from '@system/store/selectors';
+import { Location } from '@system/interfaces/location.interface';
+import { AuthProps } from '@system/containers/Auth';
 import { bem } from '@utils/formatters';
-import './Auth.scss';
+import './AuthScreen.scss';
 
-const cn = bem('Auth');
+const cn = bem('AuthScreen');
 
-const mapStateToProps = (state: rootStateTypes) => ({
-    username: systemSelectors.username(state),
-    password: systemSelectors.password(state),
-    isLoggedIn: systemSelectors.isLoggedIn(state)
-});
-
-const mapDispatchToProps = {
-    setLogin: systemActions.setLogin,
-    setPassword: systemActions.setPassword,
-    getCredentials: systemActions.getCredentials
-};
-
-type AuthProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-
-const Auth: React.FC<AuthProps> = (props) => {
+const AuthScreen: React.FC<AuthProps> = (props) => {
     const {
         username,
         password,
         setLogin,
+        isLoggedIn,
         setPassword,
-        getCredentials
+        getCredentials,
     } = props;
+
+    const location: Location = useLocation();
+    const { pathname } = location?.state?.from || { pathname: '/' };
 
     const onChangeLogin = (event: ChangeEvent<HTMLInputElement>) => {
         setLogin(event.target.value);
@@ -39,6 +28,11 @@ const Auth: React.FC<AuthProps> = (props) => {
     const onChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };
+
+
+    if (isLoggedIn) {
+        return <Redirect to={{ pathname }} />;
+    }
 
     return (
         <div className={cn()}>
@@ -71,6 +65,4 @@ const Auth: React.FC<AuthProps> = (props) => {
     );
 };
 
-const AuthConnected = connect(mapStateToProps, mapDispatchToProps)(Auth);
-
-export { AuthConnected as Auth };
+export { AuthScreen };

@@ -1,4 +1,5 @@
 import { createAction } from 'typesafe-actions';
+import { IUser } from '@system/interfaces/user.interface';
 
 export const setLogin = createAction('[SYSTEM] SET_LOGIN')<string>();
 export const setPassword = createAction('[SYSTEM] SET_PASSWORD')<string>();
@@ -6,7 +7,7 @@ export const getCredentials = createAction('[SYSTEM] GET_CREDENTIALS')();
 export const setRole = createAction('[SYSTEM] SET_ROLE')<string>();
 
 export const checkAuth = createAction('[SYSTEM] CHECK_LOGGED')();
-export const setAuth = createAction('[SYSTEM] SET_AUTH')<boolean>();
+export const setAuth = createAction('[SYSTEM] SET_AUTH')<IUser>();
 export const logOut = createAction('[SYSTEM] LOGOUT')();
 export const clearUser = createAction('[SYSTEM] CLEAR_USER')();
 export const getUsername = createAction('[SYSTEM] GET_USERNAME')();

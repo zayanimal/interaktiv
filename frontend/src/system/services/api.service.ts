@@ -50,6 +50,10 @@ export class ApiService {
             })
         );
     }
+
+    checkAuth() {
+        return ajax(this.getHeader({ url: 'auth/current', method: 'GET' })).toPromise();
+    }
 }
 
 

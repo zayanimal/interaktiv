@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '@icons/logo.png';
 import Ballot from '@material-ui/icons/Ballot';
 import AddBox from '@material-ui/icons/AddBox';
-import { LayoutContext } from '@system/containers/Layout';
+import { LayoutProps } from '@system/containers/Layout';
 import { bem } from '@utils/formatters';
 import './Drawer.scss';
 
 const cn = bem('Drawer');
 
-const Drawer: React.FC = () => {
-    const { drawerState } = useContext(LayoutContext);
+const Drawer: React.FC<LayoutProps> = (props) => {
+    const { drawerState } = props;
 
     const [hide, setHide] = useState(drawerState);
 
