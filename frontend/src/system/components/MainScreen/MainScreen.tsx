@@ -25,7 +25,7 @@ const MainScreen: React.FC<LayoutProps> = (props) => {
                 <div className={cn()}>
                     <Header {...props} />
                     <main>
-                        <Suspense fallback={<div>...Загрузка</div>}>
+                        <Suspense fallback={null}>
                             <Switch>
                                 {routerItems.map((route) => (
                                     <Route
