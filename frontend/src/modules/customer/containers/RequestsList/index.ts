@@ -1,1 +1,3 @@
-export * from './RequestsList';
+import RequestsList from './RequestsList';
+
+export default RequestsList;

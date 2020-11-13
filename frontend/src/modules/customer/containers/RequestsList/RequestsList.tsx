@@ -40,4 +40,6 @@ const RequestsList: React.SFC<Props> = (props) => {
 
 const RequestsListConnected = connect(mapStateToProps, mapDispatchToProps)(RequestsList);
 
-export { RequestsListConnected as RequestsList };
+// export { RequestsListConnected as RequestsList };
+
+export default RequestsListConnected;

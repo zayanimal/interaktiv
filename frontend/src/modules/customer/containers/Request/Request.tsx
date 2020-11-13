@@ -130,4 +130,4 @@ const Request: React.FC<Props> = (props) => {
 
 const RequestConnected = connect(mapStateToProps, mapDispatchToProps)(Request);
 
-export { RequestConnected as Request };
+export default RequestConnected;

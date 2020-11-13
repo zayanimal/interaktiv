@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
     Switch,
     Route,
@@ -7,16 +7,15 @@ import {
 } from 'react-router-dom';
 import { Drawer } from '@system/components/Drawer';
 import { Header } from '@system/components/Header';
-import { RequestsList } from '@customer/containers/RequestsList';
-import { Request } from '@customer/containers/Request';
 import { LayoutProps } from '@system/containers/Layout';
+import { routerService } from '@system/services/router.service';
 import { bem } from '@utils/formatters';
 import './MainScreen.scss';
 
 const cn = bem('MainScreen');
 
 const MainScreen: React.FC<LayoutProps> = (props) => {
-    const { isLoggedIn } = props;
+    const { isLoggedIn, routerItems } = props;
     const location = useLocation();
 
     if (isLoggedIn) {
@@ -26,10 +25,17 @@ const MainScreen: React.FC<LayoutProps> = (props) => {
                 <div className={cn()}>
                     <Header {...props} />
                     <main>
-                        <Switch>
-                            <Route path="/projects" component={RequestsList} />
-                            <Route path="/new-project" component={Request} />
-                        </Switch>
+                        <Suspense fallback={<div>...Загрузка</div>}>
+                            <Switch>
+                                {routerItems.map((route) => (
+                                    <Route
+                                        key={route.key}
+                                        path={route.path}
+                                        component={routerService.createComponent(route.component)}
+                                    />
+                                ))}
+                            </Switch>
+                        </Suspense>
                     </main>
                 </div>
             </>

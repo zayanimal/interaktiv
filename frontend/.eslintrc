@@ -8,7 +8,7 @@
         "@typescript-eslint/camelcase": "off",
         "react/jsx-indent": ["error", 4],
         "import/prefer-default-export": "off",
-        "import/no-default-export": "error",
+        "import/no-default-export": "off",
         "react/prop-types": "off",
         "comma-dangle": "off",
         "react/jsx-indent-props": ["error", 4],
