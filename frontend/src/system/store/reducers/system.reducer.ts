@@ -1,5 +1,6 @@
 import { createReducer, getType } from 'typesafe-actions';
 import * as systemActions from '@system/store/actions/system.actions';
+import { IRouterItem } from '@system/interfaces/routerItem.interface';
 
 export interface SystemStateTypes {
     authFetched: boolean;
@@ -9,6 +10,7 @@ export interface SystemStateTypes {
     permissions: string[];
     role: string;
     drawer: boolean;
+    routerItems: IRouterItem[],
     headerTitle: string;
     openNotification: boolean;
     typeNotification: 'success' | 'error' | 'info' | 'warning';
@@ -23,6 +25,7 @@ const initialState: SystemStateTypes = {
     permissions: [],
     role: '',
     drawer: false,
+    routerItems: [],
     headerTitle: '',
     openNotification: false,
     typeNotification: 'success',
@@ -56,12 +59,18 @@ const systemReducer = createReducer<SystemStateTypes>(initialState, {
         username: '',
         password: '',
         permissions: [],
+        routerItems: [],
         role: ''
     }),
 
     [getType(systemActions.setDrawerState)]: (state, { payload }) => ({
         ...state,
         drawer: payload
+    }),
+
+    [getType(systemActions.setRouterItems)]: (state, { payload }) => ({
+        ...state,
+        routerItems: payload
     }),
 
     [getType(systemActions.setHeaderTitle)]: (state, { payload }) => ({

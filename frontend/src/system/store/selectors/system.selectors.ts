@@ -5,6 +5,8 @@ export const systemState = (state: rootStateTypes) => state.system;
 
 export const drawer = (state: rootStateTypes) => systemState(state).drawer;
 
+export const routerItems = (state: rootStateTypes) => systemState(state).routerItems;
+
 export const headerTitle = (state: rootStateTypes) => systemState(state).headerTitle;
 
 export const openNotification = (state: rootStateTypes) => systemState(state).openNotification;
@@ -23,3 +25,5 @@ export const credentials = (state: rootStateTypes) => _.pick(systemState(state),
 export const authFetched = (state: rootStateTypes) => systemState(state).authFetched;
 
 export const isLoggedIn = (state: rootStateTypes) => systemState(state).isLoggedIn;
+
+export const permissions = (state: rootStateTypes) => systemState(state).permissions;

@@ -16,6 +16,7 @@ const mapStateToProps = (state: rootStateTypes) => ({
     authFetched: systemSelectors.authFetched(state),
     isLoggedIn: systemSelectors.isLoggedIn(state),
     drawerState: systemSelectors.drawer(state),
+    routerItems: systemSelectors.routerItems(state),
     headerTitle: systemSelectors.headerTitle(state),
     typeNotification: systemSelectors.typeNotification(state),
     messageNotification: systemSelectors.messageNotification(state),
@@ -25,6 +26,7 @@ const mapStateToProps = (state: rootStateTypes) => ({
 
 const mapDispatchToProps = {
     setDrawerState: systemActions.setDrawerState,
+    getRouterItems: systemActions.getRouterItems,
     closeNotification: systemActions.closeNotification,
     checkAuth: systemActions.checkAuth,
     onLogOut: systemActions.logOut
