@@ -7,8 +7,9 @@ import {
 } from 'react-router-dom';
 import { Drawer } from '@system/components/Drawer';
 import { Header } from '@system/components/Header';
+import { Preloader } from '@system/components/Preloader';
 import { LayoutProps } from '@system/containers/Layout';
-import { routerService } from '@system/services/router.service';
+import { routeComponent } from '@system/components/MainScreen/routeComponents';
 import { bem } from '@utils/formatters';
 import './MainScreen.scss';
 
@@ -24,14 +25,14 @@ const MainScreen: React.FC<LayoutProps> = (props) => {
                 <Drawer {...props} />
                 <div className={cn()}>
                     <Header {...props} />
-                    <main>
-                        <Suspense fallback={null}>
+                    <main className={cn('main')}>
+                        <Suspense fallback={<Preloader />}>
                             <Switch>
                                 {routerItems.map((route) => (
                                     <Route
                                         key={route.key}
                                         path={route.path}
-                                        component={routerService.createComponent(route.component)}
+                                        component={routeComponent.create(route.component)}
                                     />
                                 ))}
                             </Switch>

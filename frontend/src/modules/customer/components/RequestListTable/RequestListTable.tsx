@@ -23,7 +23,7 @@ const waitingTime = (date: string) => formatDistance(
     { locale: Ru }
 );
 
-const RequestListTable: React.SFC<Props> = (props) => {
+const RequestListTable: React.FC<Props> = (props) => {
     const { data } = props;
 
     const columns = useMemo(() => [

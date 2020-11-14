@@ -1,0 +1,22 @@
+.Preloader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -1.25em;
+    margin-left: -1.25em;
+    width: 2.5em;
+    height: 2.5em;
+    border-top: 2.5px solid var(--color-box-shadow);
+    border-radius: 50%;
+    animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(90deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

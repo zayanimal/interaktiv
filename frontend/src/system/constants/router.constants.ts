@@ -29,11 +29,11 @@ export const ROUTE_ITEMS: IRouterItem[] = [
     //     icon: 'AccountBox',
     //     component: ''
     // },
-    // {
-    //     key: 'USERS',
-    //     path: '/users',
-    //     name: 'Пользователи',
-    //     icon: 'People',
-    //     component: ''
-    // }
+    {
+        key: 'USERS',
+        path: '/users',
+        name: 'Пользователи',
+        icon: 'People',
+        component: 'Users'
+    }
 ];

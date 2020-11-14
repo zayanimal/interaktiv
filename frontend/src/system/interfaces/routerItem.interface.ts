@@ -1,4 +1,4 @@
-export type LazyComponents = 'RequestsList' | 'Request';
+export type LazyComponents = 'RequestsList' | 'Request' | 'Users';
 
 export interface IRouterItem {
     key: string;

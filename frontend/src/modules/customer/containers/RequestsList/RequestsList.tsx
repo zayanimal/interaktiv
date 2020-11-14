@@ -18,7 +18,7 @@ const mapDispatchToProps = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const RequestsList: React.SFC<Props> = (props) => {
+const RequestsList: React.FC<Props> = (props) => {
     const {
         setHeaderTitle,
         getRequestsList,
@@ -39,7 +39,5 @@ const RequestsList: React.SFC<Props> = (props) => {
 };
 
 const RequestsListConnected = connect(mapStateToProps, mapDispatchToProps)(RequestsList);
-
-// export { RequestsListConnected as RequestsList };
 
 export default RequestsListConnected;
