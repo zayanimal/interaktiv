@@ -1,9 +1,14 @@
-import { Observable, of, from, throwError } from 'rxjs';
-import { switchMap, switchAll, map } from 'rxjs/operators';
+import { Observable, of, from, throwError, forkJoin } from 'rxjs';
+import { switchMap, switchAll, map, mergeMap, toArray, tap } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { compare } from 'bcrypt';
+import {
+    paginate,
+    Pagination,
+    IPaginationOptions,
+  } from 'nestjs-typeorm-paginate';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -49,6 +54,42 @@ export class UsersService {
         );
     }
 
+    getUsers() {
+        return from(this.usersRepository.find({
+            relations: ['roles', 'permissions']
+        })).pipe(
+            mergeMap((users) => {
+                return from(users.map(({ username, roles, permissions }) => ({
+                    username,
+                    role: roles.name,
+                    permissions: permissions.map((perm: { name: string }) => perm?.name)
+                })))
+            }),
+            toArray()
+        );
+    }
+
+    paginate() {
+        return from(
+            paginate(this.usersRepository
+                .createQueryBuilder('users')
+                .leftJoinAndSelect('users.roles', 'roles')
+                .leftJoinAndSelect('users.permissions', 'permissions'),
+                { page: 1, limit: 4 }
+            )
+        ).pipe(
+            mergeMap(({ items, meta }) => forkJoin({
+                    items: from(items.map(({ username, roles, permissions }) => ({
+                        username,
+                        role: roles.name,
+                        permissions: permissions.map((perm: { name: string }) => perm?.name)
+                    }))).pipe(toArray()),
+                    meta: of(meta)
+                })
+            )
+        )
+    }
+
     /**
      * Найти пользователя в базе по имени
      * @param param имя пользователя
@@ -57,8 +98,7 @@ export class UsersService {
         return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
             switchMap((user) => (user
                 ? of(user).pipe(
-                    map(({ id, username, roles, permissions }) => ({
-                        id,
+                    map(({ username, roles, permissions }) => ({
                         username,
                         role: roles.name,
                         permissions: permissions.map((perm: { name: string }) => perm?.name)

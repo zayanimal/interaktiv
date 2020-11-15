@@ -28,6 +28,11 @@ export class UsersController {
         }
     }
 
+    @Get('paginate')
+    paginate() {
+        return this.usersService.paginate();
+    }
+
     @Delete()
     @UseGuards(JwtAuthGuard)
     @Roles('admin')
