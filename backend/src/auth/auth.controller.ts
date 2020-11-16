@@ -3,6 +3,7 @@ import {
     Controller,
     Req,
     Get,
+    Put,
     Post,
     UseGuards,
     Body
@@ -21,7 +22,7 @@ import { LoginStatus } from './interfaces/login-status.interface';
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    @Post('register')
+    @Put('register')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     public register(@Body() createUserDto: CreateUserDto): Observable<UserDto> {

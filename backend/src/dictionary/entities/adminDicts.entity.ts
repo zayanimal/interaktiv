@@ -5,13 +5,13 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Roles {
+export class AdminDictionaries {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({
         type: 'varchar',
-        length: 30,
+        length: 50,
         unique: true
     })
     name: string;

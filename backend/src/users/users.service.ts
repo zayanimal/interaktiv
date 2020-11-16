@@ -1,14 +1,10 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
-import { switchMap, switchAll, map, mergeMap, toArray, tap } from 'rxjs/operators';
+import { switchMap, switchAll, map, mergeMap, toArray, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { compare } from 'bcrypt';
-import {
-    paginate,
-    Pagination,
-    IPaginationOptions,
-  } from 'nestjs-typeorm-paginate';
+import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -50,32 +46,27 @@ export class UsersService {
                 : throwError(new HttpException('Пользователь не найден', HttpStatus.UNAUTHORIZED)))
             ),
 
-            switchAll()
+            switchAll(),
+
+            catchError((err) => throwError(
+                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+            ))
         );
     }
 
-    getUsers() {
-        return from(this.usersRepository.find({
-            relations: ['roles', 'permissions']
-        })).pipe(
-            mergeMap((users) => {
-                return from(users.map(({ username, roles, permissions }) => ({
-                    username,
-                    role: roles.name,
-                    permissions: permissions.map((perm: { name: string }) => perm?.name)
-                })))
-            }),
-            toArray()
-        );
-    }
-
-    paginate() {
+    /**
+     * Пагинация юзеров общий список
+     * @param page
+     * @param limit
+     */
+    getUsers(page: number, limit: number): Observable<Omit<Pagination<UserDto>, 'links'>> {
         return from(
             paginate(this.usersRepository
                 .createQueryBuilder('users')
+                .orderBy('users.time', 'ASC')
                 .leftJoinAndSelect('users.roles', 'roles')
                 .leftJoinAndSelect('users.permissions', 'permissions'),
-                { page: 1, limit: 4 }
+                { page, limit }
             )
         ).pipe(
             mergeMap(({ items, meta }) => forkJoin({
@@ -86,8 +77,12 @@ export class UsersService {
                     }))).pipe(toArray()),
                     meta: of(meta)
                 })
-            )
-        )
+            ),
+
+            catchError((err) => throwError(
+                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+            ))
+        );
     }
 
     /**
@@ -173,6 +168,13 @@ export class UsersService {
         return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
             switchMap((user) => from(this.usersRepository.remove(user)).pipe(
                 map(() => ({ message: `Пользователь ${username} удалён` }))
+            )),
+
+            catchError(() => throwError(
+                new HttpException(
+                    `Пользователь ${username} не найден`,
+                    HttpStatus.BAD_REQUEST
+                )
             ))
         );
     }

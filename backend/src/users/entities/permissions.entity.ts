@@ -7,7 +7,7 @@ import {
 @Entity()
 export class Permissions {
     @PrimaryGeneratedColumn('uuid')
-    id?: string;
+    id: string;
 
     @Column({
         type: 'varchar',
