@@ -6,8 +6,8 @@ import { systemActions } from '@system/store/actions';
 import { usersActions } from '@admin/store/actions';
 import { userSelectors } from '@admin/store/selectors';
 import { UsersHeader } from '@admin/components/UsersHeader';
+import { UsersModal } from '@admin/components/UsersModal';
 import { COLUMNS } from '@admin/containers/Users/meta';
-import { Modal } from '@system/components/Modal';
 import { bem } from '@utils/formatters';
 import './Users.scss';
 
@@ -59,7 +59,7 @@ const Users: React.FC<Props> = (props) => {
                     }
                 }}
             />
-            <Modal state={false} close={() => {}} />
+            <UsersModal open={false} />
         </div>
     );
 };

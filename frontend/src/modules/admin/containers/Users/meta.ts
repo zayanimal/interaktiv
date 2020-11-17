@@ -4,10 +4,6 @@ export const COLUMNS = [
         title: 'Имя пользователя',
     },
     {
-        field: 'email',
-        title: 'Почта',
-    },
-    {
         field: 'role',
         title: 'Роль'
     },

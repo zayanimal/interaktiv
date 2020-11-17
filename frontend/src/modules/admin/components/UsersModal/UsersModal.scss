@@ -1,3 +1,13 @@
 .UsersModal {
+    &__input {
+        display: block;
+    }
 
+    &__input + &__input {
+        margin-top: 2.5em;
+    }
+
+    &__select {
+
+    }
 }
