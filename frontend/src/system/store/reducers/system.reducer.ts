@@ -24,9 +24,11 @@ const initialState: SystemStateTypes = {
     password: '',
     permissions: [],
     role: '',
+
     drawer: false,
     routerItems: [],
     headerTitle: '',
+
     openNotification: false,
     typeNotification: 'success',
     messageNotification: ''

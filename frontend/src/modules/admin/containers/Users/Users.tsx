@@ -1,53 +1,49 @@
-import React, { useMemo } from 'react';
-// import { connect } from 'react-redux';
-// import { rootStateTypes } from '@system/store/roots';
+import React, { useMemo, useEffect } from 'react';
 import MaterialTable from 'material-table';
+import { connect } from 'react-redux';
+import { rootStateTypes } from '@system/store/roots';
+import { systemActions } from '@system/store/actions';
+import { usersActions } from '@admin/store/actions';
+import { userSelectors } from '@admin/store/selectors';
+import { UsersHeader } from '@admin/components/UsersHeader';
+import { COLUMNS } from '@admin/containers/Users/meta';
+import { Modal } from '@system/components/Modal';
 import { bem } from '@utils/formatters';
 import './Users.scss';
 
 const cn = bem('Users');
 
-// const mapStateToProps = (state: rootStateTypes) => ({
+const mapStateToProps = (state: rootStateTypes) => ({
+    list: userSelectors.list(state)
+});
 
-// });
-// const mapStateToProps = () => ({
+const mapDispatchToProps = {
+    setHeaderTitle: systemActions.setHeaderTitle,
+    getList: usersActions.getUsersList.request
+};
 
-// });
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-// const mapDispatchToProps = {
+const Users: React.FC<Props> = (props) => {
+    const {
+        setHeaderTitle,
+        getList,
+        list
+    } = props;
 
-// };
+    useEffect(() => {
+        setHeaderTitle('Управление пользователями');
+        getList(1);
+    }, [getList, setHeaderTitle]);
 
-// type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-
-const Users: React.FC = () => {
-    // const {
-
-    // } = props;
-
-    const columns = useMemo(() => [
-        {
-            field: 'user',
-            title: 'Имя пользователя',
-        },
-        {
-            field: 'role',
-            title: 'Роль'
-        }
-    ], []);
-
-    const data = useMemo(() => [
-        {
-            user: 'Вова Зайчиков',
-            role: 'admin'
-        }
-    ], []);
+    const columns = useMemo(() => COLUMNS, []);
 
     return (
         <div className={cn()}>
+            <UsersHeader />
             <MaterialTable
                 columns={columns}
-                data={data}
+                data={list}
                 options={{
                     search: false,
                     sorting: false,
@@ -63,10 +59,11 @@ const Users: React.FC = () => {
                     }
                 }}
             />
+            <Modal state={false} close={() => {}} />
         </div>
     );
 };
 
-// const UsersConnected = connect(mapStateToProps, mapDispatchToProps)(Users);
+const UsersConnected = connect(mapStateToProps, mapDispatchToProps)(Users);
 
-export { Users };
+export { UsersConnected as Users };

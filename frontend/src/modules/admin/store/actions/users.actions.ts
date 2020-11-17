@@ -1,3 +1,7 @@
-import { createAction } from 'typesafe-actions';
+import { createAsyncAction } from 'typesafe-actions';
 
-export const getUsers = createAction('[CUSTOMER] GET_USERS')();
+export const getUsersList = createAsyncAction(
+    '[ADMIN] GET_USERS_REQUEST',
+    '[ADMIN] GET_USERS_SUCCESS',
+    '[ADMIN] GET_USERS_FAILURE',
+)<number, unknown, undefined>();

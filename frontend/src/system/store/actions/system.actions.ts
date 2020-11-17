@@ -16,6 +16,8 @@ export const getUsername = createAction('[SYSTEM] GET_USERNAME')();
 export const getRouterItems = createAction('[SYSTEM] GET_ROUTER_ITEMS')();
 export const setRouterItems = createAction('[SYSTEM] SET_ROUTER_ITEMS')<IRouterItem[]>();
 
+export const getDrawerState = createAction('[SYSTEM] GET_DRAWER_STATE')();
+export const setLsDrawerState = createAction('[SYSTEM] SET_LS_DRAWER_STATE')<boolean>();
 export const setDrawerState = createAction('[SYSTEM] SET_DRAWER_STATE')<boolean>();
 export const setHeaderTitle = createAction('[SYSTEM] SET_HEADER_TITLE')<string>();
 

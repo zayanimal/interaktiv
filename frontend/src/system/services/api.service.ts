@@ -41,20 +41,9 @@ export class ApiService {
         );
     }
 
-    delete$(url: string, body: object) {
-        return ajax(
-            this.getHeader({
-                url,
-                method: 'DELETE',
-                body: body || {}
-            })
-        );
-    }
-
-    checkAuth() {
-        return ajax(this.getHeader({ url: 'auth/current', method: 'GET' })).toPromise();
+    delete$(url: string) {
+        return ajax(this.getHeader({ url, method: 'DELETE' }));
     }
 }
-
 
 export const apiService = new ApiService('http://interaktiv:8000/');

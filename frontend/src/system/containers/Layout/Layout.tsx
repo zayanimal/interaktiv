@@ -25,7 +25,8 @@ const mapStateToProps = (state: rootStateTypes) => ({
 });
 
 const mapDispatchToProps = {
-    setDrawerState: systemActions.setDrawerState,
+    setDrawerState: systemActions.setLsDrawerState,
+    getDrawerState: systemActions.getDrawerState,
     getRouterItems: systemActions.getRouterItems,
     closeNotification: systemActions.closeNotification,
     checkAuth: systemActions.checkAuth,
@@ -35,9 +36,12 @@ const mapDispatchToProps = {
 export type LayoutProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Layout: React.FC<LayoutProps> = (props) => {
-    const { checkAuth } = props;
+    const { checkAuth, getDrawerState } = props;
 
-    useEffect(() => { checkAuth(); }, [checkAuth]);
+    useEffect(() => {
+        checkAuth();
+        getDrawerState();
+    }, [checkAuth, getDrawerState]);
 
     return (
         <div className={cn('container')}>
