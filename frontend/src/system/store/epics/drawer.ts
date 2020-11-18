@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { of, merge } from 'rxjs';
 import {
     filter,
     switchMap,
@@ -17,7 +17,10 @@ export const getDrawerState: Epic = (action$) => action$.pipe(
             getLs<boolean>('drawerState')
         )
     )),
-    catchError((err) => of(systemActions.errorNotification(err.message)))
+    catchError((err, caught) => merge(
+        of(systemActions.errorNotification(err.response.message)),
+        caught
+    ))
 );
 
 export const setDrawerState: Epic = (action$) => action$.pipe(
@@ -27,5 +30,8 @@ export const setDrawerState: Epic = (action$) => action$.pipe(
 
         return of(systemActions.setDrawerState(payload));
     }),
-    catchError((err) => of(systemActions.errorNotification(err.message)))
+    catchError((err, caught) => merge(
+        of(systemActions.errorNotification(err.response.message)),
+        caught
+    ))
 );

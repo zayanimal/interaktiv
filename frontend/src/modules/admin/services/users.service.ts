@@ -1,23 +1,27 @@
 import { ApiService, apiService } from '@system/services/api.service';
-import { ICreateUser } from '@admin/interfaces/users.interface';
+import { ICreateUser, INewUser } from '@admin/interfaces/users.interface';
 
 class UserService {
     constructor(private api: ApiService) {}
 
-    getList(page: number) {
+    getList$(page: number) {
         return this.api.get$(`users?page=${page}&limit=10`);
     }
 
-    create(user: ICreateUser) {
+    create$(user: ICreateUser) {
         return this.api.post$('auth/register', user);
     }
 
-    delete(username: string) {
+    delete$(username: string) {
         return this.api.delete$(`users/${username}`);
     }
 
-    find(username: string) {
+    find$(username: string) {
         return this.api.get$(`users/${username}`);
+    }
+
+    add$(payload: INewUser) {
+        return this.api.put$('auth/register', payload);
     }
 }
 

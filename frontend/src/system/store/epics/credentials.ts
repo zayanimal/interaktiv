@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { of, merge } from 'rxjs';
 import {
     filter,
     first,
@@ -30,7 +30,10 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
 
             return of(systemActions.setAuth(request.response));
         }),
-        catchError((err) => of(systemActions.errorNotification(err.response.message)))
+        catchError((err, caught) => merge(
+            of(systemActions.errorNotification(err.response.message)),
+            caught
+        ))
     ))
 );
 

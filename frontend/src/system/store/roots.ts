@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { combineEpics, Epic } from 'redux-observable';
-import { systemReducer } from '@system/store/reducers/system.reducer';
+import { mainReducer } from '@system/store/reducers';
 import { adminReducer } from '@admin/store/reducers';
 import { customerReducer } from '@customer/store/reducers';
 import { systemEpic } from '@system/store/epics';
@@ -8,7 +8,7 @@ import { adminEpic } from '@admin/store/epics';
 import { customerEpic } from '@customer/store/epics';
 
 export const rootReducer = combineReducers({
-    system: systemReducer,
+    system: mainReducer,
     admin: adminReducer,
     customer: customerReducer
 });

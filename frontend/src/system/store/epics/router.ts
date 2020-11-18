@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { of, merge } from 'rxjs';
 import {
     filter,
     first,
@@ -19,6 +19,9 @@ export const getRouterItems: Epic = (action$, state$) => action$.pipe(
         map(systemSelectors.permissions),
         map((permissions) => routerService.getRouterItems(permissions)),
         map(systemActions.setRouterItems),
-        catchError((err) => of(systemActions.errorNotification(err)))
+        catchError((err, caught) => merge(
+            of(systemActions.errorNotification(err.message)),
+            caught
+        ))
     ))
 );

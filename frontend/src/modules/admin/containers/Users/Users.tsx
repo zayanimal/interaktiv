@@ -1,17 +1,17 @@
-import React, { useMemo, useEffect } from 'react';
-import MaterialTable from 'material-table';
+import React, { useEffect } from 'react';
+import {
+    Switch,
+    Route,
+    useLocation,
+    useRouteMatch
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { rootStateTypes } from '@system/store/roots';
 import { systemActions } from '@system/store/actions';
 import { usersActions } from '@admin/store/actions';
 import { userSelectors } from '@admin/store/selectors';
-import { UsersHeader } from '@admin/components/UsersHeader';
-import { UsersModal } from '@admin/components/UsersModal';
-import { COLUMNS } from '@admin/containers/Users/meta';
-import { bem } from '@utils/formatters';
-import './Users.scss';
-
-const cn = bem('Users');
+import { UsersList } from '@admin/components/UsersList';
+import { UserAdd } from '@admin/containers/UserAdd';
 
 const mapStateToProps = (state: rootStateTypes) => ({
     list: userSelectors.list(state)
@@ -22,45 +22,33 @@ const mapDispatchToProps = {
     getList: usersActions.getUsersList.request
 };
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+export type UsersProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const Users: React.FC<Props> = (props) => {
+const Users: React.FC<UsersProps> = (props) => {
     const {
         setHeaderTitle,
-        getList,
-        list
+        getList
     } = props;
 
-    useEffect(() => {
-        setHeaderTitle('Управление пользователями');
-        getList(1);
-    }, [getList, setHeaderTitle]);
+    const { pathname } = useLocation();
+    const { path } = useRouteMatch();
 
-    const columns = useMemo(() => COLUMNS, []);
+    useEffect(() => {
+        if (pathname === '/users') {
+            setHeaderTitle('Управление пользователями');
+            getList(1);
+        }
+    }, [getList, setHeaderTitle, pathname]);
 
     return (
-        <div className={cn()}>
-            <UsersHeader />
-            <MaterialTable
-                columns={columns}
-                data={list}
-                options={{
-                    search: false,
-                    sorting: false,
-                    filtering: false,
-                    showFirstLastPageButtons: false,
-                    showTitle: false,
-                    toolbar: false,
-                    paging: false
-                }}
-                localization={{
-                    body: {
-                        emptyDataSourceMessage: 'нет пользователей'
-                    }
-                }}
+        <Switch>
+            <Route path={`${path}/add`} component={UserAdd} />
+            <Route
+                exact
+                path={path}
+                render={() => (<UsersList {...props} />)}
             />
-            <UsersModal open={false} />
-        </div>
+        </Switch>
     );
 };
 

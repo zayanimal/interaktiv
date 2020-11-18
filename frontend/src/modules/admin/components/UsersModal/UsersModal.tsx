@@ -1,6 +1,10 @@
 import React from 'react';
 import { Modal } from '@system/components/Modal';
-import { Input, Select } from '@material-ui/core';
+import {
+    Input,
+    Select,
+    MenuItem
+} from '@material-ui/core';
 import { bem } from '@utils/formatters';
 import './UsersModal.scss';
 
@@ -35,12 +39,17 @@ const UsersModal: React.FC<Props> = (props) => {
                 />
                 <Select
                     className={cn('select')}
-                    native
+                    placeholder="Роль"
+                    onOpen={() => {}}
                 >
-                    <option value={10}>Десять</option>
-                    <option value={10}>Десять</option>
-                    <option value={10}>Десять</option>
-                    <option value={10}>Десять</option>
+                    <MenuItem value={10}>customer</MenuItem>
+                </Select>
+                <Select
+                    className={cn('select')}
+                    placeholder="Права"
+                    onOpen={() => {}}
+                >
+                    <MenuItem value={10}>ALL_ORDERS</MenuItem>
                 </Select>
             </div>
         </Modal>
