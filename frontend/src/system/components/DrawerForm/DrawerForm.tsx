@@ -9,9 +9,9 @@ const cn = bem('DrawerForm');
 
 const transitionStyles = {
     entering: { transform: 'translateX(0)' },
-    entered:  { transform: 'translateX(0)' },
-    exiting:  { transform: 'translateX(100%)' },
-    exited:  { transform: 'translateX(100%)' },
+    entered: { transform: 'translateX(0)' },
+    exiting: { transform: 'translateX(100%)' },
+    exited: { transform: 'translateX(100%)' },
     unmounted: { transform: 'translateX(100%)' }
 };
 
@@ -20,10 +20,12 @@ interface Props {
     width?: string;
     toggle: boolean;
     onClose: () => void;
-};
+}
 
-const DrawerForm: React.SFC<Props> = (props) => {
-    const { label, width, toggle, onClose, children } = props;
+const DrawerForm: React.FC<Props> = (props) => {
+    const {
+        label, width, toggle, onClose, children
+    } = props;
 
     const drawer = useRef<HTMLHeadingElement>(null);
 
@@ -32,14 +34,14 @@ const DrawerForm: React.SFC<Props> = (props) => {
             const target = e.target as HTMLElement;
 
             /** Обработка закрытия дровера в случаях когда открыт Popover материал */
-            const closeHandler = (target: HTMLElement) => {
-                const popover = target.closest('.MuiPopover-root');
+            const closeHandler = (htarget: HTMLElement) => {
+                const popover = htarget.closest('.MuiPopover-root');
 
-                if (popover !== null || target.getAttribute('aria-hidden')) {
+                if (popover !== null || htarget.getAttribute('aria-hidden')) {
                     return false;
-                } else {
-                    return !drawer.current?.contains(target);
                 }
+
+                return !drawer.current?.contains(htarget);
             };
 
             if (closeHandler(target)) {
@@ -47,10 +49,10 @@ const DrawerForm: React.SFC<Props> = (props) => {
             }
         };
 
-        document.addEventListener("click", handleClick, false);
+        document.addEventListener('click', handleClick, false);
 
         return () => {
-          document.removeEventListener("click", handleClick, false);
+            document.removeEventListener('click', handleClick, false);
         };
     });
 
@@ -59,10 +61,10 @@ const DrawerForm: React.SFC<Props> = (props) => {
             in={toggle}
             timeout={200}
         >
-            {state => (
+            {(state) => (
                 <div
                     ref={drawer}
-                    style={{...transitionStyles[state], width: `${width}px` }}
+                    style={{ ...transitionStyles[state], width: `${width}px` }}
                     className={cn()}
                 >
                     <div

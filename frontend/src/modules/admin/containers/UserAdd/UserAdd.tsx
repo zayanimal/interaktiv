@@ -36,7 +36,8 @@ const mapDispatchToProps = {
     setPassword: userAddActions.setPassword,
     setRole: userAddActions.setRole,
     setPermissions: userAddActions.setPermissions,
-    addNewUser: userAddActions.addNewUser
+    addNewUser: userAddActions.addNewUser,
+    clearUserData: userAddActions.clearUserData
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -56,7 +57,8 @@ const UserAdd: React.FC<Props> = (props) => {
         permissions,
         setPermissions,
         validFields,
-        addNewUser
+        addNewUser,
+        clearUserData
     } = props;
 
     useEffect(() => {
@@ -85,6 +87,7 @@ const UserAdd: React.FC<Props> = (props) => {
     ) => callback(event.target.value);
 
     const onCancel = () => {
+        clearUserData();
         history.push('/users');
     };
 

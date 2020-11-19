@@ -5,7 +5,7 @@ class UserService {
     constructor(private api: ApiService) {}
 
     getList$(page: number) {
-        return this.api.get$(`users?page=${page}&limit=10`);
+        return this.api.get$(`users?page=${page}&limit=30`);
     }
 
     create$(user: ICreateUser) {

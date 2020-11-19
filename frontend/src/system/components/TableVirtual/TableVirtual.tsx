@@ -1,59 +1,81 @@
 import React from 'react';
-import MaterialTable, { Column, MTableHeader } from 'material-table';
-import { TableVirtualBody } from './TableVirtualBody';
-import { useDimensions } from './useDimensions';
-// import { bem } from '@utils/formatters';
+import {
+    Table,
+    Column,
+    AutoSizer,
+    InfiniteLoader,
+    ColumnProps
+} from 'react-virtualized';
+import { bem } from '@utils/formatters';
+import { IUsersMeta } from '@admin/interfaces/users.interface';
+import 'react-virtualized/styles.css';
 import './TableVirtual.scss';
 
-// const cn = bem('TableVirtual');
+const cn = bem('TableVirtual');
 
 interface Props {
-    columns: Column<object>[];
-    list: object[];
+    list: any[];
+    getList: (limit: number) => void;
+    columns: ColumnProps[];
+    meta: IUsersMeta;
 }
 
 const TableVirtual: React.FC<Props> = (props) => {
     const {
+        list,
+        getList,
         columns,
-        list
+        meta: {
+            currentPage,
+            totalItems,
+            totalPages
+        }
     } = props;
 
-    const [
-        tableRef,
-        { width: tableWidth, height: tableHeight }
-    ] = useDimensions();
+    const loadMoreRows = () => {
+        if (currentPage <= totalPages) {
+            getList(currentPage + 1);
+        }
 
-    const [tableHeaderRef, { height: tableHeaderHeight }] = useDimensions();
+        return Promise.resolve();
+    };
 
     return (
-        <div ref={tableRef}>
-            <MaterialTable
-                columns={columns}
-                data={list}
-                options={{
-                    toolbar: false,
-                    paging: false,
-                    sorting: false,
-                    draggable: false,
-                    minBodyHeight: '85vh',
-                    maxBodyHeight: '85vh'
-                }}
-                components={{
-                    Body: (tprops) => (
-                        <TableVirtualBody
-                            {...tprops}
-                            headerHeight={tableHeaderHeight}
-                            tableWidth={tableWidth}
-                            tableHeight={tableHeight}
-                        />
-                    ),
-                    Header: (hprops) => (
-                        <div ref={tableHeaderRef} className="table-header-row">
-                            <MTableHeader {...hprops} />
-                        </div>
-                    )
-                }}
-            />
+        <div style={{ height: 'calc(100vh - 8.1992em)' }}>
+            <InfiniteLoader
+                isRowLoaded={({ index }) => !!list[index]}
+                loadMoreRows={loadMoreRows}
+                rowCount={totalItems}
+            >
+                {({ onRowsRendered, registerChild }) => (
+                    <AutoSizer>
+                        {({ width, height }) => (
+                            <Table
+                                className={cn()}
+                                width={width}
+                                height={height}
+                                onRowsRendered={onRowsRendered}
+                                ref={registerChild}
+                                headerHeight={60}
+                                rowClassName={cn('row')}
+                                rowHeight={60}
+                                rowCount={list.length}
+                                rowGetter={({ index }) => list[index]}
+                            >
+                                {columns.map((col) => (
+                                    <Column
+                                        key={col.dataKey}
+                                        label={col.label}
+                                        dataKey={col.dataKey}
+                                        width={col.width}
+                                        cellRenderer={col.cellRenderer}
+                                    />
+                                ))}
+                            </Table>
+                        )}
+                    </AutoSizer>
+                )}
+            </InfiniteLoader>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { of, merge, from } from 'rxjs';
+import { of, merge, forkJoin } from 'rxjs';
 import {
     filter,
     first,
@@ -10,7 +10,7 @@ import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 import { usersActions, userAddActions } from '@admin/store/actions';
-import { userAddSelectors } from '@admin/store/selectors';
+import { userSelectors, userAddSelectors } from '@admin/store/selectors';
 import { userService } from '@admin/services/users.service';
 
 /**
@@ -39,10 +39,29 @@ export const sendNewUser: Epic = (action$, state$) => action$.pipe(
         map(userAddSelectors.newUser)
     )),
     mergeMap((payload) => userService.add$(payload)),
-    mergeMap(() => from([
-        userAddActions.clearUserData(),
-        systemActions.successNotification('Пользователь добавлен')
-    ])),
+    map(() => systemActions.successNotification('Пользователь добавлен')),
+    catchError((err, caught) => merge(
+        of(systemActions.errorNotification(err.response.message)),
+        caught
+    ))
+);
+
+/**
+ * Удалить пользователя и отфильтровать список
+ * @param action$
+ */
+export const removeUser: Epic = (action$, state$) => action$.pipe(
+    filter(isActionOf(usersActions.removeUser)),
+    mergeMap(({ payload }) => forkJoin({
+        response: userService.delete$(payload),
+        payload: of(payload)
+    })),
+    mergeMap(({ payload }) => state$.pipe(
+        first(),
+        map(userSelectors.list),
+        map((list) => list.filter(({ username }) => username !== payload)),
+        map(usersActions.setFiltredUsersList)
+    )),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.response.message)),
         caught

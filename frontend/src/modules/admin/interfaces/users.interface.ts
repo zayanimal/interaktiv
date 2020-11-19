@@ -10,3 +10,11 @@ export interface ICreateUser {
 export type IUser = Omit<ICreateUser, 'password'>;
 
 export type INewUser = Omit<ICreateUser, 'time' | 'active'>;
+
+export interface IUsersMeta {
+    currentPage: number;
+    itemCount: number;
+    itemsPerPage: number;
+    totalItems: number;
+    totalPages: number;
+}

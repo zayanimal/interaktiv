@@ -14,31 +14,35 @@ import { UsersList } from '@admin/components/UsersList';
 import { UserAdd } from '@admin/containers/UserAdd';
 
 const mapStateToProps = (state: rootStateTypes) => ({
-    list: userSelectors.list(state)
+    list: userSelectors.list(state),
+    meta: userSelectors.meta(state)
 });
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
-    getList: usersActions.getUsersList.request
+    getList: usersActions.getUsersList.request,
+    removeUser: usersActions.removeUser
 };
 
 export type UsersProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Users: React.FC<UsersProps> = (props) => {
-    const {
-        setHeaderTitle,
-        getList
-    } = props;
-
+    const { setHeaderTitle, getList, meta } = props;
     const { pathname } = useLocation();
     const { path } = useRouteMatch();
 
     useEffect(() => {
         if (pathname === '/users') {
             setHeaderTitle('Управление пользователями');
-            getList(1);
+
+            if (!meta.currentPage) { getList(1); }
         }
-    }, [getList, setHeaderTitle, pathname]);
+    }, [
+        getList,
+        setHeaderTitle,
+        pathname,
+        meta
+    ]);
 
     return (
         <Switch>
