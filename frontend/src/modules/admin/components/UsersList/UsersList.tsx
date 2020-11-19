@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
-import MaterialTable from 'material-table';
+import { TableVirtual } from '@system/components/TableVirtual';
 import { UsersHeader } from '@admin/components/UsersHeader';
 import { COLUMNS } from '@admin/components/UsersList/meta';
 import { UsersProps } from '@admin/containers/Users';
 import { bem } from '@utils/formatters';
-import 'react-virtualized/styles.css';
 import './UsersList.scss';
 
 const cn = bem('UsersList');
@@ -17,23 +16,9 @@ const UsersList: React.FC<UsersProps> = (props) => {
     return (
         <div className={cn()}>
             <UsersHeader />
-            <MaterialTable
+            <TableVirtual
                 columns={columns}
-                data={list}
-                options={{
-                    search: false,
-                    sorting: false,
-                    filtering: false,
-                    showFirstLastPageButtons: false,
-                    showTitle: false,
-                    toolbar: false,
-                    paging: false
-                }}
-                localization={{
-                    body: {
-                        emptyDataSourceMessage: 'нет пользователей'
-                    }
-                }}
+                list={list}
             />
         </div>
     );
