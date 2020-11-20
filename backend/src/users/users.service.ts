@@ -59,21 +59,23 @@ export class UsersService {
      * @param page
      * @param limit
      */
-    getUsers(page: number, limit: number): Observable<Omit<Pagination<UserDto>, 'links'>> {
+    getUsers(page: number, limit: number): Observable<
+        Omit<Pagination<Omit<UserDto, 'permissions'>>, 'links'>
+    > {
         return from(
             paginate(this.usersRepository
                 .createQueryBuilder('users')
                 .orderBy('users.time', 'ASC')
-                .leftJoinAndSelect('users.roles', 'roles')
-                .leftJoinAndSelect('users.permissions', 'permissions'),
+                .leftJoinAndSelect('users.roles', 'roles'),
                 { page, limit }
             )
         ).pipe(
             mergeMap(({ items, meta }) => forkJoin({
-                    items: from(items.map(({ username, roles, permissions }) => ({
-                        username,
-                        role: roles.name,
-                        permissions: permissions.map((perm: { name: string }) => perm?.name)
+                    items: from(items.map((user) => ({
+                        username: user.username,
+                        role: user.roles.name,
+                        time: user.time,
+                        status: user.status
                     }))).pipe(toArray()),
                     meta: of(meta)
                 })
@@ -93,13 +95,18 @@ export class UsersService {
         return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
             switchMap((user) => (user
                 ? of(user).pipe(
-                    map(({ username, roles, permissions }) => ({
-                        username,
-                        role: roles.name,
-                        permissions: permissions.map((perm: { name: string }) => perm?.name)
+                    map((user) => ({
+                        username: user.username,
+                        role: user.roles.name,
+                        status: user.status,
+                        permissions: user.permissions.map(
+                            (perm: { name: string }) => perm?.name
+                        )
                     }))
                 )
-                : throwError(new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED)))
+                : throwError(
+                    new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED)
+                ))
             )
         );
     }

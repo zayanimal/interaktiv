@@ -26,11 +26,15 @@ export class AuthService {
 
     login(loginUserDto: LoginUserDto): Observable<LoginStatus> {
         return this.usersService.findUserCheckPass(loginUserDto).pipe(
-            map(({ id, username, roles, permissions }) => ({
-                username,
-                accessToken: this.jwtService.sign({ id, username }),
-                role: roles.name,
-                permissions: permissions.map((perm: { name: string }) => perm.name)
+            map((user) => ({
+                username: user.username,
+                accessToken: this.jwtService.sign({
+                    id: user.id,
+                    username: user.username
+                }),
+                role: user.roles.name,
+                status: user.status,
+                permissions: user.permissions.map((perm: { name: string }) => perm.name)
             }))
         );
     }

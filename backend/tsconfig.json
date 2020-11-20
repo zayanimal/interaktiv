@@ -14,8 +14,9 @@
         "paths": {
             "@shared/*": ["src/shared/*"],
             "@auth/*": ["src/auth/*"],
+            "@dictionary/*": ["src/dictionary/*"],
             "@users/*": ["src/users/*"],
-            "@dictionary/*": ["src/dictionary/*"]
+            "@companies/*": ["src/companies/*"]
         }
     },
     "exclude": ["node_modules"]
