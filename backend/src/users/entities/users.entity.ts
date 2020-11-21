@@ -49,7 +49,7 @@ export class Users {
 
     @OneToOne(() => Contacts)
     @JoinColumn()
-    constacts: Contacts
+    contacts: Contacts
 
     @ManyToOne(() => Companies)
     @JoinColumn()

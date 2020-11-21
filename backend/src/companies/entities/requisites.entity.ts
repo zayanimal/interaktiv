@@ -6,7 +6,7 @@ import {
     OneToMany
 } from 'typeorm';
 import { Companies } from '@companies/entities/companies.entity';
-import { BankRequisites } from '@companies/entities/bankRequisites.entity';
+import { Bank } from '@companies/entities/bank.entity';
 
 @Entity()
 export class Requisites {
@@ -29,8 +29,8 @@ export class Requisites {
     @Column({ type: 'varchar', length: 40 })
     ogrn: string;
 
-    @OneToMany(() => BankRequisites, (bankReqs) => bankReqs.requisites)
-    bankRequisites: BankRequisites[];
+    @OneToMany(() => Bank, (bank) => bank.requisites)
+    bank: Bank[];
 
     @ManyToOne(() => Companies, (comp) => comp.requisites)
     companies: Companies;

@@ -7,7 +7,7 @@ import {
 import { Requisites } from '@companies/entities/requisites.entity';
 
 @Entity()
-export class BankRequisites {
+export class Bank {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -18,21 +18,18 @@ export class BankRequisites {
     })
     name: string;
 
-    @Column({ type: 'string', length: 50 })
-    bankName: string;
-
-    @Column({ type: 'string', length: 50 })
+    @Column({ type: 'varchar', length: 50 })
     rs: string;
 
-    @Column({ type: 'string', length: 50 })
+    @Column({ type: 'varchar', length: 50 })
     ks: string;
 
-    @Column({ type: 'string', length: 20 })
+    @Column({ type: 'varchar', length: 20 })
     bik: string;
 
-    @Column({ type: 'string', length: 60 })
+    @Column({ type: 'varchar', length: 60 })
     address: string;
 
-    @ManyToOne(() => Requisites, (reqs) => reqs.bankRequisites)
+    @ManyToOne(() => Requisites, (reqs) => reqs.bank)
     requisites: Requisites;
 }

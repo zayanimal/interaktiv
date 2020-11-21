@@ -1,7 +1,7 @@
 import { requestDrawerActions } from '@customer/store/actions';
 import { requestDrawerSelectors } from '@customer/store/selectors';
 import TextField from '@material-ui/core/TextField';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+// import { KeyboardDatePicker } from '@material-ui/pickers';
 import { DrawerForm } from '@system/components/DrawerForm';
 import { rootStateTypes } from '@system/store/roots';
 import { bem } from '@utils/formatters';
@@ -52,7 +52,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
         cityError,
         setCityError,
 
-        date,
+        // date,
         setDate,
 
         comment,
@@ -114,13 +114,13 @@ const RequestDrawer: React.FC<Props> = (props) => {
         }
     };
 
-    const dateHandler = (value: Date | null) => {
-        if (value !== null) {
-            setDate(value);
-        } else {
-            setDate(new Date());
-        }
-    };
+    // const dateHandler = (value: Date | null) => {
+    //     if (value !== null) {
+    //         setDate(value);
+    //     } else {
+    //         setDate(new Date());
+    //     }
+    // };
 
     const commentHandler = (e: ChangeEvent) => {
         const target = e.target as HTMLInputElement;

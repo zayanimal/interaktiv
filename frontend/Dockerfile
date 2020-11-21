@@ -12,4 +12,4 @@ COPY . ./
 
 CMD ["npm", "run", "start"]
 
-# docker run -it --rm  -v ${PWD}:/app -v /app/node_modules -p 3000:3000 --network=interaktiv zayanimal/react-frontend:v1
+# docker run --name react-frontend -d --rm -v ${PWD}:/app -v /app/node_modules -e CHOKIDAR_USEPOLLING=true -p 3000:3000 --network=interaktiv zayanimal/react-frontend:v1

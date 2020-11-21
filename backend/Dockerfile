@@ -16,4 +16,4 @@ RUN npm run build
 
 CMD ["npm", "run", "start:prod"]
 
-# docker run --name nest-backend --rm -it -p 8000:8000 -v ${PWD}:/app -v /app/node_modules --network=interaktiv zayanimal/nest-backend:v1
+# docker run --name nest-backend -d -p 8000:8000 --network=interaktiv zayanimal/nest-backend:v1
