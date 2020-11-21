@@ -5,6 +5,17 @@ then
 fi
 
 docker rmi zayanimal/nest-backend:v1
+
+# монтирование образа
 docker build -t zayanimal/nest-backend:v1 ./backend/.
-docker run --name nest-backend --rm --network=interaktiv -d -p 8000:8000 zayanimal/nest-backend:v1
+
+# сборка контейнера
+docker run \
+--name nest-backend \
+--rm \
+--network=interaktiv \
+-d \
+-p 8000:8000 \
+zayanimal/nest-backend:v1
+
 docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi

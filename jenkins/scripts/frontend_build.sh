@@ -5,6 +5,20 @@ then
 fi
 
 docker rmi zayanimal/react-frontend:v1
+
+# монтирование образа
 docker build -t zayanimal/react-frontend:v1 ./frontend/.
-docker run --name react-frontend --rm --network=interaktiv -p -e CHOKIDAR_USEPOLLING=true -p 80:3000 zayanimal/react-frontend:v1
+
+# сборка контейнера
+docker run \
+--name react-frontend \
+--rm \
+--network=interaktiv \
+-itd \
+-v ${PWD}:/app \
+-v /app/node_modules \
+-e CHOKIDAR_USEPOLLING=true \
+-p 3000:3000 \
+zayanimal/react-frontend:v1
+
 docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi
