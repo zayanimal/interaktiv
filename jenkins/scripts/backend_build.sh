@@ -6,7 +6,8 @@ dockerDeploy() {
     docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi
 }
 
-if [[ -n $(docker ps --filter "name=nest-backend" -qa) ]]; then
+if [[ -n $(docker ps --filter "name=nest-backend" -qa) ]]
+then
     docker stop nest-backend
     dockerDeploy()
 else
