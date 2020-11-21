@@ -8,10 +8,12 @@ COPY package.json ./
 COPY package-lock.json ./
 
 RUN npm install
+
+COPY . .
+
 RUN npm run build
 
-COPY . ./
 
 CMD ["npm", "run", "start:prod"]
 
-# docker run --name nest-backend --rm -p -p 8000:8000 -v ${PWD}:/app -v /app/node_modules --network=interaktiv zayanimal/nest-backend:v1
+# docker run --name nest-backend --rm -it -p 8000:8000 -v ${PWD}:/app -v /app/node_modules --network=interaktiv zayanimal/nest-backend:v1
