@@ -31,16 +31,16 @@ node {
     checkout scm
 
     stage('Build backend') {
-        // if (checkDirectoryChanges('backend')) {
+        if (checkDirectoryChanges('backend')) {
             sh "chmod +x jenkins/scripts/backend_build.sh"
             sh "./jenkins/scripts/backend_build.sh"
-        // }
+        }
     }
 
     stage("Build frontend") {
-        // if (checkDirectoryChanges('frontend')) {
+        if (checkDirectoryChanges('frontend')) {
             sh "chmod +x jenkins/scripts/frontend_build.sh"
             sh "./jenkins/scripts/frontend_build.sh"
-        // }
+        }
     }
 }
