@@ -30,23 +30,17 @@ properties(
 node {
     checkout scm
 
-    stage('Build_backend') {
+    stage('Build backend') {
         if (checkDirectoryChanges('backend')) {
-            sh 'docker stop nest-backend'
-            sh 'docker rmi zayanimal/nest-backend:v1'
-            sh 'docker build -t zayanimal/nest-backend:v1 ./backend/.'
-            sh 'docker run --name nest-backend --rm --network=interaktiv -d -p 8000:8000 zayanimal/nest-backend:v1'
-            sh 'docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi'
+            sh "chmod +x jenkins/scripts/backend_build.sh"
+            sh "./jenkins/scripts/backend_build.sh"
         }
     }
 
     stage("Build frontend") {
         if (checkDirectoryChanges('frontend')) {
-            sh 'docker stop react-frontend'
-            sh 'docker rmi zayanimal/react-frontend:v1'
-            sh 'docker build -t zayanimal/react-frontend:v1 ./frontend/.'
-            sh 'docker run --name react-frontend -d --rm -v ${PWD}:/app -v /app/node_modules -e CHOKIDAR_USEPOLLING=true -p 3000:3000 --network=interaktiv zayanimal/react-frontend:v1'
-            sh 'docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi'
+            sh "chmod +x jenkins/scripts/frontend_build.sh"
+            sh "./jenkins/scripts/frontend_build.sh"
         }
     }
 }
