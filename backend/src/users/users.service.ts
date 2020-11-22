@@ -11,6 +11,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { Users } from './entities/users.entity';
 import { Roles } from './entities/roles.entity';
 import { Permissions } from './entities/permissions.entity';
+import { Contacts } from './entities/contacts.entity';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +21,9 @@ export class UsersService {
         @InjectRepository(Roles)
         private readonly rolesRepository: Repository<Roles>,
         @InjectRepository(Permissions)
-        private readonly permissionsRepository: Repository<Permissions>
+        private readonly permissionsRepository: Repository<Permissions>,
+        @InjectRepository(Contacts)
+        private readonly contactsRepository: Repository<Contacts>
     ) {}
 
     private dbRequest(username: string) {
@@ -75,7 +78,7 @@ export class UsersService {
                         username: user.username,
                         role: user.roles.name,
                         time: user.time,
-                        status: user.status
+                        isActive: user.isActive
                     }))).pipe(toArray()),
                     meta: of(meta)
                 })
@@ -98,7 +101,7 @@ export class UsersService {
                     map((user) => ({
                         username: user.username,
                         role: user.roles.name,
-                        status: user.status,
+                        isActive: user.isActive,
                         permissions: user.permissions.map(
                             (perm: { name: string }) => perm?.name
                         )
@@ -115,12 +118,13 @@ export class UsersService {
      * Проверить существует ли пользователь в базе, если нет создать нового
      * @param userDto логин и пароль пользователя
      */
-    checkExistsAndCreate(userDto: CreateUserDto): Observable<UserDto> {
+    checkExistsAndCreate(userDto: CreateUserDto): Observable<{ message: string; }> {
         const {
             username,
             password,
             role,
-            permissions
+            permissions,
+            contacts
         } = userDto;
 
         return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
@@ -152,9 +156,13 @@ export class UsersService {
                           newUser.rolesId = roleId;
                           newUser.permissions = foundPerm;
 
+                    if (Object.keys(contacts).length) {
+                        newUser.contacts = await this.createContacts(contacts);
+                    }
+
                     await this.usersRepository.save(newUser);
 
-                    return this.findByUsername(username);
+                    return of({ message: `Пользователь ${username} добавлен` });
                 } else {
                     return throwError(
                         new HttpException('Пользователь уже существует', HttpStatus.BAD_REQUEST)
@@ -166,6 +174,17 @@ export class UsersService {
         );
     }
 
+    /**
+     * Создать контакты для пользователя
+     * @param contacts
+     */
+    async createContacts(contacts: Omit<Contacts, 'id'>) {
+        const contact = this.contactsRepository.create(contacts);
+
+        await this.contactsRepository.save(contact);
+
+        return contact;
+    }
 
     /**
      * Удалить пользователя

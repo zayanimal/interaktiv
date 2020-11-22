@@ -16,7 +16,7 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    register(userDto: CreateUserDto): Observable<UserDto> {
+    register(userDto: CreateUserDto) {
         return this.usersService.checkExistsAndCreate(userDto);
     }
 

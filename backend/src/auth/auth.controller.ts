@@ -25,7 +25,7 @@ export class AuthController {
     @Put('register')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    public register(@Body() createUserDto: CreateUserDto): Observable<UserDto> {
+    public register(@Body() createUserDto: CreateUserDto) {
         return this.authService.register(createUserDto);
     }
 

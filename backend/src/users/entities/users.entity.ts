@@ -34,7 +34,7 @@ export class Users {
     time: string;
 
     @Column({ type: 'boolean', default: true })
-    status: boolean;
+    isActive: boolean;
 
     @Column({ type: 'uuid', default: 'bbab9d8b-0bda-4f16-ae8d-59334e38a7c8' })
     rolesId: string;
@@ -47,7 +47,10 @@ export class Users {
     @JoinTable()
     permissions: Permissions[];
 
-    @OneToOne(() => Contacts)
+    @Column({ type: 'uuid', nullable: true })
+    contactsId: string;
+
+    @OneToOne(() => Contacts, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
     contacts: Contacts
 
