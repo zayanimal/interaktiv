@@ -1,8 +1,11 @@
 import {
     Entity,
     Column,
-    PrimaryGeneratedColumn
+    PrimaryGeneratedColumn,
+    OneToOne,
+    JoinColumn
 } from 'typeorm';
+import { Users } from '@users/entities/users.entity';
 
 @Entity()
 export class Contacts {
@@ -17,4 +20,11 @@ export class Contacts {
 
     @Column({ type: 'varchar', length: 30 })
     position: string;
+
+    @Column({ type: 'uuid' })
+    usersId: string;
+
+    @OneToOne(() => Users, { cascade: true, onDelete: 'CASCADE' })
+    @JoinColumn()
+    users: Users
 }

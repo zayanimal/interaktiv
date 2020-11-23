@@ -3,15 +3,13 @@ import { switchMap, switchAll, map, mergeMap, toArray, catchError } from 'rxjs/o
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { compare } from 'bcrypt';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
-import { UserDto } from './dto/user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { Users } from './entities/users.entity';
-import { Roles } from './entities/roles.entity';
-import { Permissions } from './entities/permissions.entity';
-import { Contacts } from './entities/contacts.entity';
+import { ContactsService } from '@contacts/contacts.service';
+import { UserDto } from '@users/dto/user.dto';
+import { CreateUserDto } from '@users/dto/create-user.dto';
+import { Users } from '@users/entities/users.entity';
+import { Roles } from '@auth/entities/roles.entity';
+import { Permissions } from '@auth/entities/permissions.entity';
 
 @Injectable()
 export class UsersService {
@@ -22,39 +20,14 @@ export class UsersService {
         private readonly rolesRepository: Repository<Roles>,
         @InjectRepository(Permissions)
         private readonly permissionsRepository: Repository<Permissions>,
-        @InjectRepository(Contacts)
-        private readonly contactsRepository: Repository<Contacts>
+        private contactsService: ContactsService
     ) {}
 
-    private dbRequest(username: string) {
+    dbRequest(username: string) {
         return {
             where: { username },
             relations: ['roles', 'permissions']
         };
-    }
-
-    /**
-     * Проверить есть ли пользователь в базе и соответствует ли его пароль
-     * @param param введеные пользователем логин и пароль
-     */
-    findUserCheckPass({ username, password }: LoginUserDto): Observable<any> {
-        return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
-            switchMap((user) => (user
-                ? of(user).pipe(
-                    switchMap(async (user) => (await compare(password, user.password)
-                        ? of(user)
-                        : throwError(new HttpException('Неверный пароль', HttpStatus.UNAUTHORIZED)))
-                    )
-                )
-                : throwError(new HttpException('Пользователь не найден', HttpStatus.UNAUTHORIZED)))
-            ),
-
-            switchAll(),
-
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
-        );
     }
 
     /**
@@ -156,11 +129,10 @@ export class UsersService {
                           newUser.rolesId = roleId;
                           newUser.permissions = foundPerm;
 
-                    if (Object.keys(contacts).length) {
-                        newUser.contacts = await this.createContacts(contacts);
-                    }
+                    const { id } = await this.usersRepository.save(newUser);
 
-                    await this.usersRepository.save(newUser);
+                    /** Создание контактов нового пользователя */
+                    await this.contactsService.create({ ...contacts, usersId: id });
 
                     return of({ message: `Пользователь ${username} добавлен` });
                 } else {
@@ -175,23 +147,11 @@ export class UsersService {
     }
 
     /**
-     * Создать контакты для пользователя
-     * @param contacts
-     */
-    async createContacts(contacts: Omit<Contacts, 'id'>) {
-        const contact = this.contactsRepository.create(contacts);
-
-        await this.contactsRepository.save(contact);
-
-        return contact;
-    }
-
-    /**
      * Удалить пользователя
      * @param userName
      */
     removeUser(username: string) {
-        return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
+        return from(this.usersRepository.findOne({ where: { username } })).pipe(
             switchMap((user) => from(this.usersRepository.remove(user)).pipe(
                 map(() => ({ message: `Пользователь ${username} удалён` }))
             )),

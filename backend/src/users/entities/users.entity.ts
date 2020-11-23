@@ -10,9 +10,9 @@ import {
     OneToOne
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Roles } from './roles.entity';
-import { Permissions } from './permissions.entity';
-import { Contacts } from './contacts.entity';
+import { Roles } from '@auth/entities/roles.entity';
+import { Permissions } from '@auth/entities/permissions.entity';
+import { Contacts } from '@contacts/entities/contacts.entity';
 import { Companies } from '@companies/entities/companies.entity';
 
 @Entity()
@@ -46,13 +46,6 @@ export class Users {
     @ManyToMany(() => Permissions, { eager: true })
     @JoinTable()
     permissions: Permissions[];
-
-    @Column({ type: 'uuid', nullable: true })
-    contactsId: string;
-
-    @OneToOne(() => Contacts, { cascade: true, onDelete: 'CASCADE' })
-    @JoinColumn()
-    contacts: Contacts
 
     @ManyToOne(() => Companies)
     @JoinColumn()

@@ -16,6 +16,7 @@
             "@auth/*": ["src/auth/*"],
             "@dictionary/*": ["src/dictionary/*"],
             "@users/*": ["src/users/*"],
+            "@contacts/*": ["src/contacts/*"],
             "@companies/*": ["src/companies/*"]
         }
     },
