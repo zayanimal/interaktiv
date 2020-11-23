@@ -1,7 +1,7 @@
 import * as usersActions from './users.actions';
-import * as userAddActions from './userAdd.actions';
+import * as userControlActions from './userControl.actions';
 
 export {
     usersActions,
-    userAddActions
+    userControlActions
 };

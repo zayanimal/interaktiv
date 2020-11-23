@@ -1,10 +1,16 @@
+interface Contacts {
+    email: string;
+    phone: string;
+    position: string;
+}
+
 export interface ICreateUser {
     username: string;
     password: string;
     role: string;
     time: string;
-    active: boolean;
     permissions: string[];
+    contacts: Contacts;
 }
 
 export type IUser = Omit<ICreateUser, 'password'>;

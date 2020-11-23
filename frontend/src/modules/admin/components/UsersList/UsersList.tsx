@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
+import { useRouteMatch, useHistory } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
+import Chip from '@material-ui/core/Chip';
 import { ColumnProps } from 'react-virtualized';
 import { TableRowButton } from '@system/components/TableRowButton';
 import { TableVirtual } from '@system/components/TableVirtual';
@@ -15,44 +17,70 @@ const UsersList: React.FC<UsersProps> = (props) => {
         list,
         meta,
         removeUser,
-        getList
+        getList,
+        setUserEditName
     } = props;
 
-    const columns: ColumnProps[] = useMemo(() => [
-        {
-            dataKey: 'none',
-            label: '',
-            width: 90,
-            cellRenderer: ({ rowData }) => (
-                <TableRowButton>
-                    <MenuItem>Редактировать</MenuItem>
-                    <MenuItem onClick={() => { removeUser(rowData.username); }}>
-                        Удалить
-                    </MenuItem>
-                </TableRowButton>
-            )
-        },
-        {
-            dataKey: 'username',
-            label: 'Имя пользователя',
-            width: 300
-        },
-        {
-            dataKey: 'role',
-            label: 'Роль',
-            width: 250
-        },
-        {
-            dataKey: 'time',
-            label: 'Дата создания',
-            width: 250
-        },
-        {
-            dataKey: 'active',
-            label: 'Статус',
-            width: 250
-        }
-    ], [removeUser]);
+    const { path } = useRouteMatch();
+    const history = useHistory();
+
+    const columns: ColumnProps[] = useMemo(() => {
+        const onEdit = (rowData: any) => () => {
+            setUserEditName(rowData.username);
+            history.push({ pathname: `${path}/edit` });
+        };
+
+        const onRemove = (rowData: any) => () => { removeUser(rowData.username); };
+
+        return [
+            {
+                dataKey: 'none',
+                label: '',
+                width: 90,
+                cellRenderer: ({ rowData }) => (
+                    <TableRowButton>
+                        <MenuItem onClick={onEdit(rowData)}>
+                            Редактировать
+                        </MenuItem>
+                        <MenuItem onClick={onRemove(rowData)}>
+                            Удалить
+                        </MenuItem>
+                    </TableRowButton>
+                )
+            },
+            {
+                dataKey: 'username',
+                label: 'Имя пользователя',
+                width: 300
+            },
+            {
+                dataKey: 'role',
+                label: 'Роль',
+                width: 250
+            },
+            {
+                dataKey: 'time',
+                label: 'Дата создания',
+                width: 300,
+                cellRenderer: ({ cellData }) => new Date(cellData).toLocaleDateString('ru')
+            },
+            {
+                dataKey: 'isActive',
+                label: 'Статус',
+                width: 250,
+                cellRenderer: ({ cellData }) => (cellData ? (
+                    <Chip label="Активен" size="small" color="primary" />
+                ) : (
+                    <Chip label="Не активен" size="small" />
+                ))
+            }
+        ];
+    }, [
+        removeUser,
+        path,
+        history,
+        setUserEditName
+    ]);
 
     return (
         <div className={cn()}>

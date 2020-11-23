@@ -9,8 +9,8 @@ import {
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
-import { usersActions, userAddActions } from '@admin/store/actions';
-import { userSelectors, userAddSelectors } from '@admin/store/selectors';
+import { usersActions, userControlActions } from '@admin/store/actions';
+import { userSelectors, userControlSelectors } from '@admin/store/selectors';
 import { userService } from '@admin/services/users.service';
 
 /**
@@ -33,13 +33,18 @@ export const getUsersList: Epic = (action$) => action$.pipe(
  * @param state$
  */
 export const sendNewUser: Epic = (action$, state$) => action$.pipe(
-    filter(isActionOf(userAddActions.addNewUser)),
+    filter(isActionOf(userControlActions.addNewUser)),
     mergeMap(() => state$.pipe(
         first(),
-        map(userAddSelectors.newUser)
+        map(userControlSelectors.newUser)
+    )),
+    mergeMap((user) => state$.pipe(
+        first(),
+        map(userControlSelectors.newContacts),
+        map((contacts) => Object.assign(user, { contacts }))
     )),
     mergeMap((payload) => userService.add$(payload)),
-    map(() => systemActions.successNotification('Пользователь добавлен')),
+    map(({ response }) => systemActions.successNotification(response.message)),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.response.message)),
         caught

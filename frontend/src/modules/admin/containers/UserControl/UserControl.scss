@@ -1,7 +1,8 @@
-.UserAdd {
+.UserControl {
     $width: 60%;
     $padding: 2em;
     $margin-top: 3em;
+    position: relative;
     display: flex;
 
     &__column {
@@ -37,9 +38,12 @@
     }
 
     &__controls {
-        padding: $padding;
-        margin-top: $margin-top;
-        display: flex;
-        align-items: center;
+        position: absolute;
+        bottom: 3em;
+        left: 3em;
+
+        button + button {
+            margin-left: 2em;
+        }
     }
 }

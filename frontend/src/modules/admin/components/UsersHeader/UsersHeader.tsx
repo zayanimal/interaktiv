@@ -7,13 +7,7 @@ import './UsersHeader.scss';
 
 const cn = bem('UsersHeader');
 
-interface Props {
-
-}
-
-const UsersHeader: React.FC<Props> = () => {
-    // const {} = props;
-
+const UsersHeader: React.FC = () => {
     const { path } = useRouteMatch();
     const history = useHistory();
 

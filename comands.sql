@@ -57,6 +57,10 @@ on
 	"permissionid" = public.permissions.id;
 
 
+-- каскадное удаление для foreign key
+ALTER TABLE public.contacts ADD FOREIGN KEY ("usersId")
+REFERENCES public.users(id) ON DELETE CASCADE;
+
 
 -- 73b71694-9d9f-4cc6-915d-8fd4eb5a7797 admin
 -- 586ecc04-b76f-42a3-9986-1ddb4c97d3ff customer

@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { users } from '@admin/store/reducers/users.reducer';
-import { userAdd } from '@admin/store/reducers/userAdd.reducer';
+import { userControl } from '@admin/store/reducers/userControl.reducer';
 
 export const adminReducer = combineReducers({
     users,
-    userAdd
+    userControl
 });

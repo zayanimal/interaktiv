@@ -9,3 +9,7 @@ export const getUsersList = createAsyncAction(
 export const removeUser = createAction('[ADMIN] REMOVE_USER')<string>();
 
 export const setFiltredUsersList = createAction('[ADMIN] SET_FILTRED_USERS_LIST')<any[]>();
+
+export const setUserEditMode = createAction('[ADMIN] SET_USER_EDIT_MODE')<boolean>();
+
+export const setUserEditName = createAction('[ADMIN] SET_USER_EDIT_NAME')<string>();

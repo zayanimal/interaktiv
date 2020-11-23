@@ -11,7 +11,7 @@ import { systemActions } from '@system/store/actions';
 import { usersActions } from '@admin/store/actions';
 import { userSelectors } from '@admin/store/selectors';
 import { UsersList } from '@admin/components/UsersList';
-import { UserAdd } from '@admin/containers/UserAdd';
+import { UserControl } from '@admin/containers/UserControl';
 
 const mapStateToProps = (state: rootStateTypes) => ({
     list: userSelectors.list(state),
@@ -21,7 +21,8 @@ const mapStateToProps = (state: rootStateTypes) => ({
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
     getList: usersActions.getUsersList.request,
-    removeUser: usersActions.removeUser
+    removeUser: usersActions.removeUser,
+    setUserEditName: usersActions.setUserEditName
 };
 
 export type UsersProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -46,7 +47,8 @@ const Users: React.FC<UsersProps> = (props) => {
 
     return (
         <Switch>
-            <Route path={`${path}/add`} component={UserAdd} />
+            <Route path={`${path}/add`} component={UserControl} />
+            <Route path={`${path}/edit`} component={UserControl} />
             <Route
                 exact
                 path={path}

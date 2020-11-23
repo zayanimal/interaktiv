@@ -1,7 +1,7 @@
 import * as userSelectors from './users.selectors';
-import * as userAddSelectors from './userAdd.selectors';
+import * as userControlSelectors from './userControl.selectors';
 
 export {
     userSelectors,
-    userAddSelectors
+    userControlSelectors
 };
