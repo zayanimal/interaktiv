@@ -25,7 +25,7 @@ export class UsersController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     findOne(@Param('username') username: string) {
-        return this.usersService.findByUsername(username);
+        return this.usersService.findUserForEdit(username);
     }
 
     /**

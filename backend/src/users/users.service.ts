@@ -1,8 +1,8 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
 import { switchMap, switchAll, map, mergeMap, toArray, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
+import { Repository, EntityManager, ObjectLiteral } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { ContactsService } from '@contacts/contacts.service';
 import { UserDto } from '@users/dto/user.dto';
@@ -14,6 +14,8 @@ import { Permissions } from '@auth/entities/permissions.entity';
 @Injectable()
 export class UsersService {
     constructor(
+        @InjectEntityManager()
+        private readonly entityManager: EntityManager,
         @InjectRepository(Users)
         private readonly usersRepository: Repository<Users>,
         @InjectRepository(Roles)
@@ -88,6 +90,29 @@ export class UsersService {
     }
 
     /**
+     * Найти пльзователя и его контакты, чтобы отредактировать
+     * @param username
+     */
+    findUserForEdit(username: string) {
+        return this.usersRepository
+            .createQueryBuilder('users')
+            .select([
+                'users.username',
+                'users.password',
+                'rol.name',
+                'perm.name',
+                'cont.email',
+                'cont.phone',
+                'cont.position'
+            ])
+            .innerJoin('users.roles', 'rol')
+            .innerJoin('users.permissions', 'perm')
+            .innerJoin('users.contacts', 'cont')
+            .where('users.username = :name', { name: username })
+            .getOne();
+    }
+
+    /**
      * Проверить существует ли пользователь в базе, если нет создать нового
      * @param userDto логин и пароль пользователя
      */
@@ -129,10 +154,13 @@ export class UsersService {
                           newUser.rolesId = roleId;
                           newUser.permissions = foundPerm;
 
-                    const { id } = await this.usersRepository.save(newUser);
+                    const savedUser = await this.usersRepository.save(newUser);
 
                     /** Создание контактов нового пользователя */
-                    await this.contactsService.create({ ...contacts, usersId: id });
+                    const savedContact = await this.contactsService.create({ ...contacts, usersId: savedUser.id });
+
+                    /** Добавить пользователю ссылку на контакт */
+                    await this.usersRepository.update({ username }, { contactsId: savedContact.id });
 
                     return of({ message: `Пользователь ${username} добавлен` });
                 } else {

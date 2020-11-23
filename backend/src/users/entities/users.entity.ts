@@ -43,13 +43,20 @@ export class Users {
     @JoinColumn()
     roles: Roles;
 
+    @Column({ type: 'uuid', nullable: true })
+    contactsId: string;
+
+    @OneToOne(() => Contacts)
+    @JoinColumn()
+    contacts: Contacts;
+
     @ManyToMany(() => Permissions, { eager: true })
     @JoinTable()
     permissions: Permissions[];
 
     @ManyToOne(() => Companies)
     @JoinColumn()
-    companies: Companies
+    companies: Companies;
 
     @BeforeInsert() async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);
