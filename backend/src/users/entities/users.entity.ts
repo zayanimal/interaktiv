@@ -50,7 +50,7 @@ export class Users {
     @JoinColumn()
     contacts: Contacts;
 
-    @ManyToMany(() => Permissions, { eager: true })
+    @ManyToMany(() => Permissions)
     @JoinTable()
     permissions: Permissions[];
 

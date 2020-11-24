@@ -1,6 +1,6 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
 import { toArray, map, mergeMap, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { compare } from 'bcrypt';
@@ -25,6 +25,7 @@ export class AuthService {
         private readonly rolesRepository: Repository<Roles>,
         @InjectRepository(Permissions)
         private readonly permissionsRepository: Repository<Permissions>,
+        @Inject(forwardRef(() => UsersService))
         private usersService: UsersService,
         private contactsService: ContactsService,
         private jwtService: JwtService
@@ -58,7 +59,6 @@ export class AuthService {
      */
     checkRole(role: string) {
         return from(this.rolesRepository.findOne({ where: { name: role } })).pipe(
-            map(({ id }) => id),
             catchError(() => throwError(
                 new HttpException('Введена неверная роль', HttpStatus.BAD_REQUEST)
             ))
@@ -95,7 +95,7 @@ export class AuthService {
 
         return this.checkUser(username).pipe(
             mergeMap(() => forkJoin({
-                roleId: this.checkRole(role),
+                roleId: this.checkRole(role).pipe(map(({ id }) => id)),
                 permissions: this.checkPermissions(permissions)
             })),
             mergeMap(({ roleId, permissions }) => of(
@@ -143,7 +143,7 @@ export class AuthService {
                 }),
                 role: user.roles.name,
                 isActive: user.isActive,
-                permissions: user.permissions.map((perm: { name: string }) => perm.name)
+                permissions: user.permissions.map(({ name }) => name)
             }))
         );
     }

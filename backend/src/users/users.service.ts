@@ -1,18 +1,25 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
 import { switchMap, map, mergeMap, toArray, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { hash } from 'bcrypt';
+import { AuthService } from '@auth/auth.service';
 import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { Users } from '@users/entities/users.entity';
+import { Contacts } from '@contacts/entities/contacts.entity';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(Users)
-        private readonly usersRepository: Repository<Users>
+        private readonly usersRepository: Repository<Users>,
+        @InjectRepository(Contacts)
+        private readonly contactsRepository: Repository<Contacts>,
+        @Inject(forwardRef(() => AuthService))
+        private authService: AuthService
     ) {}
 
     dbRequest(username: string) {
@@ -61,7 +68,7 @@ export class UsersService {
      */
     findByUsername(username: string): Observable<UserDto> {
         return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
-            switchMap((user) => (user
+            mergeMap((user) => (user
                 ? of(user).pipe(
                     map((user) => ({
                         username: user.username,
@@ -72,8 +79,8 @@ export class UsersService {
                 )
                 : throwError(
                     new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED)
-                ))
-            )
+                )
+            ))
         );
     }
 
@@ -110,12 +117,52 @@ export class UsersService {
             );
     }
 
+    /**
+     * Редактирование пользователя
+     * @param editableUser имя редактируемого пользователя
+     * @param userDto данные для редактирования
+     */
     editUser(editableUser: string, userDto: CreateUserDto & { isActive: boolean; }) {
-        this.usersRepository
-            .createQueryBuilder('users')
-            .select('users.id')
-            .where('users.username = :n', { n: editableUser })
-            .getOne();
+        const { username, password, isActive, role, permissions, contacts } = userDto;
+
+        return forkJoin({
+                user: from(this.usersRepository.findOne(this.dbRequest(editableUser))),
+                foundRole: from(this.authService.checkRole(role)),
+                permissions: from(this.authService.checkPermissions(permissions)),
+                hashedPassword: (password.length ? from(hash(password, 10)) : of(''))
+            }).pipe(
+            mergeMap((props) => {
+                const { user, foundRole, permissions, hashedPassword } = props;
+
+                if (!user) { return throwError(
+                        new HttpException('Пользователь не существует', HttpStatus.BAD_REQUEST)
+                    );
+                }
+
+                user.username = username;
+                if (hashedPassword.length) { user.password = hashedPassword; }
+                user.isActive = isActive;
+                user.roles = foundRole;
+                user.permissions = permissions;
+
+                return from(this.usersRepository.save(user));
+            }),
+            mergeMap(({ id }) => from(
+                this.contactsRepository.findOne({ where: { usersId: id }})
+            ).pipe(
+                mergeMap((contact) => {
+                    const { email, phone, position } = contacts;
+
+                    contact.email = email;
+                    contact.phone = phone;
+                    contact.position = position;
+
+                    return from(this.contactsRepository.save(contact));
+                }),
+                map(() => ({ message: `Пользователь изменён` }))
+            )),
+            catchError((err) => of(err.message))
+        );
     }
 
     /**
