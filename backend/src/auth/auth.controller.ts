@@ -15,7 +15,6 @@ import { Roles } from '@auth/decorators/roles.decorator';
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { LoginUserDto } from '@users/dto/login-user.dto';
-import { UserDto } from '@users/dto/user.dto';
 import { LoginStatus } from './interfaces/login-status.interface';
 
 @Controller('auth')

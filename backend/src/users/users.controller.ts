@@ -2,15 +2,18 @@ import {
     Controller,
     Delete,
     Get,
+    Patch,
     Param,
     Query,
     UseGuards,
-    ParseIntPipe
+    ParseIntPipe,
+    Body
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { UsersService } from '@users/users.service';
 import { Roles } from '@auth/decorators/roles.decorator';
+import { CreateUserDto } from '@users/dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -42,6 +45,16 @@ export class UsersController {
         @Query('limit', ParseIntPipe) limit: number
     ) {
         return this.usersService.getUsers(page, limit);
+    }
+
+    @Patch('edit/:username')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    editUser(
+        @Param('username') username: string,
+        @Body() editUser: CreateUserDto & { isActive: boolean; }
+    ) {
+        return this.usersService.editUser(username, editUser);
     }
 
     /**

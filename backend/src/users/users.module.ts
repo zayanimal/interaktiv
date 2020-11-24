@@ -7,7 +7,6 @@ import { Users } from '@users/entities/users.entity';
 import { Roles } from '@auth/entities/roles.entity';
 import { Permissions } from '@auth/entities/permissions.entity';
 import { Contacts } from '@contacts/entities/contacts.entity';
-import { Companies } from '@companies/entities/companies.entity';
 
 @Module({
   imports: [
@@ -16,8 +15,7 @@ import { Companies } from '@companies/entities/companies.entity';
       Users,
       Roles,
       Permissions,
-      Contacts,
-      Companies
+      Contacts
     ])
   ],
   providers: [UsersService],
