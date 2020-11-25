@@ -1,11 +1,14 @@
 import {
     Entity,
     Column,
+    JoinColumn,
     PrimaryGeneratedColumn,
-    OneToMany
+    OneToMany,
+    OneToOne
 } from 'typeorm';
 import { Users } from '@users/entities/users.entity';
 import { Requisites } from '@companies/entities/requisites.entity';
+import { ContactCompany } from '@companies/entities/contactCompany.entity';
 
 @Entity()
 export class Companies {
@@ -19,17 +22,15 @@ export class Companies {
     })
     name: string;
 
-    @Column({ type: 'varchar', length: 30 })
-    email: string;
-
-    @Column({ type: 'varchar', length: 20 })
-    phone: string;
-
-    @Column({ type: 'varchar', length: 30 })
-    site: string;
-
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     time: string;
+
+    @Column({ type: 'uuid', nullable: true })
+    contactId: string;
+
+    @OneToOne(() => ContactCompany)
+    @JoinColumn()
+    contact: ContactCompany;
 
     @OneToMany(() => Users, users => users.companies)
     users: Users[];

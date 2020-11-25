@@ -12,7 +12,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { Roles } from '@auth/entities/roles.entity';
 import { Permissions } from '@auth/entities/permissions.entity';
-import { Contacts } from '@contacts/entities/contacts.entity';
+import { ContactUser } from '@users/entities/contactUser.entity';
 import { Companies } from '@companies/entities/companies.entity';
 
 @Entity()
@@ -44,11 +44,11 @@ export class Users {
     roles: Roles;
 
     @Column({ type: 'uuid', nullable: true })
-    contactsId: string;
+    contactId: string;
 
-    @OneToOne(() => Contacts)
+    @OneToOne(() => ContactUser)
     @JoinColumn()
-    contacts: Contacts;
+    contact: ContactUser;
 
     @ManyToMany(() => Permissions)
     @JoinTable()

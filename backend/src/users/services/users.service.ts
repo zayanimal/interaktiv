@@ -9,15 +9,15 @@ import { AuthService } from '@auth/auth.service';
 import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { Users } from '@users/entities/users.entity';
-import { Contacts } from '@contacts/entities/contacts.entity';
+import { ContactUser } from '@users/entities/contactUser.entity';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(Users)
         private readonly usersRepository: Repository<Users>,
-        @InjectRepository(Contacts)
-        private readonly contactsRepository: Repository<Contacts>,
+        @InjectRepository(ContactUser)
+        private readonly contactsRepository: Repository<ContactUser>,
         @Inject(forwardRef(() => AuthService))
         private authService: AuthService
     ) {}
@@ -112,7 +112,7 @@ export class UsersService {
                     isActive: user.isActive,
                     role: user.roles.name,
                     permissions: user.permissions.map(({ name }) => name),
-                    contacts: user.contacts
+                    contacts: user.contact
                 }))
             );
     }

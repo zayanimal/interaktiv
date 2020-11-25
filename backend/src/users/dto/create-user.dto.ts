@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { Contacts } from '@contacts/entities/contacts.entity';
+import { ContactUser } from '@users/entities/contactUser.entity';
 
 export class CreateUserDto {
     @IsNotEmpty()
@@ -15,5 +15,5 @@ export class CreateUserDto {
     permissions: string[];
 
     @IsNotEmpty()
-    contacts: Contacts;
+    contacts: ContactUser;
 }

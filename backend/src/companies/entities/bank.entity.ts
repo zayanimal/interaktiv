@@ -14,21 +14,25 @@ export class Bank {
     @Column({
         type: 'varchar',
         length: 40,
-        unique: true
+        unique: true,
+        nullable: false
     })
     name: string;
 
-    @Column({ type: 'varchar', length: 50 })
+    @Column({ type: 'varchar', length: 50, nullable: false })
     rs: string;
 
-    @Column({ type: 'varchar', length: 50 })
+    @Column({ type: 'varchar', length: 50, nullable: false })
     ks: string;
 
-    @Column({ type: 'varchar', length: 20 })
+    @Column({ type: 'varchar', length: 20, nullable: false })
     bik: string;
 
-    @Column({ type: 'varchar', length: 60 })
+    @Column({ type: 'varchar', length: 60, nullable: false })
     address: string;
+
+    @Column({ type: 'uuid' })
+    requisitesId: string;
 
     @ManyToOne(() => Requisites, (reqs) => reqs.bank)
     requisites: Requisites;

@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CompaniesController } from './companies.controller';
-import { CompaniesService } from './companies.service';
-import { Companies } from './entities/companies.entity';
-import { Requisites } from './entities/requisites.entity';
-import { Bank } from './entities/bank.entity';
+import { CompaniesController } from '@companies/companies.controller';
+import { CompaniesService } from '@companies/companies.service';
+import { Companies } from '@companies/entities/companies.entity';
+import { Requisites } from '@companies/entities/requisites.entity';
+import { Bank } from '@companies/entities/bank.entity';
 import { Users } from '@users/entities/users.entity';
+import { ContactCompany } from '@companies/entities/contactCompany.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
     Companies,
     Requisites,
     Bank,
-    Users
+    Users,
+    ContactCompany
   ])],
   controllers: [CompaniesController],
   providers: [CompaniesService],

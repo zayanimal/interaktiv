@@ -5,8 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '@users/users.service';
-import { ContactsService } from '@contacts/contacts.service';
+import { UsersService } from '@users/services/users.service';
+import { ContactsService } from '@users/services/contacts.service';
 import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { LoginUserDto } from '@users/dto/login-user.dto';
@@ -114,7 +114,7 @@ export class AuthService {
             ))),
             mergeMap((savedContact) => from(this.usersRepository.update(
                 { username },
-                { contactsId: savedContact.id }
+                { contactId: savedContact.id }
             ))),
             map(() => ({ message: `Пользователь ${username} добавлен` }))
         )

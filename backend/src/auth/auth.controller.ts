@@ -24,18 +24,18 @@ export class AuthController {
     @Put('register')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    public register(@Body() createUserDto: CreateUserDto) {
+    register(@Body() createUserDto: CreateUserDto) {
         return this.authService.register(createUserDto);
     }
 
     @Post('login')
-    public login(@Body() loginUserDto: LoginUserDto): Observable<LoginStatus> {
+    login(@Body() loginUserDto: LoginUserDto): Observable<LoginStatus> {
         return this.authService.login(loginUserDto);
     }
 
     @Get('current')
     @UseGuards(JwtAuthGuard)
-    public current(@Req() req: Request) {
+    current(@Req() req: Request) {
         return req.user;
     }
 }
