@@ -75,23 +75,41 @@ export class CompaniesService {
         )
     }
 
+    /**
+     * Получить все данные о компании для дальнейшего редактирования
+     * @param id
+     */
     getFullCompany(id: string) {
         return from(this.companyRepository
             .createQueryBuilder('companies')
             .select([
+                'companies.id',
                 'companies.name',
-                // 'c.email',
-                // 'c.phone',
-                // 'c.website',
-                // 'r.name'
+                'c.email',
+                'c.phone',
+                'c.website',
+                'u.username',
+                'r.name',
+                'r.inn',
+                'r.kpp',
+                'r.ogrn',
+                'b.name',
+                'b.rs',
+                'b.ks',
+                'b.bik',
+                'b.address'
             ])
-            .leftJoinAndSelect('companies.users', 'user')
-            // .innerJoin('contact', 'c')
-            // .innerJoin('requisites', 'r')
-            // .innerJoin('bank', 'b')
+            .leftJoin('companies.contact', 'c', 'companies.contactId = c.id')
+            .leftJoin('companies.users', 'u', 'companies.id = u.companiesId')
+            .leftJoin('companies.requisites', 'r', 'companies.id = r.companiesId')
+            .leftJoin('r.bank', 'b', 'r.id = b.requisitesId')
             .where('companies.id = :id', { id })
-            .getOne()
-        );
+            .getOne()).pipe(
+                map((company) => ({
+                    ...company,
+                    users: company.users.map(({ username }) => username)
+                }))
+            );
     }
 
     /**
