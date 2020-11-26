@@ -10,6 +10,7 @@ import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { Users } from '@users/entities/users.entity';
 import { ContactUser } from '@users/entities/contactUser.entity';
+import { CreateCompanyDto } from '@companies/dto/createCompanyDto';
 
 @Injectable()
 export class UsersService {
@@ -182,5 +183,26 @@ export class UsersService {
                 )
             ))
         );
+    }
+
+    /**
+     * Обновить в пользователе его принадлежность к организации
+     * @param companyDto
+     * @param id
+     */
+    updateUserCompany(users: string[], id: string) {
+        return from(this.usersRepository.find({
+            where: users.map((username) => ({ username }))
+        })).pipe(
+            mergeMap((users) => from(users)),
+            mergeMap((user) => from(this.usersRepository.update(
+                { username: user.username },
+                { companiesId: id }
+            )))
+        );
+    }
+
+    removeUserCompany(companiesId: string) {
+        return from(this.usersRepository.update({ companiesId }, { companiesId: null }));
     }
 }

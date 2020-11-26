@@ -36,6 +36,10 @@ export class Requisites {
     @Column({ type: 'uuid' })
     companiesId: string;
 
-    @ManyToOne(() => Companies, (comp) => comp.requisites)
+    @ManyToOne(
+        () => Companies,
+        (comp) => comp.requisites,
+        { cascade: true, onDelete: 'CASCADE' }
+    )
     companies: Companies;
 }

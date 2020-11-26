@@ -34,6 +34,10 @@ export class Bank {
     @Column({ type: 'uuid' })
     requisitesId: string;
 
-    @ManyToOne(() => Requisites, (reqs) => reqs.bank)
+    @ManyToOne(
+        () => Requisites,
+        (reqs) => reqs.bank,
+        { cascade: true, onDelete: 'CASCADE' }
+    )
     requisites: Requisites;
 }
