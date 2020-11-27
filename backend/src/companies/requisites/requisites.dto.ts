@@ -1,7 +1,11 @@
-import { IsNotEmpty, IsArray } from 'class-validator';
-import { BankDto } from '@companies/dto/bankDto';
+import { IsNotEmpty, IsArray, IsUUID, IsOptional } from 'class-validator';
+import { BankDto } from '@companies/bank/bank.dto';
 
 export class RequisitesDto {
+    @IsOptional()
+    @IsUUID()
+    id?: string;
+
     @IsNotEmpty()
     name: string;
 
@@ -14,6 +18,7 @@ export class RequisitesDto {
     @IsNotEmpty()
     ogrn: string;
 
+    @IsOptional()
     @IsArray()
     bank: BankDto[];
 }

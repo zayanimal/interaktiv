@@ -1,12 +1,13 @@
-import { Observable, merge, of, from, throwError, forkJoin } from 'rxjs';
-import { toArray, map, mergeMap, tap, catchError, switchAll } from 'rxjs/operators';
+import { of, from, throwError, forkJoin } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Raw } from 'typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
 import { UsersService } from '@users/services/users.service';
 import { ContactService } from '@companies/services/contact.service';
-import { RequisitesService } from '@companies/services/requisites.service';
-import { CreateCompanyDto } from '@companies/dto/createCompanyDto';
+import { RequisitesService } from '@companies/requisites/requisites.service';
+import { CreateCompanyDto } from '@companies/dto/createCompany.dto';
 import { Companies } from '@companies/entities/companies.entity';
 
 @Injectable()
@@ -25,8 +26,39 @@ export class CompaniesService {
      */
     search(name: string) {
         return this.companyRepository.find({
-            name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}')`)
+            where: {
+                name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}')`)
+            },
+            select: ['id', 'name']
         });
+    }
+
+    /**
+     * Список компаний с пагинацией
+     * @param page
+     * @param limit
+     */
+    list(page: number, limit: number) {
+        return from(
+            paginate(this.companyRepository
+                .createQueryBuilder('companies')
+                .select([
+                    'companies.id',
+                    'companies.name',
+                    'companies.time',
+                    'c.phone',
+                    'c.website'
+                ])
+                .leftJoin('companies.contact', 'c', 'companies.contactId = c.id')
+                .orderBy('companies.time', 'ASC'),
+                { page, limit }
+            )
+        ).pipe(
+            map(({ items, meta }) => ({ items, meta })),
+            catchError((err) => throwError(
+                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+            ))
+        );
     }
 
     /**
@@ -76,6 +108,24 @@ export class CompaniesService {
     }
 
     /**
+     * Обновление данных компании
+     * @param id
+     */
+    update(id: string, data: CreateCompanyDto) {
+        return from(this.companyRepository.findOne({ id })).pipe(
+            mergeMap((company) => forkJoin([
+                from(this.contactService.update(data.contact, company.id)),
+                from(this.userService.updateUserCompany(data.users, company.id)),
+                from(this.requisitesService.update(data.requisites))
+            ])),
+            mergeMap(() => from(this.companyRepository.update({ id }, {
+                name: data.name
+            }))),
+            map(() => ({ message: 'Данные компании обновлены' }))
+        );
+    }
+
+    /**
      * Получить все данные о компании для дальнейшего редактирования
      * @param id
      */
@@ -88,11 +138,14 @@ export class CompaniesService {
                 'c.email',
                 'c.phone',
                 'c.website',
+                'u.id',
                 'u.username',
+                'r.id',
                 'r.name',
                 'r.inn',
                 'r.kpp',
                 'r.ogrn',
+                'b.id',
                 'b.name',
                 'b.rs',
                 'b.ks',

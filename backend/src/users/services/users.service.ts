@@ -1,5 +1,5 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
-import { switchMap, map, mergeMap, toArray, catchError } from 'rxjs/operators';
+import { switchMap, map, mergeMap, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,7 +10,6 @@ import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { Users } from '@users/entities/users.entity';
 import { ContactUser } from '@users/entities/contactUser.entity';
-import { CreateCompanyDto } from '@companies/dto/createCompanyDto';
 
 @Injectable()
 export class UsersService {
@@ -41,21 +40,27 @@ export class UsersService {
         return from(
             paginate(this.usersRepository
                 .createQueryBuilder('users')
-                .orderBy('users.time', 'ASC')
-                .leftJoinAndSelect('users.roles', 'roles'),
+                .select([
+                    'users.id',
+                    'users.username',
+                    'r.name',
+                    'users.time',
+                    'users.isActive',
+                ])
+                .leftJoin('users.roles', 'r', 'users.rolesId = r.id')
+                .orderBy('users.time', 'ASC'),
                 { page, limit }
             )
         ).pipe(
-            mergeMap(({ items, meta }) => forkJoin({
-                    items: from(items.map((user) => ({
-                        username: user.username,
-                        role: user.roles.name,
-                        time: user.time,
-                        isActive: user.isActive
-                    }))).pipe(toArray()),
-                    meta: of(meta)
-                })
-            ),
+            map(({ items, meta }) => ({
+                items: items.map((user) => ({
+                    username: user.username,
+                    time: user.time,
+                    isActive: user.isActive,
+                    role: user.roles.name
+                })),
+                meta
+            })),
 
             catchError((err) => throwError(
                 new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -187,8 +192,8 @@ export class UsersService {
 
     /**
      * Обновить в пользователе его принадлежность к организации
-     * @param companyDto
-     * @param id
+     * @param users список пользователей
+     * @param id айди компании
      */
     updateUserCompany(users: string[], id: string) {
         return from(this.usersRepository.find({
@@ -202,6 +207,10 @@ export class UsersService {
         );
     }
 
+    /**
+     * Удалить пользователя в компании
+     * @param companiesId
+     */
     removeUserCompany(companiesId: string) {
         return from(this.usersRepository.update({ companiesId }, { companiesId: null }));
     }

@@ -14,7 +14,6 @@ export class Bank {
     @Column({
         type: 'varchar',
         length: 40,
-        unique: true,
         nullable: false
     })
     name: string;
