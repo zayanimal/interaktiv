@@ -17,7 +17,9 @@
             "@dictionary/*": ["src/dictionary/*"],
             "@users/*": ["src/users/*"],
             "@contacts/*": ["src/contacts/*"],
-            "@companies/*": ["src/companies/*"]
+            "@companies/*": ["src/companies/*"],
+            "@good/*": ["src/good/*"],
+            "@enduser/*": ["src/enduser/*"]
         }
     },
     "exclude": ["node_modules"]
