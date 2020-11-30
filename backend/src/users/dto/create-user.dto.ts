@@ -3,17 +3,17 @@ import { ContactUser } from '@users/entities/contactUser.entity';
 
 export class CreateUserDto {
     @IsNotEmpty()
-    username: string;
+    username!: string;
 
     @IsNotEmpty()
-    password: string;
+    password!: string;
 
     @IsNotEmpty()
-    role: string;
+    role!: string;
 
     @IsNotEmpty()
-    permissions: string[];
+    permissions!: string[];
 
     @IsNotEmpty()
-    contacts: ContactUser;
+    contacts!: ContactUser;
 }

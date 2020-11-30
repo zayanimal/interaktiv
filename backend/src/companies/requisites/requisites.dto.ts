@@ -7,18 +7,18 @@ export class RequisitesDto {
     id?: string;
 
     @IsNotEmpty()
-    name: string;
+    name!: string;
 
     @IsNotEmpty()
-    inn: string;
+    inn!: string;
 
     @IsNotEmpty()
-    kpp: string;
+    kpp!: string;
 
     @IsNotEmpty()
-    ogrn: string;
+    ogrn!: string;
 
     @IsOptional()
     @IsArray()
-    bank: BankDto[];
+    bank!: BankDto[];
 }

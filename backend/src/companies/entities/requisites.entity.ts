@@ -11,34 +11,34 @@ import { Bank } from '@companies/entities/bank.entity';
 @Entity()
 export class Requisites {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({
         type: 'varchar',
         length: 40,
         nullable: false
     })
-    name: string;
+    name!: string;
 
     @Column({ type: 'varchar', length: 20, nullable: false })
-    inn: string;
+    inn!: string;
 
     @Column({ type: 'varchar', length: 20, nullable: false })
-    kpp: string;
+    kpp!: string;
 
     @Column({ type: 'varchar', length: 40, nullable: false })
-    ogrn: string;
+    ogrn!: string;
 
     @OneToMany(() => Bank, (bank) => bank.requisites)
-    bank: Bank[];
+    bank!: Bank[];
 
     @Column({ type: 'uuid' })
-    companiesId: string;
+    companiesId!: string;
 
     @ManyToOne(
         () => Companies,
         (comp) => comp.requisites,
         { cascade: true, onDelete: 'CASCADE' }
     )
-    companies: Companies;
+    companies!: Companies;
 }

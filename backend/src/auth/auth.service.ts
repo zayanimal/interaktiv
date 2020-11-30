@@ -1,5 +1,5 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
-import { toArray, map, mergeMap, catchError } from 'rxjs/operators';
+import { toArray, map, mergeMap } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -54,13 +54,27 @@ export class AuthService {
     }
 
     /**
+     * Проверка на отсутствие пользователя
+     * @param user
+     */
+    checkUserExistance(user: Users | undefined) {
+        return (user
+            ? of(user)
+            : throwError(new HttpException('Пользователь не существует', HttpStatus.BAD_REQUEST))
+        );
+    }
+
+    /**
      * Проверка существования введеной роли в словаре ролей
      * @param role
      */
     checkRole(role: string) {
         return from(this.rolesRepository.findOne({ where: { name: role } })).pipe(
-            catchError(() => throwError(
-                new HttpException('Введена неверная роль', HttpStatus.BAD_REQUEST)
+            mergeMap((role) => (role
+                ? of(role)
+                : throwError(
+                    new HttpException('Введена неверная роль', HttpStatus.BAD_REQUEST)
+                )
             ))
         );
     }

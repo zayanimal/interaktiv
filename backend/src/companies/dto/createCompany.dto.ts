@@ -8,14 +8,14 @@ export class CreateCompanyDto {
     id?: string;
 
     @IsNotEmpty()
-    name: string;
+    name!: string;
 
     @IsNotEmpty()
-    users: string[];
+    users!: string[];
 
     @IsObject()
-    contact: ContactDto;
+    contact!: ContactDto;
 
     @IsArray()
-    requisites: RequisitesDto[];
+    requisites!: RequisitesDto[];
 }

@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { hash } from 'bcrypt';
 import { AuthService } from '@auth/auth.service';
+import { ContactsService } from '@users/services/contacts.service';
 import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { Users } from '@users/entities/users.entity';
@@ -19,7 +20,8 @@ export class UsersService {
         @InjectRepository(ContactUser)
         private readonly contactsRepository: Repository<ContactUser>,
         @Inject(forwardRef(() => AuthService))
-        private authService: AuthService
+        private authService: AuthService,
+        private contactService: ContactsService
     ) {}
 
     dbRequest(username: string) {
@@ -94,9 +96,7 @@ export class UsersService {
      * Найти пльзователя и его контакты, чтобы отредактировать
      * @param username
      */
-    findUserForEdit(username: string): Observable<
-        Omit<CreateUserDto, 'password'> & { isActive: boolean; }
-    > {
+    findUserForEdit(username: string) {
         return from(this.usersRepository
             .createQueryBuilder('users')
             .select([
@@ -113,13 +113,16 @@ export class UsersService {
             .innerJoin('users.contacts', 'cont')
             .where('users.username = :name', { name: username })
             .getOne()).pipe(
-                map((user) => ({
-                    username: user.username,
-                    isActive: user.isActive,
-                    role: user.roles.name,
-                    permissions: user.permissions.map(({ name }) => name),
-                    contacts: user.contact
-                }))
+                mergeMap((user) => (user
+                    ? of({
+                        username: user.username,
+                        isActive: user.isActive,
+                        role: user.roles.name,
+                        permissions: user.permissions.map(({ name }) => name),
+                        contacts: user.contact
+                    })
+                    : throwError(new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED))
+                ))
             );
     }
 
@@ -132,18 +135,15 @@ export class UsersService {
         const { username, password, isActive, role, permissions, contacts } = userDto;
 
         return forkJoin({
-                user: from(this.usersRepository.findOne(this.dbRequest(editableUser))),
+                user: from(this.usersRepository.findOne(this.dbRequest(editableUser))).pipe(
+                    mergeMap((user) => this.authService.checkUserExistance(user))
+                ),
                 foundRole: from(this.authService.checkRole(role)),
                 permissions: from(this.authService.checkPermissions(permissions)),
                 hashedPassword: (password.length ? from(hash(password, 10)) : of(''))
             }).pipe(
             mergeMap((props) => {
                 const { user, foundRole, permissions, hashedPassword } = props;
-
-                if (!user) { return throwError(
-                        new HttpException('Пользователь не существует', HttpStatus.BAD_REQUEST)
-                    );
-                }
 
                 user.username = username;
                 if (hashedPassword.length) { user.password = hashedPassword; }
@@ -156,6 +156,7 @@ export class UsersService {
             mergeMap(({ id }) => from(
                 this.contactsRepository.findOne({ where: { usersId: id }})
             ).pipe(
+                mergeMap((cntct) => this.contactService.checkContact(cntct)),
                 mergeMap((contact) => {
                     const { email, phone, position } = contacts;
 
@@ -177,6 +178,7 @@ export class UsersService {
      */
     removeUser(username: string) {
         return from(this.usersRepository.findOne({ where: { username } })).pipe(
+            mergeMap((user) => this.authService.checkUserExistance(user)),
             switchMap((user) => from(this.usersRepository.remove(user)).pipe(
                 map(() => ({ message: `Пользователь ${username} удалён` }))
             )),

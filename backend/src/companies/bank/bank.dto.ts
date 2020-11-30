@@ -6,17 +6,17 @@ export class BankDto {
     id?: string;
 
     @IsNotEmpty()
-    name: string;
+    name!: string;
 
     @IsNotEmpty()
-    rs: string;
+    rs!: string;
 
     @IsNotEmpty()
-    ks: string;
+    ks!: string;
 
     @IsNotEmpty()
-    bik: string;
+    bik!: string;
 
     @IsNotEmpty()
-    address: string;
+    address!: string;
 }

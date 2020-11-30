@@ -1,4 +1,4 @@
-import { Observable, from, throwError, forkJoin } from 'rxjs';
+import { Observable, from, of, throwError, forkJoin } from 'rxjs';
 import { switchMap, map, mergeMap, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
@@ -15,6 +15,15 @@ export class DictionaryAdminService {
         private readonly adminDictsRepository: Repository<AdminDictionaries>
     ) {}
 
+    checkDictionary(dict: AdminDictionaries | undefined) {
+        return (dict
+            ? of(dict)
+            : throwError(
+                new HttpException('Словарь не существует', HttpStatus.BAD_REQUEST)
+            )
+        );
+    }
+
     getDictionary(dictionary: string) {
         return this.entityManager.query(`select * from ${dictionary}`);
     }
@@ -25,7 +34,9 @@ export class DictionaryAdminService {
             .where('adminDictionaries.name IN (:...name)', { name: dicts.split('%') })
             .getMany()).pipe(
                 mergeMap((dicts) => forkJoin(dicts.reduce((acc, { name }) => {
-                    acc[name] = from(this.getDictionary(name));
+                    Object.defineProperty(acc, name, {
+                        value: from(this.getDictionary(name))
+                    });
 
                     return acc;
                 }, {}))),
@@ -55,6 +66,7 @@ export class DictionaryAdminService {
 
     removeAdminDictionary(name: string) {
         return from(this.adminDictsRepository.findOne({ where: { name } })).pipe(
+            mergeMap((dict) => this.checkDictionary(dict)),
             switchMap((dictionary) => from(this.adminDictsRepository.remove(dictionary)).pipe(
                 map(() => ({ message: `Словарь ${name} удалён` }))
             )),

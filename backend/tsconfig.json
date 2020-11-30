@@ -7,8 +7,17 @@
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "target": "es2017",
+        "strict": true,
+        "allowJs": true,
         "sourceMap": true,
         "outDir": "./dist",
+        "strictNullChecks": true,
+        "alwaysStrict": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
         "baseUrl": "./",
         "incremental": true,
         "paths": {
@@ -22,5 +31,6 @@
             "@enduser/*": ["src/enduser/*"]
         }
     },
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
+    "include": ["src"]
 }

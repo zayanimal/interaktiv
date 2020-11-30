@@ -10,21 +10,21 @@ import { Companies } from '@companies/entities/companies.entity';
 @Entity()
 export class ContactCompany {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({ type: 'varchar', length: 35 })
-    email: string;
+    email!: string;
 
     @Column({ type: 'varchar', length: 35 })
-    phone: string;
+    phone!: string;
 
     @Column({ type: 'varchar', length: 35 })
-    website: string;
+    website!: string;
 
     @Column({ type: 'uuid' })
-    companyId: string;
+    companyId!: string;
 
     @OneToOne(() => Companies, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
-    company: Companies
+    company!: Companies;
 }

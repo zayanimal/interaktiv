@@ -18,48 +18,48 @@ import { Companies } from '@companies/entities/companies.entity';
 @Entity()
 export class Users {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({
         type: 'varchar',
         length: 30,
         unique: true
     })
-    username: string;
+    username!: string;
 
     @Column({ type: 'varchar' })
-    password: string;
+    password!: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    time: string;
+    time!: string;
 
     @Column({ type: 'boolean', default: true })
-    isActive: boolean;
+    isActive!: boolean;
 
     @Column({ type: 'uuid', default: 'bbab9d8b-0bda-4f16-ae8d-59334e38a7c8' })
-    rolesId: string;
+    rolesId!: string;
 
     @ManyToOne(() => Roles)
     @JoinColumn()
-    roles: Roles;
+    roles!: Roles;
 
     @Column({ type: 'uuid', nullable: true })
-    contactId: string;
+    contactId!: string;
 
     @OneToOne(() => ContactUser)
     @JoinColumn()
-    contact: ContactUser;
+    contact!: ContactUser;
 
     @Column({ type: 'uuid', nullable: true })
-    companiesId: string;
+    companiesId!: string | null;
 
     @ManyToOne(() => Companies)
     @JoinColumn()
-    companies: Companies;
+    companies!: Companies;
 
     @ManyToMany(() => Permissions)
     @JoinTable()
-    permissions: Permissions[];
+    permissions!: Permissions[];
 
     @BeforeInsert() async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);

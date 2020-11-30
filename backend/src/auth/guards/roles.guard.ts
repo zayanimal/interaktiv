@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { UserDto } from '@users/dto/user.dto';
 
 

@@ -10,12 +10,12 @@ import { Good } from '@good/entities/good.entity';
 @Entity()
 export class Margin {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({ type: 'real' })
-    margin: number;
+    margin!: number;
 
     @ManyToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
-    good: Good;
+    good!: Good;
 }

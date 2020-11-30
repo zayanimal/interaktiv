@@ -9,34 +9,34 @@ import { Requisites } from '@companies/entities/requisites.entity';
 @Entity()
 export class Bank {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({
         type: 'varchar',
         length: 40,
         nullable: false
     })
-    name: string;
+    name!: string;
 
     @Column({ type: 'varchar', length: 50, nullable: false })
-    rs: string;
+    rs!: string;
 
     @Column({ type: 'varchar', length: 50, nullable: false })
-    ks: string;
+    ks!: string;
 
     @Column({ type: 'varchar', length: 20, nullable: false })
-    bik: string;
+    bik!: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false })
-    address: string;
+    address!: string;
 
     @Column({ type: 'uuid' })
-    requisitesId: string;
+    requisitesId!: string;
 
     @ManyToOne(
         () => Requisites,
         (reqs) => reqs.bank,
         { cascade: true, onDelete: 'CASCADE' }
     )
-    requisites: Requisites;
+    requisites!: Requisites;
 }

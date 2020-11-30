@@ -13,28 +13,28 @@ import { ContactCompany } from '@companies/entities/contactCompany.entity';
 @Entity()
 export class Companies {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({
         type: 'varchar',
         length: 50,
         unique: true
     })
-    name: string;
+    name!: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    time: string;
+    time!: string;
 
     @Column({ type: 'uuid', nullable: true })
-    contactId: string;
+    contactId!: string;
 
     @OneToOne(() => ContactCompany)
     @JoinColumn()
-    contact: ContactCompany;
+    contact!: ContactCompany;
 
     @OneToMany(() => Users, users => users.companies)
-    users: Users[];
+    users!: Users[];
 
     @OneToMany(() => Requisites, reqs => reqs.companies)
-    requisites: Requisites[];
+    requisites!: Requisites[];
 }

@@ -7,6 +7,7 @@ import { MarginModule } from '@good/margin/margin.module';
 import { DescriptionModule } from '@good/description/description.module';
 import { DiscountModule } from '@good/discount/discount.module';
 import { Good } from '@good/entities/good.entity';
+import { TypeModule } from './type/type.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { Good } from '@good/entities/good.entity';
     PriceModule,
     MarginModule,
     DescriptionModule,
-    DiscountModule
+    DiscountModule,
+    TypeModule
   ],
   providers: [GoodService],
   controllers: [GoodController]

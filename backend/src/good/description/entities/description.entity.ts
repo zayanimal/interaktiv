@@ -10,15 +10,15 @@ import { Good } from '@good/entities/good.entity';
 @Entity()
 export class Description {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({ type: 'varchar', length: 20 })
-    vendor: string;
+    vendor!: string;
 
     @Column({ type: 'varchar', length: 300 })
-    description: string;
+    description!: string;
 
     @OneToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
-    good: Good
+    good!: Good;
 }

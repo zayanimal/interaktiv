@@ -62,11 +62,22 @@ export class CompaniesService {
     }
 
     /**
+     * Проверить существование компании
+     * @param company
+     */
+    checkCompanyExistance(company: Companies | undefined) {
+        return (company
+            ? of(company)
+            : throwError(new HttpException('Компания не существует', HttpStatus.BAD_REQUEST))
+        );
+    }
+
+    /**
      * Проверить существует ли компания в базе, если нет создать новую
      * @param company
      * @param companyDto
      */
-    checkCreateCompany(company: Companies, companyDto: CreateCompanyDto) {
+    checkCreateCompany(company: Companies | undefined, companyDto: CreateCompanyDto) {
         return of(company).pipe(
             mergeMap((foundCompany) => (foundCompany
                 ? throwError(
@@ -96,6 +107,7 @@ export class CompaniesService {
             })),
             mergeMap(({ contact, reqs, id }) => {
                 return from(this.companyRepository.findOne({ where: { id }})).pipe(
+                    mergeMap((cmp) => this.checkCompanyExistance(cmp)),
                     mergeMap((company) => {
                         company.contact = contact;
                         company.requisites = reqs;
@@ -113,6 +125,7 @@ export class CompaniesService {
      */
     update(id: string, data: CreateCompanyDto) {
         return from(this.companyRepository.findOne({ id })).pipe(
+            mergeMap((cmp) => this.checkCompanyExistance(cmp)),
             mergeMap((company) => forkJoin([
                 from(this.contactService.update(data.contact, company.id)),
                 from(this.userService.updateUserCompany(data.users, company.id)),
@@ -158,6 +171,7 @@ export class CompaniesService {
             .leftJoin('r.bank', 'b', 'r.id = b.requisitesId')
             .where('companies.id = :id', { id })
             .getOne()).pipe(
+                mergeMap((cmp) => this.checkCompanyExistance(cmp)),
                 map((company) => ({
                     ...company,
                     users: company.users.map(({ username }) => username)

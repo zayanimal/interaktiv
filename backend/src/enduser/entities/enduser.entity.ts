@@ -7,8 +7,8 @@ import {
 @Entity()
 export class Enduser {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({ type: 'varchar', length: 40 })
-    name: string;
+    name!: string;
 }

@@ -7,12 +7,12 @@ import {
 @Entity()
 export class Roles {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({
         type: 'varchar',
         length: 30,
         unique: true
     })
-    name: string;
+    name!: string;
 }

@@ -10,15 +10,15 @@ import { Good } from '@good/entities/good.entity';
 @Entity()
 export class Price {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column({ type: 'date', default: () => 'CURRENT_DATE' })
-    date: string;
+    date!: string;
 
     @Column({ type: 'real' })
-    ddp: number;
+    ddp!: number;
 
     @ManyToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
-    good: Good;
+    good!: Good;
 }
