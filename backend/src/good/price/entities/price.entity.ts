@@ -16,7 +16,7 @@ export class Price {
     date!: string;
 
     @Column({ type: 'real' })
-    ddp!: number;
+    cost!: number;
 
     @ManyToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()

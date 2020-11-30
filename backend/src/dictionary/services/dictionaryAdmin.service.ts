@@ -34,9 +34,7 @@ export class DictionaryAdminService {
             .where('adminDictionaries.name IN (:...name)', { name: dicts.split('%') })
             .getMany()).pipe(
                 mergeMap((dicts) => forkJoin(dicts.reduce((acc, { name }) => {
-                    Object.defineProperty(acc, name, {
-                        value: from(this.getDictionary(name))
-                    });
+                    Object.assign(acc, { [name]: from(this.getDictionary(name)) })
 
                     return acc;
                 }, {}))),

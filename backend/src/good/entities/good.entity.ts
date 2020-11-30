@@ -4,14 +4,12 @@ import {
     JoinColumn,
     PrimaryGeneratedColumn,
     OneToMany,
-    OneToOne,
-    ManyToOne
+    OneToOne
 } from 'typeorm';
 import { Price } from '@good/price/entities/price.entity';
 import { Discount } from '@good/discount/entities/discount.entity';
 import { Margin } from '@good/margin/entities/margin.entity';
 import { Description } from '@good/description/entities/description.entity';
-import { Type } from '@good/type/entities/type.entity';
 
 @Entity()
 export class Good {
@@ -25,11 +23,7 @@ export class Good {
     })
     name!: string;
 
-    @ManyToOne(() => Type, (type) => type.good)
-    type!: Type;
-
     @OneToOne(() => Description)
-    @JoinColumn()
     description!: Description;
 
     @OneToMany(() => Price, (price) => price.good)

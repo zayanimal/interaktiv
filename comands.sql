@@ -73,3 +73,13 @@ REFERENCES public.users(id) ON DELETE CASCADE;
 -- f71fa5e8-faf6-419d-8a77-6285232a60cb
 -- e0b09cc6-8a9a-411e-bef5-2589c77b8266
 -- a2a94bcb-22d7-4b77-b9b9-23792d4366f3
+
+select
+	g.name,
+	p.cost,
+	d.discount,
+	m.margin
+from good g
+left join price p on g.id = p."goodId"
+left join discount d on g.id = d."goodId"
+left join margin m on g.id = m."goodId"

@@ -15,7 +15,7 @@ export class Description {
     @Column({ type: 'varchar', length: 20 })
     vendor!: string;
 
-    @Column({ type: 'varchar', length: 300 })
+    @Column({ type: 'varchar', length: 2000 })
     description!: string;
 
     @OneToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
