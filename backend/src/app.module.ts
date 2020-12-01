@@ -6,6 +6,7 @@ import { DictionaryModule } from '@dictionary/dictionary.module';
 import { CompanyModule } from 'src/company/company.module';
 import { GoodModule } from '@good/good.module';
 import { EnduserModule } from '@enduser/enduser.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
     imports: [
@@ -15,7 +16,8 @@ import { EnduserModule } from '@enduser/enduser.module';
         DictionaryModule,
         CompanyModule,
         GoodModule,
-        EnduserModule
+        EnduserModule,
+        OrderModule
     ]
 })
 export class AppModule {}

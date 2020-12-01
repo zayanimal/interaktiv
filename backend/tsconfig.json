@@ -28,6 +28,7 @@
             "@contacts/*": ["src/contacts/*"],
             "@company/*": ["src/company/*"],
             "@good/*": ["src/good/*"],
+            "@order/*": ["src/order/*"],
             "@enduser/*": ["src/enduser/*"]
         }
     },

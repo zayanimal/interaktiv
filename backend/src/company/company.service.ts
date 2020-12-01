@@ -41,16 +41,16 @@ export class CompanyService {
     list(page: number, limit: number) {
         return from(
             paginate(this.companyRepository
-                .createQueryBuilder('companies')
+                .createQueryBuilder('company')
                 .select([
-                    'companies.id',
-                    'companies.name',
-                    'companies.time',
+                    'company.id',
+                    'company.name',
+                    'company.time',
                     'c.phone',
                     'c.website'
                 ])
-                .leftJoin('companies.contact', 'c', 'companies.contactId = c.id')
-                .orderBy('companies.time', 'ASC'),
+                .leftJoin('company.contact', 'c', 'company.contactId = c.id')
+                .orderBy('company.time', 'ASC'),
                 { page, limit }
             )
         ).pipe(
@@ -140,14 +140,14 @@ export class CompanyService {
 
     /**
      * Получить все данные о компании для дальнейшего редактирования
-     * @param id
+     * @param id айди компании
      */
     getFullCompany(id: string) {
         return from(this.companyRepository
-            .createQueryBuilder('companies')
+            .createQueryBuilder('company')
             .select([
-                'companies.id',
-                'companies.name',
+                'company.id',
+                'company.name',
                 'c.email',
                 'c.phone',
                 'c.website',
@@ -165,11 +165,11 @@ export class CompanyService {
                 'b.bik',
                 'b.address'
             ])
-            .leftJoin('companies.contact', 'c', 'companies.contactId = c.id')
-            .leftJoin('companies.users', 'u', 'companies.id = u.companiesId')
-            .leftJoin('companies.requisites', 'r', 'companies.id = r.companiesId')
+            .leftJoin('company.contact', 'c', 'company.contactId = c.id')
+            .leftJoin('company.users', 'u', 'company.id = u.companyId')
+            .leftJoin('company.requisites', 'r', 'company.id = r.companyId')
             .leftJoin('r.bank', 'b', 'r.id = b.requisitesId')
-            .where('companies.id = :id', { id })
+            .where('company.id = :id', { id })
             .getOne()).pipe(
                 mergeMap((cmp) => this.checkCompanyExistance(cmp)),
                 map((company) => ({
@@ -181,11 +181,11 @@ export class CompanyService {
 
     /**
      * Каскадное удаление компании со всеми зависимостями
-     * @param companiesId
+     * @param companyId
      */
-    remove(companiesId: string) {
-        return this.userService.removeUserCompany(companiesId).pipe(
-            mergeMap(() => from(this.companyRepository.delete(companiesId))),
+    remove(companyId: string) {
+        return this.userService.removeUserCompany(companyId).pipe(
+            mergeMap(() => from(this.companyRepository.delete(companyId))),
             map(() => ({ message: 'Компания полностью удалена' }))
         );
     }

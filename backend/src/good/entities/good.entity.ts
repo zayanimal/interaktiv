@@ -3,12 +3,14 @@ import {
     Column,
     PrimaryGeneratedColumn,
     OneToMany,
-    OneToOne
+    OneToOne,
+    ManyToOne,
 } from 'typeorm';
 import { Price } from '@good/price/entities/price.entity';
 import { Discount } from '@good/discount/entities/discount.entity';
 import { Margin } from '@good/margin/entities/margin.entity';
 import { Description } from '@good/description/entities/description.entity';
+import { Order } from '@order/entities/order.entity';
 
 @Entity()
 export class Good {
@@ -33,4 +35,7 @@ export class Good {
 
     @OneToMany(() => Margin, (margin) => margin.good)
     margin!: Margin[];
+
+    @ManyToOne(() => Order, (order) => order.good)
+    order!: Order;
 }

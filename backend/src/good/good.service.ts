@@ -1,6 +1,6 @@
 import { of, from, forkJoin } from 'rxjs';
 import { filter, skip, map, mergeMap, toArray, catchError } from 'rxjs/operators';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Raw, EntityManager } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';

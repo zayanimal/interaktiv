@@ -19,7 +19,7 @@ import { CompanyService } from '@company/company.service';
 import { CreateCompanyDto } from '@company/dto/createCompany.dto';
 import { SearchPipe } from '@shared/pipes/search.pipe';
 
-@Controller('companies')
+@Controller('company')
 export class CompanyController {
     constructor(private readonly companyService: CompanyService) {}
 

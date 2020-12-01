@@ -211,7 +211,7 @@ export class UsersService {
 
     /**
      * Удалить пользователя в компании
-     * @param companiesId
+     * @param companyId
      */
     removeUserCompany(companyId: string) {
         return from(this.usersRepository.update({ companyId }, { companyId: null }));
