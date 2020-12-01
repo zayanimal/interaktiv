@@ -5,8 +5,8 @@ import {
     ManyToOne,
     OneToMany
 } from 'typeorm';
-import { Companies } from '@companies/entities/companies.entity';
-import { Bank } from '@companies/entities/bank.entity';
+import { Company } from '@company/entities/company.entity';
+import { Bank } from '@company/bank/entities/bank.entity';
 
 @Entity()
 export class Requisites {
@@ -33,12 +33,12 @@ export class Requisites {
     bank!: Bank[];
 
     @Column({ type: 'uuid' })
-    companiesId!: string;
+    companyId!: string;
 
     @ManyToOne(
-        () => Companies,
+        () => Company,
         (comp) => comp.requisites,
         { cascade: true, onDelete: 'CASCADE' }
     )
-    companies!: Companies;
+    company!: Company;
 }

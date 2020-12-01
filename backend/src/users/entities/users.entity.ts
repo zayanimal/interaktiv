@@ -13,7 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { Roles } from '@auth/entities/roles.entity';
 import { Permissions } from '@auth/entities/permissions.entity';
 import { ContactUser } from '@users/entities/contactUser.entity';
-import { Companies } from '@companies/entities/companies.entity';
+import { Company } from '@company/entities/company.entity';
 
 @Entity()
 export class Users {
@@ -51,11 +51,11 @@ export class Users {
     contact!: ContactUser;
 
     @Column({ type: 'uuid', nullable: true })
-    companiesId!: string | null;
+    companyId!: string | null;
 
-    @ManyToOne(() => Companies)
+    @ManyToOne(() => Company)
     @JoinColumn()
-    companies!: Companies;
+    company!: Company;
 
     @ManyToMany(() => Permissions)
     @JoinTable()

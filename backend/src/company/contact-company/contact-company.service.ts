@@ -3,11 +3,11 @@ import { mergeMap, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ContactCompany } from '@companies/entities/contactCompany.entity';
-import { ContactDto } from '@companies/dto/contact.dto';
+import { ContactCompany } from '@company/contact-company/entities/contact-company.entity';
+import { ContactDto } from '@company/dto/contact.dto';
 
 @Injectable()
-export class ContactService {
+export class ContactCompanyService {
     constructor(
         @InjectRepository(ContactCompany)
         private readonly contactRepository: Repository<ContactCompany>

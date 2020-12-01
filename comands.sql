@@ -78,8 +78,11 @@ select
 	g.name,
 	p.cost,
 	d.discount,
-	m.margin
+	m.margin,
+	de.vendor,
+	de.description
 from good g
 left join price p on g.id = p."goodId"
 left join discount d on g.id = d."goodId"
 left join margin m on g.id = m."goodId"
+left join description de on g.id = de."goodId"

@@ -11,8 +11,8 @@ import {
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { Roles } from '@auth/decorators/roles.decorator';
-import { RequisitesService } from '@companies/requisites/requisites.service';
-import { RequisitesDto } from '@companies/requisites/requisites.dto';
+import { RequisitesService } from '@company/requisites/requisites.service';
+import { RequisitesDto } from '@company/requisites/requisites.dto';
 
 @Controller('requisites')
 export class RequisitesController {

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RequisitesController } from '@companies/requisites/requisites.controller';
-import { RequisitesService } from '@companies/requisites/requisites.service';
-import { Requisites } from '@companies/entities/requisites.entity';
-import { BankModule } from '@companies/bank/bank.module';
+import { RequisitesController } from '@company/requisites/requisites.controller';
+import { RequisitesService } from '@company/requisites/requisites.service';
+import { Requisites } from '@company/requisites/entities/requisites.entity';
+import { BankModule } from '@company/bank/bank.module';
 
 @Module({
   imports: [

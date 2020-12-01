@@ -7,11 +7,11 @@ import {
     OneToOne
 } from 'typeorm';
 import { Users } from '@users/entities/users.entity';
-import { Requisites } from '@companies/entities/requisites.entity';
-import { ContactCompany } from '@companies/entities/contactCompany.entity';
+import { Requisites } from '@company/requisites/entities/requisites.entity';
+import { ContactCompany } from '@company/contact-company/entities/contact-company.entity';
 
 @Entity()
-export class Companies {
+export class Company {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
@@ -32,9 +32,9 @@ export class Companies {
     @JoinColumn()
     contact!: ContactCompany;
 
-    @OneToMany(() => Users, users => users.companies)
+    @OneToMany(() => Users, users => users.company)
     users!: Users[];
 
-    @OneToMany(() => Requisites, reqs => reqs.companies)
+    @OneToMany(() => Requisites, reqs => reqs.company)
     requisites!: Requisites[];
 }

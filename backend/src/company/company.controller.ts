@@ -15,12 +15,13 @@ import {
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { Roles } from '@auth/decorators/roles.decorator';
-import { CompaniesService } from '@companies/services/companies.service';
-import { CreateCompanyDto } from '@companies/dto/createCompany.dto';
+import { CompanyService } from '@company/company.service';
+import { CreateCompanyDto } from '@company/dto/createCompany.dto';
+import { SearchPipe } from '@shared/pipes/search.pipe';
 
 @Controller('companies')
-export class CompaniesController {
-    constructor(private readonly companiesService: CompaniesService) {}
+export class CompanyController {
+    constructor(private readonly companyService: CompanyService) {}
 
     /**
      * Создание новой компании
@@ -30,7 +31,7 @@ export class CompaniesController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     create(@Body(ValidationPipe) company: CreateCompanyDto) {
-        return this.companiesService.create(company);
+        return this.companyService.create(company);
     }
 
     /**
@@ -45,7 +46,7 @@ export class CompaniesController {
         @Param('id') id: string,
         @Body(ValidationPipe) data: CreateCompanyDto
     ) {
-        return this.companiesService.update(id, data);
+        return this.companyService.update(id, data);
     }
 
     /**
@@ -56,7 +57,7 @@ export class CompaniesController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     remove(@Param('id', ParseUUIDPipe) id: string) {
-        return this.companiesService.remove(id);
+        return this.companyService.remove(id);
     }
 
     /**
@@ -71,7 +72,7 @@ export class CompaniesController {
         @Query('page', ParseIntPipe) page: number,
         @Query('limit', ParseIntPipe) limit: number
     ) {
-        return this.companiesService.list(page, limit);
+        return this.companyService.list(page, limit);
     }
 
     /**
@@ -81,8 +82,8 @@ export class CompaniesController {
     @Get('search-name/:name')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    search(@Param('name') name: string) {
-        return this.companiesService.search(name);
+    search(@Param('name', SearchPipe) name: string) {
+        return this.companyService.search(name);
     }
 
     /**
@@ -93,6 +94,6 @@ export class CompaniesController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     getCompany(@Param('id', ParseUUIDPipe) id: string) {
-        return this.companiesService.getFullCompany(id);
+        return this.companyService.getFullCompany(id);
     }
 }

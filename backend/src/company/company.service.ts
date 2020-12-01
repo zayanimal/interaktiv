@@ -5,18 +5,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Raw } from 'typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { UsersService } from '@users/services/users.service';
-import { ContactService } from '@companies/services/contact.service';
-import { RequisitesService } from '@companies/requisites/requisites.service';
-import { CreateCompanyDto } from '@companies/dto/createCompany.dto';
-import { Companies } from '@companies/entities/companies.entity';
+import { ContactCompanyService } from '@company/contact-company/contact-company.service';
+import { RequisitesService } from '@company/requisites/requisites.service';
+import { CreateCompanyDto } from '@company/dto/createCompany.dto';
+import { Company } from '@company/entities/company.entity';
 
 @Injectable()
-export class CompaniesService {
+export class CompanyService {
     constructor(
-        @InjectRepository(Companies)
-        private readonly companyRepository: Repository<Companies>,
+        @InjectRepository(Company)
+        private readonly companyRepository: Repository<Company>,
         private userService: UsersService,
-        private contactService: ContactService,
+        private contactService: ContactCompanyService,
         private requisitesService: RequisitesService
     ) {}
 
@@ -27,7 +27,7 @@ export class CompaniesService {
     search(name: string) {
         return this.companyRepository.find({
             where: {
-                name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}')`)
+                name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)
             },
             select: ['id', 'name']
         });
@@ -65,7 +65,7 @@ export class CompaniesService {
      * Проверить существование компании
      * @param company
      */
-    checkCompanyExistance(company: Companies | undefined) {
+    checkCompanyExistance(company: Company | undefined) {
         return (company
             ? of(company)
             : throwError(new HttpException('Компания не существует', HttpStatus.BAD_REQUEST))
@@ -77,7 +77,7 @@ export class CompaniesService {
      * @param company
      * @param companyDto
      */
-    checkCreateCompany(company: Companies | undefined, companyDto: CreateCompanyDto) {
+    checkCreateCompany(company: Company | undefined, companyDto: CreateCompanyDto) {
         return of(company).pipe(
             mergeMap((foundCompany) => (foundCompany
                 ? throwError(

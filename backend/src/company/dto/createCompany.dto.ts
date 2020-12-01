@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsObject, IsArray, IsUUID, IsOptional } from 'class-validator';
-import { ContactDto } from '@companies/dto/contact.dto';
-import { RequisitesDto } from '@companies/requisites/requisites.dto';
+import { ContactDto } from 'src/company/dto/contact.dto';
+import { RequisitesDto } from '@company/requisites/requisites.dto';
 
 export class CreateCompanyDto {
     @IsOptional()

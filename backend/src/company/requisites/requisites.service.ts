@@ -4,9 +4,9 @@ import { toArray, map, mergeMap, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Requisites } from '@companies/entities/requisites.entity';
-import { RequisitesDto } from '@companies/requisites/requisites.dto';
-import { BankService } from '@companies/bank/bank.service';
+import { Requisites } from '@company/requisites/entities/requisites.entity';
+import { RequisitesDto } from '@company/requisites/requisites.dto';
+import { BankService } from '@company/bank/bank.service';
 
 @Injectable()
 export class RequisitesService {
@@ -25,7 +25,7 @@ export class RequisitesService {
         return from(requisitesDto).pipe(
             map((reqs) => this.requisitesRepository.create(reqs)),
             mergeMap((prepReqs) => {
-                prepReqs.companiesId = companyId;
+                prepReqs.companyId = companyId;
 
                 return from(this.requisitesRepository.save(prepReqs)).pipe(
                     mergeMap((newReqs) => (prepReqs?.bank?.length

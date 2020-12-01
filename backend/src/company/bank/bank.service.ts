@@ -4,8 +4,8 @@ import { map, mergeMap, catchError } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Bank } from '@companies/entities/bank.entity';
-import { BankDto } from '@companies/bank/bank.dto';
+import { Bank } from '@company/bank/entities/bank.entity';
+import { BankDto } from '@company/bank/bank.dto';
 
 @Injectable()
 export class BankService {

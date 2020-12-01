@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsArray, IsUUID, IsOptional } from 'class-validator';
-import { BankDto } from '@companies/bank/bank.dto';
+import { BankDto } from '@company/bank/bank.dto';
 
 export class RequisitesDto {
     @IsOptional()

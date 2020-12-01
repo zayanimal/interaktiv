@@ -4,7 +4,7 @@ import {
     PrimaryGeneratedColumn,
     ManyToOne
 } from 'typeorm';
-import { Requisites } from '@companies/entities/requisites.entity';
+import { Requisites } from '@company/requisites/entities/requisites.entity';
 
 @Entity()
 export class Bank {

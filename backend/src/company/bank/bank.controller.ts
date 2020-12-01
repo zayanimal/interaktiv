@@ -11,8 +11,8 @@ import {
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { Roles } from '@auth/decorators/roles.decorator';
-import { BankService } from '@companies/bank/bank.service';
-import { BankDto } from '@companies/bank/bank.dto';
+import { BankService } from '@company/bank/bank.service';
+import { BankDto } from '@company/bank/bank.dto';
 
 @Controller('bank')
 export class BankController {

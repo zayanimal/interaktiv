@@ -26,7 +26,7 @@
             "@dictionary/*": ["src/dictionary/*"],
             "@users/*": ["src/users/*"],
             "@contacts/*": ["src/contacts/*"],
-            "@companies/*": ["src/companies/*"],
+            "@company/*": ["src/company/*"],
             "@good/*": ["src/good/*"],
             "@enduser/*": ["src/enduser/*"]
         }

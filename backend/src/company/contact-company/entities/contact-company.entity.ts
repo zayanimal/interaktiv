@@ -5,7 +5,7 @@ import {
     OneToOne,
     JoinColumn
 } from 'typeorm';
-import { Companies } from '@companies/entities/companies.entity';
+import { Company } from '@company/entities/company.entity';
 
 @Entity()
 export class ContactCompany {
@@ -24,7 +24,7 @@ export class ContactCompany {
     @Column({ type: 'uuid' })
     companyId!: string;
 
-    @OneToOne(() => Companies, { cascade: true, onDelete: 'CASCADE' })
+    @OneToOne(() => Company, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
-    company!: Companies;
+    company!: Company;
 }

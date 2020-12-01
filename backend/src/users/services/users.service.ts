@@ -204,7 +204,7 @@ export class UsersService {
             mergeMap((users) => from(users)),
             mergeMap((user) => from(this.usersRepository.update(
                 { username: user.username },
-                { companiesId: id }
+                { companyId: id }
             )))
         );
     }
@@ -213,7 +213,7 @@ export class UsersService {
      * Удалить пользователя в компании
      * @param companiesId
      */
-    removeUserCompany(companiesId: string) {
-        return from(this.usersRepository.update({ companiesId }, { companiesId: null }));
+    removeUserCompany(companyId: string) {
+        return from(this.usersRepository.update({ companyId }, { companyId: null }));
     }
 }
