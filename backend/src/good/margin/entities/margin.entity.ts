@@ -6,6 +6,7 @@ import {
     ManyToOne
 } from 'typeorm';
 import { Good } from '@good/entities/good.entity';
+import { Company } from '@company/entities/company.entity';
 
 @Entity()
 export class Margin {
@@ -18,4 +19,11 @@ export class Margin {
     @ManyToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
     good!: Good;
+
+    @ManyToOne(() => Company, (company) => company.margin, {
+        cascade: true,
+        onDelete: 'CASCADE'
+    })
+    @JoinColumn()
+    company!: Company;
 }

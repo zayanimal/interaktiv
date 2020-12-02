@@ -9,6 +9,7 @@ import {
 import { Users } from '@users/entities/users.entity';
 import { Requisites } from '@company/requisites/entities/requisites.entity';
 import { ContactCompany } from '@company/contact-company/entities/contact-company.entity';
+import { Margin } from '@good/margin/entities/margin.entity';
 
 @Entity()
 export class Company {
@@ -32,9 +33,12 @@ export class Company {
     @JoinColumn()
     contact!: ContactCompany;
 
-    @OneToMany(() => Users, users => users.company)
+    @OneToMany(() => Users, (users) => users.company)
     users!: Users[];
 
-    @OneToMany(() => Requisites, reqs => reqs.company)
+    @OneToMany(() => Requisites, (reqs) => reqs.company)
     requisites!: Requisites[];
+
+    @OneToMany(() => Margin, (margin) => margin.company)
+    margin!: Margin;
 }

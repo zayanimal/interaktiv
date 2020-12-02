@@ -35,7 +35,7 @@ export class GoodController {
     @Get(':name')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    list(@Param('name', SearchPipe) name: string) {
+    search(@Param('name', SearchPipe) name: string) {
         return this.goodService.search(name);
     }
 }

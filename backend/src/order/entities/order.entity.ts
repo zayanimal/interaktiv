@@ -1,11 +1,13 @@
 import {
+    Column,
     Entity,
     PrimaryGeneratedColumn,
     Generated,
-    OneToMany,
+    ManyToMany,
     OneToOne,
     ManyToOne,
-    JoinColumn
+    JoinColumn,
+    JoinTable
 } from 'typeorm';
 import { Users } from '@users/entities/users.entity';
 import { Company } from '@company/entities/company.entity';
@@ -18,6 +20,7 @@ export class Order {
     id!: string;
 
     @Generated('rowid')
+    @Column()
     orderId!: number;
 
     @OneToOne(() => Users)
@@ -28,9 +31,13 @@ export class Order {
     @JoinColumn()
     company!: Company;
 
-    @OneToMany(() => Good, (good) => good.order)
+    @ManyToMany(() => Good, { eager: true })
+    @JoinTable()
     good!: Good[];
 
     @ManyToOne(() => OrderStatus, (status) => status.order)
     status!: OrderStatus;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    created!: string;
 }

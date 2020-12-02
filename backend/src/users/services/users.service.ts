@@ -80,6 +80,8 @@ export class UsersService {
                 ? of(user).pipe(
                     map((user) => ({
                         username: user.username,
+                        userId: user.id,
+                        companyId: user.companyId,
                         role: user.roles.name,
                         isActive: user.isActive,
                         permissions: user.permissions.map(({ name }) => name)
