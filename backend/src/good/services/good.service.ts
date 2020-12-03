@@ -1,18 +1,19 @@
-import { of, from, forkJoin } from 'rxjs';
-import { filter, take, skip, map, mergeMap, toArray, catchError } from 'rxjs/operators';
-import { Injectable } from '@nestjs/common';
+import { of, from, forkJoin, throwError, Observable } from 'rxjs';
+import { filter, take, tap, skip, map, mergeMap, toArray, catchError } from 'rxjs/operators';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Raw, EntityManager } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { parse } from 'node-xlsx';
 import { Good } from '@good/entities/good.entity';
 import { GoodView } from '@good/entities/good-view.entity';
-import { IDlinkRow } from '@good/interfaces/good.interface';
+import { IGoodService } from '@good/interfaces/good-service.interface';
+import { IDlinkRow } from '@good/interfaces/row.interface';
 import { PriceService } from '@good/price/price.service';
 import { DescriptionService } from '@good/description/description.service';
 
 @Injectable()
-export class GoodService {
+export class GoodService implements IGoodService {
     constructor(
         @InjectRepository(Good)
         private readonly goodRepository: Repository<Good>,
@@ -21,11 +22,6 @@ export class GoodService {
         private descriptionService: DescriptionService,
     ) {}
 
-    /**
-     * Добавить позиции в базу из файла xls
-     * @param buffer файл прайслиста
-     * @param vendor название вендора
-     */
     createFromFile(buffer: ArrayBuffer, vendor: string) {
         const [{ data }] = parse(buffer);
 
@@ -57,28 +53,31 @@ export class GoodService {
         );
     }
 
-    /**
-     * Очистить дубли оставшиейся после загрузки прайслиста
-     */
     cleanDublicates() {
         return from(this.goodRepository.find({ name: Like('%dub%') })).pipe(
             mergeMap((dublicates) => from(this.goodRepository.remove(dublicates)))
         );
     }
 
-    /**
-     * Поиск товара по заданной подстроке
-     * @param name
-     */
+    checkGoodExistance(good: Good | undefined) {
+        return (good ? of(good) : throwError(
+            new BadRequestException('Товар не существует')
+        ));
+    }
+
     search(name: string) {
         // return this.entityManager.find(GoodView, {
         //     name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)
         // });
 
-        return this.goodRepository.find({
+        return from(this.goodRepository.find({
             name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)
-        });
+        }));
     }
 
-
+    searchId(id: string) {
+        return from(this.goodRepository.findOne({ id })).pipe(
+            mergeMap((good) => this.checkGoodExistance(good))
+        );
+    }
 }

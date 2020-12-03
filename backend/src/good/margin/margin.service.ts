@@ -1,9 +1,9 @@
 import { from } from 'rxjs';
-import { toArray } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Margin } from '@good/margin/entities/margin.entity';
+import { MarginDto } from '@good/margin/dto/margin.dto';
 
 @Injectable()
 export class MarginService {
@@ -16,9 +16,9 @@ export class MarginService {
      * Создать уровень прибыли для товара
      * @param margin
      */
-    create(margin: number) {
+    create(dto: MarginDto) {
         return from(this.marginRepository.save(
-            this.marginRepository.create({ margin })
-        )).pipe(toArray());
+            this.marginRepository.create(dto)
+        ));
     }
 }

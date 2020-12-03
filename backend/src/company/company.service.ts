@@ -1,6 +1,6 @@
 import { of, from, throwError, forkJoin } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Raw } from 'typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
@@ -31,6 +31,22 @@ export class CompanyService {
             },
             select: ['id', 'name']
         });
+    }
+
+    checkCompany(company: Company | undefined) {
+        return (company ? of(company) : throwError(
+            new BadRequestException('Компания не существует')
+        ));
+    }
+
+    /**
+     * Поиск компании по id
+     * @param id
+     */
+    searchId(id: string) {
+        return from(this.companyRepository.findOne({ id })).pipe(
+            mergeMap((company) => this.checkCompany(company))
+        );
     }
 
     /**

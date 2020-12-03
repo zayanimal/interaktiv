@@ -14,13 +14,13 @@ export class EnduserService {
     ) {}
 
     /**
-     * Создать нового заказчик
+     * Создать нового заказчика
      * @param dto
      */
     create(dto: EnduserDto) {
-        return of(this.enduserRepository.create(dto)).pipe(
-            mergeMap((enduser) => this.enduserRepository.save(enduser))
-        );
+        return from(this.enduserRepository.save(
+            this.enduserRepository.create(dto)
+        ));
     }
 
     /**

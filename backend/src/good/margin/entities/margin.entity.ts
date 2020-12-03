@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Good } from '@good/entities/good.entity';
 import { Company } from '@company/entities/company.entity';
+import { Order } from '@order/entities/order.entity';
 
 @Entity()
 export class Margin {
@@ -26,4 +27,10 @@ export class Margin {
     })
     @JoinColumn()
     company!: Company;
+
+    @ManyToOne(() => Order, (order) => order.discount, {
+        cascade: true,
+        onDelete: 'CASCADE'
+    })
+    order!: Order;
 }

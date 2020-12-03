@@ -7,12 +7,16 @@ import {
     OneToOne,
     ManyToOne,
     JoinColumn,
-    JoinTable
+    JoinTable,
+    OneToMany
 } from 'typeorm';
 import { Users } from '@users/entities/users.entity';
 import { Company } from '@company/entities/company.entity';
+import { Enduser } from '@enduser/entities/enduser.entity';
 import { Good } from '@good/entities/good.entity';
 import { OrderStatus } from '@order/order-status/entities/order-status.entity';
+import { Discount } from '@good/discount/entities/discount.entity';
+import { Margin } from '@good/margin/entities/margin.entity';
 
 @Entity()
 export class Order {
@@ -23,21 +27,32 @@ export class Order {
     @Column()
     orderId!: number;
 
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    created!: string;
+
     @OneToOne(() => Users)
     @JoinColumn()
     user!: Users;
 
-    @OneToOne(() => Company)
+    @ManyToOne(() => Company)
     @JoinColumn()
     company!: Company;
+
+    @ManyToOne(() => Enduser)
+    @JoinColumn()
+    enduser!: Enduser;
 
     @ManyToMany(() => Good, { eager: true })
     @JoinTable()
     good!: Good[];
 
-    @ManyToOne(() => OrderStatus, (status) => status.order)
-    status!: OrderStatus;
+    @OneToMany(() => Discount, (discount) => discount.order)
+    discount!: Discount[];
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    created!: string;
+    @OneToMany(() => Margin, (margin) => margin.order)
+    margin!: Margin[];
+
+    @ManyToOne(() => OrderStatus, (status) => status.order)
+    @JoinColumn()
+    status!: OrderStatus;
 }

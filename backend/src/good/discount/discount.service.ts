@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Discount } from '@good/discount/entities/discount.entity';
+import { DiscountDto } from '@good/discount/dto/discount.dto';
 
 @Injectable()
 export class DiscountService {
@@ -13,12 +14,12 @@ export class DiscountService {
     ) {}
 
     /**
-     * Создать скидки для каждого товара
+     * Создать скидку для товара
      * @param discount
      */
-    create(discount: number) {
+    create(dto: DiscountDto) {
         return from(this.discountRepository.save(
-            this.discountRepository.create({ discount })
-        )).pipe(toArray());
+            this.discountRepository.create(dto)
+        ));
     }
 }

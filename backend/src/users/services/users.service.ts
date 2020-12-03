@@ -32,6 +32,14 @@ export class UsersService {
     }
 
     /**
+     * Поиск пользователя по id
+     * @param id
+     */
+    searchId(id: string) {
+        return this.usersRepository.findOne({ id });
+    }
+
+    /**
      * Пагинация юзеров общий список
      * @param page
      * @param limit
