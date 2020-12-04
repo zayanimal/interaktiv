@@ -1,7 +1,7 @@
 import { isString } from 'lodash';
-import { from } from 'rxjs';
-import { toArray } from 'rxjs/operators';
-import { Injectable } from '@nestjs/common';
+import { of, from, throwError } from 'rxjs';
+import { toArray, mergeMap } from 'rxjs/operators';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Price } from '@good/price/entities/price.entity';
@@ -21,5 +21,30 @@ export class PriceService {
         return from(this.priceRepository.save(
             this.priceRepository.create({ cost: (isString(cost) ? 0 : cost) })
         )).pipe(toArray());
+    }
+
+    /**
+     * Проверить существует ли прайс
+     * @param price
+     */
+    checkPrice(price: Price | undefined) {
+        return (price ? of(price) : throwError(
+            new BadRequestException('Цены не существует')
+        ));
+    }
+
+    /**
+     * Поиск цены на ближайшую к текущей дате
+     * @param id
+     */
+    searchId(id: string) {
+        return from(this.priceRepository
+            .createQueryBuilder('p')
+            .where('p."goodId" = :id', { id })
+            .orderBy('p.date', 'DESC')
+            .limit(1)
+            .getOne()).pipe(
+                mergeMap((price) => this.checkPrice(price))
+            );
     }
 }

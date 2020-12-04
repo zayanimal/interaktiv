@@ -10,7 +10,6 @@ import { Price } from '@good/price/entities/price.entity';
 import { Discount } from '@good/discount/entities/discount.entity';
 import { Margin } from '@good/margin/entities/margin.entity';
 import { Description } from '@good/description/entities/description.entity';
-import { Order } from '@order/entities/order.entity';
 
 @Entity()
 export class Good {

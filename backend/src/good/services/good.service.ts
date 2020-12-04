@@ -1,5 +1,5 @@
 import { of, from, forkJoin, throwError, Observable } from 'rxjs';
-import { filter, take, tap, skip, map, mergeMap, toArray, catchError } from 'rxjs/operators';
+import { filter, take, skip, map, mergeMap, toArray, catchError } from 'rxjs/operators';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Raw, EntityManager } from 'typeorm';

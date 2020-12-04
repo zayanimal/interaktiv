@@ -7,12 +7,15 @@ import {
     Get,
     Req,
     Param,
+    Query,
     Put,
-    ValidationPipe
+    ValidationPipe,
+    ParseIntPipe,
+    ParseUUIDPipe
 } from '@nestjs/common';
 import { User } from '@shared/decorators/user.decorator';
 import { UserDto } from '@users/dto/user.dto';
-import { OrderService } from '@order/services/order/order.service';
+import { OrderService } from '@order/services/order.service';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { Roles } from '@auth/decorators/roles.decorator';
@@ -32,10 +35,20 @@ export class OrderController {
         return this.orderService.create(order, user);
     }
 
+    @Get(':id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    find(@Param('id', ParseUUIDPipe) id: string) {
+        return this.orderService.find(id);
+    }
+
     @Get()
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    list() {
-        return this.orderService.list();
+    list(
+        @Query('page', ParseIntPipe) page: number,
+        @Query('limit', ParseIntPipe) limit: number
+    ) {
+        return this.orderService.list(page, limit);
     }
 }

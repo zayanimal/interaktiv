@@ -86,3 +86,21 @@ left join price p on g.id = p."goodId"
 left join discount d on g.id = d."goodId"
 left join margin m on g.id = m."goodId"
 left join description de on g.id = de."goodId"
+
+
+
+select
+g.name,
+p.cost * d.discount * m.margin as price
+
+from "order" o
+inner join order_good_good ogg
+on o.id = ogg."orderId"
+inner join good g
+on g.id = ogg."goodId"
+inner join price p
+on p."goodId" = g.id
+inner join discount d
+on d."goodId" = g.id
+inner join margin m
+on m."goodId" = g.id

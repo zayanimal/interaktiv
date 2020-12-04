@@ -12,11 +12,14 @@ export class Price {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @Column({ type: 'date', default: () => 'CURRENT_DATE' })
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     date!: string;
 
     @Column({ type: 'real' })
     cost!: number;
+
+    @Column({ type: 'uuid' })
+    goodId!: string;
 
     @ManyToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()

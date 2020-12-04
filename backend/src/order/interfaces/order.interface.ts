@@ -1,18 +1,19 @@
 import { Observable } from "rxjs";
+import { Pagination } from "nestjs-typeorm-paginate";
 import { UserDto } from "@users/dto/user.dto";
 import { CreateOrderDto } from "@order/dto/create-order.dto";
 import { IMessage } from '@shared/interfaces/message.interface';
 import { Order } from "@order/entities/order.entity";
 
 interface ICheckUser { userId: string; companyId: string; }
+interface IOrderListItem extends Pick<Order, "id" | "orderId" | "created"> {
+    user: string;
+    company: string;
+    enduser: string;
+    status: number;
+}
 
 export interface IOrderService {
-    /**
-     * Проверить существование пользователя и компании
-     * @param user юзер из реквеста
-     */
-    checkUser(user: UserDto): Observable<ICheckUser>
-
     /**
      * Создать новый заказ
      * @param dto данные заказа
@@ -21,7 +22,17 @@ export interface IOrderService {
     create(dto: CreateOrderDto, user: Observable<UserDto>): Observable<IMessage>
 
     /**
-     * Список заказов
+     * Поиск по айди компании
+     * @param id айди компании
      */
-    list(): Promise<Order[]>
+    find(id: string): any
+
+    // update(dto): any
+
+    /**
+     * Список заказов с пагинацией
+     * @param page
+     * @param limit
+     */
+    list(page: number, limit: number): Observable<Omit<Pagination<IOrderListItem>, 'links'>>
 }
