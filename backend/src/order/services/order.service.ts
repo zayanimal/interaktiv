@@ -36,8 +36,9 @@ export class OrderService implements IOrderService {
 
     create(dto: CreateOrderDto, user: Observable<UserDto>) {
         return from(user).pipe(
-            mergeMap((usr) => this.checkOrderService.checkUser(usr)),
+            mergeMap(this.checkOrderService.checkUser),
             mergeMap((usr) => forkJoin({
+                rate: of(dto.rate),
                 user: this.userService.searchId(usr.userId),
                 company: this.companyService.searchId(usr.companyId),
                 status: this.statusService.findStatus(1),
@@ -69,8 +70,7 @@ export class OrderService implements IOrderService {
                                 order
                             })
                         ])),
-                        map(() => ({ message: `Ваш заказ создан.
-                            Номер заказа ${order.orderId}` }))
+                        map(() => ({ message: `Ваш заказ создан. Номер заказа ${order.orderId}` }))
                     ))
                 ))
             ))
@@ -78,7 +78,7 @@ export class OrderService implements IOrderService {
     }
 
     find(id: string) {
-        return this.orderRepository.createQueryBuilder('o')
+        return from(this.orderRepository.createQueryBuilder('o')
             .select(['o', 'u.username', 'c.name', 'e.name', 's.status', 'g.id',
                 'g.name', 'm.margin', 'd.discount', 'p.cost' ])
             .leftJoin('o.good', 'g')
@@ -93,7 +93,20 @@ export class OrderService implements IOrderService {
             .where('o.id = :id', { id })
             .andWhere('m."orderId" = o.id')
             .andWhere('d."orderId" = o.id')
-            .getOne()
+            .getOne()).pipe(
+                mergeMap(this.checkOrderService.checkFoundOrder)
+            );
+    }
+
+    update(id: string) {
+
+    }
+
+    remove(id: string) {
+        return from(this.orderRepository.delete({ id })).pipe(
+            mergeMap(this.checkOrderService.checkRemovedOrder),
+            map(() => ({ message: 'Заказ удален' }))
+        );
     }
 
     list(page: number, limit: number) {

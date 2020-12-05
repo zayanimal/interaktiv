@@ -25,9 +25,19 @@ export interface IOrderService {
      * Поиск по айди компании
      * @param id айди компании
      */
-    find(id: string): any
+    find(id: string): Observable<Order>
 
-    // update(dto): any
+    /**
+     *
+     * @param dto
+     */
+    update(id: string, dto: CreateOrderDto): any
+
+    /**
+     * Удалить заказ по айди
+     * @param id айди заказа
+     */
+    remove(id: string): any
 
     /**
      * Список заказов с пагинацией

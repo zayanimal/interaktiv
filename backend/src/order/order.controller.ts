@@ -5,6 +5,7 @@ import {
     UseGuards,
     Body,
     Get,
+    Delete,
     Req,
     Param,
     Query,
@@ -40,6 +41,13 @@ export class OrderController {
     @Roles('admin')
     find(@Param('id', ParseUUIDPipe) id: string) {
         return this.orderService.find(id);
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    remove(@Param('id', ParseUUIDPipe) id: string) {
+        return this.orderService.remove(id);
     }
 
     @Get()

@@ -23,6 +23,9 @@ export class Order {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
+    @Column({ type: 'real' })
+    rate!: number;
+
     @Generated('rowid')
     @Column()
     orderId!: number;
