@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUUID, IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsUUID, IsNumber, IsOptional } from 'class-validator';
 
 export class GoodDto {
     @IsNotEmpty()
@@ -10,10 +10,14 @@ export class GoodDto {
     cost?: number;
 
     @IsOptional()
-    @IsString()
+    @IsNumber()
     margin?: number;
 
     @IsOptional()
-    @IsString()
+    @IsNumber()
     discount?: number;
+
+    @IsOptional()
+    @IsNumber()
+    quantity?: number;
 }

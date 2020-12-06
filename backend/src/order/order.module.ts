@@ -10,6 +10,7 @@ import { GoodModule } from '@good/good.module';
 import { PriceModule } from '@good/price/price.module';
 import { DiscountModule } from '@good/discount/discount.module';
 import { MarginModule } from '@good/margin/margin.module';
+import { QuantityModule } from '@good/quantity/quantity.module';
 import { EnduserModule } from '@enduser/enduser.module';
 import { Order } from '@order/entities/order.entity';
 
@@ -24,6 +25,7 @@ import { Order } from '@order/entities/order.entity';
     PriceModule,
     DiscountModule,
     MarginModule,
+    QuantityModule,
     EnduserModule,
     OrderStatusModule
   ],

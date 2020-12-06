@@ -17,6 +17,7 @@ import { Good } from '@good/entities/good.entity';
 import { Margin } from '@good/margin/entities/margin.entity';
 import { Price } from '@good/price/entities/price.entity';
 import { Discount } from '@good/discount/entities/discount.entity';
+import { Quantity } from '@good/quantity/entities/quantity.entity';
 
 @Entity()
 export class Order {
@@ -55,6 +56,9 @@ export class Order {
 
     @OneToMany(() => Margin, (margin) => margin.order)
     margin!: Margin[];
+
+    @OneToMany(() => Quantity, (quantity) => quantity.order)
+    quantity!: Quantity[];
 
     @ManyToOne(() => OrderStatus, (status) => status.order)
     @JoinColumn()

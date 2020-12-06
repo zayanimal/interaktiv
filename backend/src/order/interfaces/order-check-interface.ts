@@ -16,7 +16,7 @@ export interface ICheckOrderService {
      * Проверить роль и выдать соответствующий список заказов
      * @param repository
      */
-    role(user: UserDto, repository: SelectQueryBuilder<Order>): any;
+    role(user: UserDto, repository: SelectQueryBuilder<Order>): SelectQueryBuilder<Order>;
 
     /**
      * Проверить удалился ли заказ

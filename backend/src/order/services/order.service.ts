@@ -17,6 +17,7 @@ import { PriceService } from '@good/price/price.service';
 import { DiscountService } from '@good/discount/discount.service';
 import { MarginService } from '@good/margin/margin.service';
 import { EnduserService } from '@enduser/enduser.service';
+import { QuantityService } from '@good/quantity/quantity.service';
 
 @Injectable()
 export class OrderService implements IOrderService {
@@ -31,6 +32,7 @@ export class OrderService implements IOrderService {
         private readonly priceService: PriceService,
         private readonly discountService: DiscountService,
         private readonly marginService: MarginService,
+        private readonly quantityService: QuantityService,
         private readonly enduserService: EnduserService
     ) {}
 
@@ -50,7 +52,7 @@ export class OrderService implements IOrderService {
                 good: from(dto.good).pipe(
                     mergeMap(({ id }) => this.goodService.searchId(id)),
                     toArray()
-                )
+                ),
             }).pipe(
                 mergeMap((orderData) => from(this.orderRepository.save(
                     this.orderRepository.create(orderData)
@@ -68,6 +70,11 @@ export class OrderService implements IOrderService {
                                 good,
                                 enduser: orderData.enduser,
                                 order
+                            }),
+                            this.quantityService.create({
+                                qty: 1,
+                                good,
+                                order
                             })
                         ])),
                         map(() => ({ message: `Ваш заказ создан. Номер заказа ${order.orderId}` }))
@@ -80,12 +87,13 @@ export class OrderService implements IOrderService {
     find(id: string) {
         return from(this.orderRepository.createQueryBuilder('o')
             .select(['o', 'u.username', 'c.name', 'e.name', 's.status', 'g.id',
-                'g.name', 'm.margin', 'd.discount', 'p.cost' ])
+                'g.name', 'q.qty', 'm.margin', 'd.discount', 'p.cost' ])
             .leftJoin('o.good', 'g')
             .leftJoin('o.price', 'op')
             .leftJoin('g.price', 'p', 'p.id = op.id')
             .leftJoin('g.margin', 'm', 'm."goodId" = g.id')
             .leftJoin('g.discount', 'd', 'd."goodId" = g.id')
+            .leftJoin('g.quantity', 'q', 'q."goodId" = g.id')
             .leftJoin('o.user', 'u')
             .leftJoin('o.company', 'c')
             .leftJoin('o.enduser', 'e')
@@ -93,6 +101,7 @@ export class OrderService implements IOrderService {
             .where('o.id = :id', { id })
             .andWhere('m."orderId" = o.id')
             .andWhere('d."orderId" = o.id')
+            .andWhere('q."orderId" = o.id')
             .getOne()).pipe(
                 mergeMap(this.checkOrderService.found)
             );
