@@ -5,7 +5,7 @@ import { Order } from '@order/entities/order.entity';
 export class QuantityDto {
     @IsNotEmpty()
     @IsNumber()
-    qty!: number;
+    quantity!: number;
 
     @IsNotEmpty()
     good!: Good;

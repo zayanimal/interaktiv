@@ -72,7 +72,7 @@ export class OrderService implements IOrderService {
                                 order
                             }),
                             this.quantityService.create({
-                                qty: 1,
+                                quantity: 1,
                                 good,
                                 order
                             })

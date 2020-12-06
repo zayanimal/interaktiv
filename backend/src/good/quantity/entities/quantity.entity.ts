@@ -14,7 +14,7 @@ export class Quantity {
     id!: string;
 
     @Column({ type: 'integer' })
-    qty!: number;
+    quantity!: number;
 
     @ManyToOne(() => Good, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
