@@ -3,7 +3,7 @@ import { map, mergeMap, toArray, catchError } from 'rxjs/operators';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
+import { paginate, IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { IOrderService } from '@order/interfaces/order.interface';
 import { UserDto } from '@users/dto/user.dto';
 import { CreateOrderDto } from '@order/dto/create-order.dto';
@@ -36,7 +36,7 @@ export class OrderService implements IOrderService {
 
     create(dto: CreateOrderDto, user: Observable<UserDto>) {
         return from(user).pipe(
-            mergeMap(this.checkOrderService.checkUser),
+            mergeMap(this.checkOrderService.user),
             mergeMap((usr) => forkJoin({
                 rate: of(dto.rate),
                 user: this.userService.searchId(usr.userId),
@@ -94,7 +94,7 @@ export class OrderService implements IOrderService {
             .andWhere('m."orderId" = o.id')
             .andWhere('d."orderId" = o.id')
             .getOne()).pipe(
-                mergeMap(this.checkOrderService.checkFoundOrder)
+                mergeMap(this.checkOrderService.found)
             );
     }
 
@@ -104,22 +104,26 @@ export class OrderService implements IOrderService {
 
     remove(id: string) {
         return from(this.orderRepository.delete({ id })).pipe(
-            mergeMap(this.checkOrderService.checkRemovedOrder),
+            mergeMap(this.checkOrderService.removed),
             map(() => ({ message: 'Заказ удален' }))
         );
     }
 
-    list(page: number, limit: number) {
-        return from(
-            paginate(this.orderRepository
-                .createQueryBuilder('o')
-                .select(['o', 'u.username', 'c.name', 'e.name', 's.status'])
-                .leftJoin('o.user', 'u')
-                .leftJoin('o.company', 'c')
-                .leftJoin('o.enduser', 'e')
-                .leftJoin('o.status', 's'),
+    list({ page, limit }: IPaginationOptions, user: Observable<UserDto>) {
+        return from(user).pipe(
+            mergeMap((usr) => paginate(
+                this.checkOrderService.role(
+                    usr,
+                    this.orderRepository
+                        .createQueryBuilder('o')
+                        .select(['o', 'u.username', 'c.name', 'e.name', 's.status'])
+                        .leftJoin('o.user', 'u')
+                        .leftJoin('o.company', 'c')
+                        .leftJoin('o.enduser', 'e')
+                        .leftJoin('o.status', 's')
+                ),
                 { page, limit }
-        )).pipe(
+            )),
             mergeMap(({ items, meta }) => forkJoin({
                 items: from(items).pipe(
                     map((o) => ({

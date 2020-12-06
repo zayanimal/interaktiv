@@ -28,7 +28,7 @@ export class OrderController {
 
     @Put()
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('admin', 'customer')
     create(
         @Body(ValidationPipe) order: CreateOrderDto,
         @User() user: Observable<UserDto>
@@ -45,7 +45,7 @@ export class OrderController {
 
     @Delete(':id')
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('admin', 'customer')
     remove(@Param('id', ParseUUIDPipe) id: string) {
         return this.orderService.remove(id);
     }
@@ -55,8 +55,9 @@ export class OrderController {
     @Roles('admin')
     list(
         @Query('page', ParseIntPipe) page: number,
-        @Query('limit', ParseIntPipe) limit: number
+        @Query('limit', ParseIntPipe) limit: number,
+        @User() user: Observable<UserDto>,
     ) {
-        return this.orderService.list(page, limit);
+        return this.orderService.list({ page, limit }, user);
     }
 }

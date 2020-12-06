@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { Pagination } from "nestjs-typeorm-paginate";
+import { Pagination, IPaginationOptions } from "nestjs-typeorm-paginate";
 import { UserDto } from "@users/dto/user.dto";
 import { CreateOrderDto } from "@order/dto/create-order.dto";
 import { IMessage } from '@shared/interfaces/message.interface';
@@ -41,8 +41,10 @@ export interface IOrderService {
 
     /**
      * Список заказов с пагинацией
-     * @param page
-     * @param limit
+     * @param options объект с параметрами пагинации
+     * @param user
      */
-    list(page: number, limit: number): Observable<Omit<Pagination<IOrderListItem>, 'links'>>
+    list(options: IPaginationOptions, user: Observable<UserDto>): Observable<
+        Omit<Pagination<IOrderListItem>, 'links'>
+    >
 }

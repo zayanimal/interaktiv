@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { DeleteResult } from 'typeorm';
+import { SelectQueryBuilder, DeleteResult } from 'typeorm';
 import { UserDto } from "@users/dto/user.dto";
 import { Order } from "@order/entities/order.entity";
 
@@ -10,17 +10,23 @@ export interface ICheckOrderService {
      * Проверить существование пользователя и компании
      * @param user юзер из реквеста
      */
-    checkUser(user: UserDto): Observable<ICheckUser>
+    user(user: UserDto): Observable<ICheckUser>
+
+    /**
+     * Проверить роль и выдать соответствующий список заказов
+     * @param repository
+     */
+    role(user: UserDto, repository: SelectQueryBuilder<Order>): any;
 
     /**
      * Проверить удалился ли заказ
      * @param removeData результат удаленного заказа
      */
-    checkRemovedOrder(removeData: DeleteResult): Observable<DeleteResult>
+    removed(removeData: DeleteResult): Observable<DeleteResult>
 
     /**
      * Проверить найден ли заказ
      * @param foundOrder
      */
-    checkFoundOrder(foundOrder: Order | undefined): Observable<any>
+    found(foundOrder: Order | undefined): Observable<any>
 }
