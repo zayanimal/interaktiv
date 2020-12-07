@@ -9,6 +9,7 @@ import {
     JoinTable,
     OneToMany
 } from 'typeorm';
+import { IOrderEntity } from '@order/interfaces/order-entity.interface';
 import { Users } from '@users/entities/users.entity';
 import { Company } from '@company/entities/company.entity';
 import { Enduser } from '@enduser/entities/enduser.entity';
@@ -20,7 +21,7 @@ import { Discount } from '@good/discount/entities/discount.entity';
 import { Quantity } from '@good/quantity/entities/quantity.entity';
 
 @Entity()
-export class Order {
+export class Order implements IOrderEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 

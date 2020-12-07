@@ -1,11 +1,11 @@
 import { Observable } from "rxjs";
-import { Pagination, IPaginationOptions } from "nestjs-typeorm-paginate";
+import { IPaginationMeta, IPaginationOptions } from "nestjs-typeorm-paginate";
 import { UserDto } from "@users/dto/user.dto";
 import { CreateOrderDto } from "@order/dto/create-order.dto";
 import { IMessage } from '@shared/interfaces/message.interface';
 import { Order } from "@order/entities/order.entity";
+import { OrderEntity } from '@order/order.serializer';
 
-interface ICheckUser { userId: string; companyId: string; }
 interface IOrderListItem extends Pick<Order, "id" | "orderId" | "created"> {
     user: string;
     company: string;
@@ -25,7 +25,7 @@ export interface IOrderService {
      * Поиск по айди компании
      * @param id айди компании
      */
-    find(id: string): Observable<Order>
+    find(id: string): Observable<Order>;
 
     /**
      *
@@ -44,7 +44,8 @@ export interface IOrderService {
      * @param options объект с параметрами пагинации
      * @param user
      */
-    list(options: IPaginationOptions, user: Observable<UserDto>): Observable<
-        Omit<Pagination<IOrderListItem>, 'links'>
-    >
+    list(options: IPaginationOptions, user: Observable<UserDto>): Observable<{
+        items: OrderEntity[];
+        meta: IPaginationMeta;
+    }>
 }

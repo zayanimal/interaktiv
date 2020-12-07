@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderService } from '@order/services/order.service';
-import { CheckOrderService } from '@order/services/check-order.service';
+import { OrderService } from '@order/order.service';
 import { OrderController } from '@order/order.controller';
 import { OrderStatusModule } from '@order/order-status/order-status.module';
 import { UsersModule } from '@users/users.module';
@@ -12,12 +11,12 @@ import { DiscountModule } from '@good/discount/discount.module';
 import { MarginModule } from '@good/margin/margin.module';
 import { QuantityModule } from '@good/quantity/quantity.module';
 import { EnduserModule } from '@enduser/enduser.module';
-import { Order } from '@order/entities/order.entity';
+import { OrderRepository } from '@order/order.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Order
+      OrderRepository
     ]),
     UsersModule,
     CompanyModule,
@@ -29,7 +28,7 @@ import { Order } from '@order/entities/order.entity';
     EnduserModule,
     OrderStatusModule
   ],
-  providers: [OrderService, CheckOrderService],
+  providers: [OrderService],
   controllers: [OrderController]
 })
 export class OrderModule {}
