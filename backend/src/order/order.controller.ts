@@ -12,7 +12,9 @@ import {
     Put,
     ValidationPipe,
     ParseIntPipe,
-    ParseUUIDPipe
+    ParseUUIDPipe,
+    Patch,
+    UsePipes
 } from '@nestjs/common';
 import { User } from '@shared/decorators/user.decorator';
 import { UserDto } from '@users/dto/user.dto';
@@ -20,7 +22,7 @@ import { OrderService } from '@order/order.service';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { Roles } from '@auth/decorators/roles.decorator';
-import { CreateOrderDto } from '@order/dto/create-order.dto';
+import { CreateOrderDto, UpdateOrderDto } from '@order/dto/order.dto';
 
 @Controller('order')
 export class OrderController {
@@ -30,10 +32,10 @@ export class OrderController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin', 'customer')
     create(
-        @Body(ValidationPipe) order: CreateOrderDto,
+        @Body(ValidationPipe) dto: CreateOrderDto,
         @User() user: Observable<UserDto>
     ) {
-        return this.orderService.create(order, user);
+        return this.orderService.create(dto, user);
     }
 
     @Get(':id')
@@ -41,6 +43,17 @@ export class OrderController {
     @Roles('admin')
     find(@Param('id', ParseUUIDPipe) id: string) {
         return this.orderService.find(id);
+    }
+
+    @Patch()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    @UsePipes(new ValidationPipe({ whitelist: true }))
+    update(
+        @Body() dto: UpdateOrderDto,
+        @User() user: Observable<UserDto>
+    ) {
+        return this.orderService.update(dto, user);
     }
 
     @Delete(':id')

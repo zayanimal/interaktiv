@@ -2,10 +2,11 @@ import { of, from, throwError } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Repository, EntityRepository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
-import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Order } from '@order/entities/order.entity';
-import { OrderEntity, findGroup } from '@order/order.serializer';
+import { OrderEntity, DEFAULT_GROUP, FIND_GROUP } from '@order/order.serializer';
 import { INewOrder } from '@order/interfaces/new-order.interface';
+import { IOrderReduce } from '@order/interfaces/order.interface';
 import { UserDto } from '@users/dto/user.dto';
 
 @EntityRepository(Order)
@@ -29,7 +30,7 @@ export class OrderRepository extends Repository<Order> {
             .andWhere('d."orderId" = o.id')
             .andWhere('q."orderId" = o.id')
             .getOne()).pipe(
-                mergeMap((order) => (order ? of(this.transform(order, { groups: findGroup })) : throwError(
+                mergeMap((order) => (order ? of(this.transform(order, FIND_GROUP)) : throwError(
                     new NotFoundException('Заказ не найден')
                 )))
             );
@@ -41,10 +42,21 @@ export class OrderRepository extends Repository<Order> {
         );
     }
 
+    updateCreatedOrder(id: string, goods: IOrderReduce) {
+        return from(this.findOne(id)).pipe(
+            mergeMap((foundOrder) => (foundOrder ? of(foundOrder) : throwError(
+                new NotFoundException('Заказ не найден')))
+            ),
+            mergeMap((foundOrder) => from(this.save(
+                foundOrder.updateOrder(goods)
+            )))
+        );
+    }
+
     deleteOrder(id: string) {
         return from(this.delete({ id })).pipe(
             mergeMap((deleteRes) => (deleteRes.affected ? of(deleteRes) : throwError(
-                new BadRequestException('Заказ не существует')
+                new NotFoundException('Заказ не существует')
             ))),
             map(() => ({ message: 'Заказ удален' }))
         );
@@ -57,13 +69,14 @@ export class OrderRepository extends Repository<Order> {
             .leftJoin('o.company', 'c')
             .leftJoin('o.enduser', 'e')
             .leftJoin('o.status', 's')
+            .orderBy('o.orderId', 'DESC')
 
         return (user.role.includes('admin') ? query : query.where(
             'o."companyId" = :id', { id: user.companyId }
         ));
     }
 
-    transform(order: Order, options = {}) {
+    transform(order: Order, options = DEFAULT_GROUP) {
         return plainToClass(OrderEntity, order, options);
     }
 

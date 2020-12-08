@@ -19,6 +19,7 @@ import { Margin } from '@good/margin/entities/margin.entity';
 import { Price } from '@good/price/entities/price.entity';
 import { Discount } from '@good/discount/entities/discount.entity';
 import { Quantity } from '@good/quantity/entities/quantity.entity';
+import { IOrderReduce } from '@order/interfaces/order.interface';
 
 @Entity()
 export class Order implements IOrderEntity {
@@ -64,4 +65,10 @@ export class Order implements IOrderEntity {
     @ManyToOne(() => OrderStatus, (status) => status.order)
     @JoinColumn()
     status!: OrderStatus;
+
+    updateOrder(items: IOrderReduce) {
+        Object.assign(this, items);
+
+        return this;
+    }
 }
