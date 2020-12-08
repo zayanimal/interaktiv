@@ -42,53 +42,57 @@ export class OrderService implements IOrderService {
         );
     }
 
-    create(dto: CreateOrderDto, user: Observable<UserDto>) {
+    orderData(dto: CreateOrderDto | UpdateOrderDto, user: Observable<UserDto>) {
         return this.checkUser(user).pipe(
             mergeMap((usr) => forkJoin({
                 rate: of(dto.rate),
                 user: this.userService.searchId(usr.userId),
                 company: this.companyService.searchId(usr.companyId),
-                status: this.statusService.findStatus(1),
-                enduser: this.enduserService.checkCreate(dto.enduser),
-            }).pipe(
-                mergeMap((orderData) => this.orderRepository.saveOrder(orderData).pipe(
-                    mergeMap((order) => from(dto.good).pipe(
-                        mergeMap((good) => this.goodService.searchId(good.id).pipe(
-                            mergeMap((foundGood) => forkJoin([
-                                of(foundGood),
-                                this.priceService.searchId(good.id),
-                                this.marginService.create({
-                                    margin: 1.13,
-                                    good: foundGood,
-                                    company: orderData.company,
-                                    order
-                                }),
-                                this.discountService.create({
-                                    discount: 1,
-                                    good: foundGood,
-                                    enduser: orderData.enduser,
-                                    order
-                                }),
-                                this.quantityService.create({
-                                    quantity: good?.quantity || 1,
-                                    good: foundGood,
-                                    order
-                                })
-                            ])),
-                        )),
-                        reduce<IOrderReduceArr, IOrderReduce>((acc, [g, p, m, d, q]) => {
-                            acc.good.push(g);
-                            acc.price.push(p);
-                            acc.margin.push(m);
-                            acc.discount.push(d);
-                            acc.quantity.push(q)
+                status: this.statusService.findStatus(dto?.status || 1),
+                enduser: this.enduserService.checkCreate(dto.enduser)
+            }))
+        );
+    }
 
-                            return acc;
-                        }, { good: [], price: [], margin: [], discount: [], quantity: [] }),
-                        mergeMap((goods) => this.orderRepository.updateCreatedOrder(order.id, goods)),
-                        map(() => ({ message: `Ваш заказ создан. Номер заказа ${order.orderId}` }))
+    create(dto: CreateOrderDto, user: Observable<UserDto>) {
+        return this.orderData(dto, user).pipe(
+            mergeMap((orderData) => this.orderRepository.saveOrder(orderData).pipe(
+                mergeMap((order) => from(dto.good).pipe(
+                    mergeMap((good) => this.goodService.searchId(good.id).pipe(
+                        mergeMap((foundGood) => forkJoin([
+                            of(foundGood),
+                            this.priceService.searchId(good.id),
+                            this.marginService.create({
+                                margin: 1.13,
+                                good: foundGood,
+                                company: orderData.company,
+                                order
+                            }),
+                            this.discountService.create({
+                                discount: 1,
+                                good: foundGood,
+                                enduser: orderData.enduser,
+                                order
+                            }),
+                            this.quantityService.create({
+                                quantity: good?.quantity || 1,
+                                good: foundGood,
+                                order
+                            })
+                        ])),
                     )),
-                ))
+                    reduce<IOrderReduceArr, IOrderReduce>((acc, [g, p, m, d, q]) => {
+                        acc.good.push(g);
+                        acc.price.push(p);
+                        acc.margin.push(m);
+                        acc.discount.push(d);
+                        acc.quantity.push(q)
+
+                        return acc;
+                    }, { good: [], price: [], margin: [], discount: [], quantity: [] }),
+                    mergeMap((goods) => this.orderRepository.updateCreatedOrder(order.id, goods)),
+                    map(() => ({ message: `Ваш заказ создан. Номер заказа ${order.orderId}` }))
+                )),
             ))
         );
     }
@@ -96,14 +100,7 @@ export class OrderService implements IOrderService {
     find(id: string) { return this.orderRepository.findOrder(id); }
 
     update(dto: UpdateOrderDto, user: Observable<UserDto>) {
-        // return this.checkUser(user).pipe(
-        //     mergeMap((usr) => forkJoin([
-        //         // dto.status && this.statusService.findStatus(dto.status)
-        //         // this.enduserService.checkCreate(dto.enduser)
-        //     ]))
-        // );
-
-        return dto;
+        return this.orderData(dto, user);
     }
 
     remove(id: string) { return this.orderRepository.deleteOrder(id); }

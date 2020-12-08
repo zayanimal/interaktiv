@@ -1,6 +1,13 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
 import { switchMap, map, mergeMap, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus, Inject, forwardRef } from '@nestjs/common';
+import {
+    Injectable,
+    HttpException,
+    HttpStatus,
+    Inject,
+    forwardRef,
+    BadRequestException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
@@ -31,12 +38,20 @@ export class UsersService {
         };
     }
 
+    checkUser(user: Users | undefined) {
+        return (user ? of(user) : throwError(
+            new BadRequestException('Пользователь не существует')
+        ));
+    }
+
     /**
      * Поиск пользователя по id
      * @param id
      */
     searchId(id: string) {
-        return this.usersRepository.findOne({ id });
+        return from(this.usersRepository.findOne({ id })).pipe(
+            mergeMap((user) => this.checkUser(user))
+        );
     }
 
     /**

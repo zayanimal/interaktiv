@@ -24,6 +24,10 @@ export class CreateOrderDto {
     @IsNotEmpty()
     @IsObject()
     enduser!: EnduserDto;
+
+    @IsOptional()
+    @IsNumber()
+    status?: number;
 }
 
 export class UpdateOrderDto {
@@ -31,27 +35,23 @@ export class UpdateOrderDto {
     @IsUUID()
     id!: string;
 
-    @IsOptional()
     @IsDefined()
     @IsPositive()
     @IsNumber()
-    rate?: number;
+    rate!: number;
 
-    @IsOptional()
     @ValidateNested()
     @IsArray()
     @IsDefined()
     @Type(() => GoodDto)
     good!: GoodDto[];
 
-    @IsOptional()
     @IsObject()
     @IsDefined()
     @ValidateNested()
     @Type(() => EnduserDto)
-    enduser?: EnduserDto;
+    enduser!: EnduserDto;
 
-    @IsOptional()
     @IsDefined()
     @IsPositive()
     @IsNumber()

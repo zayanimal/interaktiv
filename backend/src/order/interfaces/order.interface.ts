@@ -9,6 +9,10 @@ import { Margin } from "@good/margin/entities/margin.entity";
 import { Discount } from "@good/discount/entities/discount.entity";
 import { Quantity } from "@good/quantity/entities/quantity.entity";
 import { Price } from "@good/price/entities/price.entity";
+import { Users } from "@users/entities/users.entity";
+import { Company } from "@company/entities/company.entity";
+import { OrderStatus } from "@order/order-status/entities/order-status.entity";
+import { Enduser } from "@enduser/entities/enduser.entity";
 
 export interface IOrderReduce {
     good: Good[],
@@ -16,6 +20,14 @@ export interface IOrderReduce {
     margin: Margin[],
     discount: Discount[],
     quantity: Quantity[]
+}
+
+interface IOrderData {
+    rate: number;
+    user: Users;
+    company: Company;
+    status: OrderStatus;
+    enduser: Enduser;
 }
 
 export type IOrderReduceArr = [Good, Price, Margin, Discount, Quantity];
@@ -29,6 +41,13 @@ export interface IOrderService {
         userId: string;
         companyId: string;
     }>
+
+    /**
+     * Получить данные заказа из базы
+     * @param dto данные для создания/обновления заказа
+     * @param user объект пользователя из реквеста
+     */
+    orderData(dto: CreateOrderDto | UpdateOrderDto, user: Observable<UserDto>): Observable<IOrderData>
 
     /**
      * Создать новый заказ
