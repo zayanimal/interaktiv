@@ -1,7 +1,8 @@
 import { Observable } from "rxjs";
 import { IPaginationMeta, IPaginationOptions } from "nestjs-typeorm-paginate";
 import { UserDto } from "@users/dto/user.dto";
-import { CreateOrderDto, UpdateOrderDto } from "@order/dto/order.dto";
+import { CreateOrderDto } from "@order/dto/create-order.dto";
+import { UpdateOrderDto } from '@order/dto/update-order.dto';
 import { IMessage } from '@shared/interfaces/message.interface';
 import { OrderEntity } from '@order/order.serializer';
 import { Good } from "@good/entities/good.entity";
@@ -13,13 +14,15 @@ import { Users } from "@users/entities/users.entity";
 import { Company } from "@company/entities/company.entity";
 import { OrderStatus } from "@order/order-status/entities/order-status.entity";
 import { Enduser } from "@enduser/entities/enduser.entity";
+import { Order } from "@order/entities/order.entity";
 
 export interface IOrderReduce {
-    good: Good[],
-    price: Price[],
-    margin: Margin[],
-    discount: Discount[],
-    quantity: Quantity[]
+    good: Good[];
+    price: Price[];
+    margin: Margin[];
+    discount: Discount[];
+    quantity: Quantity[];
+    push: (items: IOrderReduceArr) => IOrderReduce;
 }
 
 interface IOrderData {
@@ -43,13 +46,6 @@ export interface IOrderService {
     }>
 
     /**
-     * Получить данные заказа из базы
-     * @param dto данные для создания/обновления заказа
-     * @param user объект пользователя из реквеста
-     */
-    orderData(dto: CreateOrderDto | UpdateOrderDto, user: Observable<UserDto>): Observable<IOrderData>
-
-    /**
      * Создать новый заказ
      * @param dto данные заказа
      * @param user служебная информация
@@ -59,14 +55,15 @@ export interface IOrderService {
     /**
      * Поиск по айди компании
      * @param id айди компании
+     * @param serial режим сериализации
      */
-    find(id: string): Observable<OrderEntity>;
+    find(id: string, serial: boolean): Observable<Order | OrderEntity>;
 
     /**
      *
      * @param dto
      */
-    update(dto: UpdateOrderDto, user: Observable<UserDto>): any
+    // update(dto: UpdateOrderDto, user: Observable<UserDto>): any
 
     /**
      * Удалить заказ по айди

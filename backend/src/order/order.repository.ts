@@ -11,7 +11,7 @@ import { UserDto } from '@users/dto/user.dto';
 
 @EntityRepository(Order)
 export class OrderRepository extends Repository<Order> {
-    findOrder(id: string) {
+    findOrder(id: string, serial = true) {
         return from(this.createQueryBuilder('o')
             .select(['o', 'u.username', 'c.name', 'e.name', 's.status', 'g.id',
                 'g.name', 'q.quantity', 'm.margin', 'd.discount', 'p.cost' ])
@@ -30,9 +30,8 @@ export class OrderRepository extends Repository<Order> {
             .andWhere('d."orderId" = o.id')
             .andWhere('q."orderId" = o.id')
             .getOne()).pipe(
-                mergeMap((order) => (order ? of(this.transform(order, FIND_GROUP)) : throwError(
-                    new NotFoundException('Заказ не найден')
-                )))
+                mergeMap((order) => (order ? of(serial ? this.transform(order, FIND_GROUP) : order)
+                    : throwError(new NotFoundException('Заказ не найден'))))
             );
     }
 
