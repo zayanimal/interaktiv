@@ -1,33 +1,21 @@
-import { from, of, throwError } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { from, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Margin } from '@good/margin/entities/margin.entity';
 import { MarginDto } from '@good/margin/dto/margin.dto';
-import { Company } from '@company/entities/company.entity';
-import { Order } from '@order/entities/order.entity';
-import { OrderEntity } from '@order/order.serializer';
-import { Good } from '@good/entities/good.entity';
-
-interface ICheckCreateMargin {
-    margin: number;
-    good: Good;
-    order: Order;
-}
+import { ICheckCreateMargin } from '@good/interfaces/good-details.interface';
+import { checkEntity } from '@shared/utils/check-entity.util';
+import { MARGIN_GROUP } from '@order/constants/order-groups.constant';
 
 @Injectable()
 export class MarginService {
+    errorMessage: string;
     constructor(
         @InjectRepository(Margin)
         private readonly marginRepository: Repository<Margin>
-    ) {}
-
-    checkMargin(margin: Margin | undefined) {
-        return (margin ? of(margin) : throwError(
-            new NotFoundException('Прибыль не найдена')
-        ));
-    }
+    ) { this.errorMessage = 'Прибыль не найдена'; }
 
     /**
      * Создать уровень прибыли для товара
@@ -39,19 +27,28 @@ export class MarginService {
         ));
     }
 
-    checkCreate(dto: ICheckCreateMargin) {
-        return from(this.marginRepository
-            .createQueryBuilder('m')
-            .select()
-            .where('m."goodId" = :goodId', { goodId: dto.good.id })
-            .andWhere('m."orderId" = :orderId', { orderId: dto.order.id })
-            .getOne()).pipe(
-                mergeMap((margin) => this.checkMargin(margin)),
-                mergeMap((margin) => from(this.marginRepository.preload(
-                    { id: margin.id, margin: dto.margin }
-                ))),
-                mergeMap((margin) => this.checkMargin(margin)),
-                mergeMap((preloaded) => from(this.marginRepository.save(preloaded)))
-            );
+    /**
+     * Обновить маржинальность конкретного заказа
+     * @param dto
+     */
+    update(dto: ICheckCreateMargin) {
+        return of(dto.user).pipe(
+            map(({ role }) => role),
+            map(MARGIN_GROUP),
+            mergeMap((permission) => (permission ? from(this.marginRepository
+                .createQueryBuilder('m')
+                .select()
+                .where('m."goodId" = :goodId', { goodId: dto.good.id })
+                .andWhere('m."orderId" = :orderId', { orderId: dto.order.id })
+                .getOne()).pipe(
+                    mergeMap(checkEntity(this.errorMessage)),
+                    mergeMap((margin) => from(this.marginRepository.preload(
+                        { id: margin.id, margin: dto.margin }
+                    ))),
+                    mergeMap(checkEntity(this.errorMessage)),
+                    mergeMap((preloaded) => from(this.marginRepository.save(preloaded)))
+                )
+            : of(null)))
+        );
     }
 }

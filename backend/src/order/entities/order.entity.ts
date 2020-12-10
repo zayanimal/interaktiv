@@ -19,7 +19,7 @@ import { Margin } from '@good/margin/entities/margin.entity';
 import { Price } from '@good/price/entities/price.entity';
 import { Discount } from '@good/discount/entities/discount.entity';
 import { Quantity } from '@good/quantity/entities/quantity.entity';
-import { IOrderReduce } from '@order/interfaces/order.interface';
+import { IOrderReduce } from '@order/interfaces';
 
 @Entity()
 export class Order implements IOrderEntity {

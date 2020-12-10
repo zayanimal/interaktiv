@@ -1,9 +1,10 @@
-import { of, from, throwError } from 'rxjs';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderStatus } from '@order/order-status/entities/order-status.entity';
+import { checkEntity } from '@shared/utils';
 
 @Injectable()
 export class OrderStatusService {
@@ -13,22 +14,12 @@ export class OrderStatusService {
     ) {}
 
     /**
-     * Проверить существование статуса в базе
-     * @param status
-     */
-    checkStatus(status: OrderStatus | undefined) {
-        return (status ? of(status) : throwError(
-            new BadRequestException('Статус заказа не существует')
-        ));
-    }
-
-    /**
      * Найти id статуса
      * @param status
      */
     findStatus(status: number) {
         return from(this.statusRepository.findOne({ status })).pipe(
-            mergeMap((status) => this.checkStatus(status))
+            mergeMap(checkEntity('Статус заказа не существует'))
         );
     }
 }

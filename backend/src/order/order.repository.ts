@@ -5,9 +5,9 @@ import { plainToClass } from 'class-transformer';
 import { NotFoundException } from '@nestjs/common';
 import { Order } from '@order/entities/order.entity';
 import { OrderEntity, DEFAULT_GROUP, FIND_GROUP } from '@order/order.serializer';
-import { INewOrder } from '@order/interfaces/new-order.interface';
-import { IOrderReduce } from '@order/interfaces/order.interface';
+import { INewOrder, IOrderReduce, IUpdateOrder } from '@order/interfaces';
 import { UserDto } from '@users/dto/user.dto';
+import { checkEntity } from '@shared/utils/check-entity.util';
 
 @EntityRepository(Order)
 export class OrderRepository extends Repository<Order> {
@@ -43,20 +43,24 @@ export class OrderRepository extends Repository<Order> {
 
     updateCreatedOrder(id: string, goods: IOrderReduce) {
         return from(this.findOne(id)).pipe(
-            mergeMap((foundOrder) => (foundOrder ? of(foundOrder) : throwError(
-                new NotFoundException('Заказ не найден')))
-            ),
+            mergeMap(checkEntity('Заказ не найден')),
             mergeMap((foundOrder) => from(this.save(
                 foundOrder.updateOrder(goods)
             )))
         );
     }
 
+    updateOrder(updateData: IUpdateOrder) {
+        return from(this.preload(updateData)).pipe(
+            mergeMap(checkEntity('Заказ не найден')),
+            mergeMap((updatedOrder) => this.save(updatedOrder))
+        )
+    }
+
     deleteOrder(id: string) {
         return from(this.delete({ id })).pipe(
-            mergeMap((deleteRes) => (deleteRes.affected ? of(deleteRes) : throwError(
-                new NotFoundException('Заказ не существует')
-            ))),
+            map((res) => res.affected),
+            mergeMap(checkEntity('Заказ не существует')),
             map(() => ({ message: 'Заказ удален' }))
         );
     }

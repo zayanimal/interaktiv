@@ -1,12 +1,10 @@
 import { Observable } from 'rxjs';
 import {
     Controller,
-    Post,
     UseGuards,
     Body,
     Get,
     Delete,
-    Req,
     Param,
     Query,
     Put,

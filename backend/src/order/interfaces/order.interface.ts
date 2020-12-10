@@ -5,35 +5,7 @@ import { CreateOrderDto } from "@order/dto/create-order.dto";
 import { UpdateOrderDto } from '@order/dto/update-order.dto';
 import { IMessage } from '@shared/interfaces/message.interface';
 import { OrderEntity } from '@order/order.serializer';
-import { Good } from "@good/entities/good.entity";
-import { Margin } from "@good/margin/entities/margin.entity";
-import { Discount } from "@good/discount/entities/discount.entity";
-import { Quantity } from "@good/quantity/entities/quantity.entity";
-import { Price } from "@good/price/entities/price.entity";
-import { Users } from "@users/entities/users.entity";
-import { Company } from "@company/entities/company.entity";
-import { OrderStatus } from "@order/order-status/entities/order-status.entity";
-import { Enduser } from "@enduser/entities/enduser.entity";
 import { Order } from "@order/entities/order.entity";
-
-export interface IOrderReduce {
-    good: Good[];
-    price: Price[];
-    margin: Margin[];
-    discount: Discount[];
-    quantity: Quantity[];
-    push: (items: IOrderReduceArr) => IOrderReduce;
-}
-
-interface IOrderData {
-    rate: number;
-    user: Users;
-    company: Company;
-    status: OrderStatus;
-    enduser: Enduser;
-}
-
-export type IOrderReduceArr = [Good, Price, Margin, Discount, Quantity];
 
 export interface IOrderService {
     /**
@@ -60,10 +32,11 @@ export interface IOrderService {
     find(id: string, serial: boolean): Observable<Order | OrderEntity>;
 
     /**
-     *
+     * Обновить заказ
      * @param dto
+     * @param user
      */
-    // update(dto: UpdateOrderDto, user: Observable<UserDto>): any
+    update(dto: UpdateOrderDto, user: Observable<UserDto>): Observable<IMessage>
 
     /**
      * Удалить заказ по айди

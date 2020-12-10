@@ -1,11 +1,10 @@
 import { Observable, of, from, forkJoin, throwError } from 'rxjs';
-import { map, reduce, toArray, mergeMap, catchError, tap } from 'rxjs/operators';
+import { map, reduce, mergeMap, catchError } from 'rxjs/operators';
 import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { UserDto } from '@users/dto/user.dto';
-import { CreateOrderDto } from '@order/dto/create-order.dto';
-import { UpdateOrderDto } from '@order/dto/update-order.dto';
+import { CreateOrderDto, UpdateOrderDto } from '@order/dto';
 import { OrderStatusService } from '@order/order-status/order-status.service';
 import { UsersService } from '@users/services/users.service';
 import { CompanyService } from '@company/company.service';
@@ -16,9 +15,8 @@ import { MarginService } from '@good/margin/margin.service';
 import { EnduserService } from '@enduser/enduser.service';
 import { QuantityService } from '@good/quantity/quantity.service';
 import { OrderRepository } from '@order/order.repository';
-import { IOrderService, IOrderReduce, IOrderReduceArr } from '@order/interfaces/order.interface';
+import { IOrderService, IOrderReduce, IOrderReduceArr } from '@order/interfaces';
 import { OrderAccumulator } from '@order/utils/order.util';
-import { MARGIN_GROUP, DISCOUNT_GROUP } from '@order/constants/order-groups.constant';
 import { Order } from './entities/order.entity';
 
 @Injectable()
@@ -82,7 +80,7 @@ export class OrderService implements IOrderService {
                     )),
                     reduce<IOrderReduceArr, IOrderReduce>(
                         (acc, items) => acc.push(items),
-                        new OrderAccumulator()
+                        OrderAccumulator.create()
                     ),
                     mergeMap((goods) => this.orderRepository.updateCreatedOrder(order.id, goods)),
                     map(() => ({ message: `Ваш заказ создан. Номер заказа ${order.orderId}` }))
@@ -94,32 +92,41 @@ export class OrderService implements IOrderService {
     find(id: string, serial = true) { return this.orderRepository.findOrder(id, serial); }
 
     update(dto: UpdateOrderDto, user: Observable<UserDto>) {
-        return this.checkUser(user).pipe(
-            mergeMap((usr) => forkJoin([
-                from(user),
-                this.find(dto.id, false),
-                this.companyService.searchId(usr.companyId),
-                this.statusService.findStatus(dto?.status || 1),
-                this.enduserService.checkCreate(dto.enduser)
-            ])),
-            mergeMap(([usr, order, company, status, enduser]) => from(dto.good).pipe(
+        return forkJoin([
+            from(user),
+            this.find(dto.id, false),
+            this.statusService.findStatus(dto?.status || 1),
+            this.enduserService.checkCreate(dto.enduser)
+        ]).pipe(
+            mergeMap(([usr, order, status, enduser]) => from(dto.good).pipe(
                 mergeMap((good) => this.goodService.searchId(good.id).pipe(
                     mergeMap((foundGood) => forkJoin([
-                        of(foundGood),
-                        this.priceService.searchId(good.id),
-                        this.marginService.checkCreate({
-                            margin: (good.margin || 1.13 as number),
+                        this.marginService.update({
+                            margin: good.margin || 1.13,
                             good: foundGood,
-                            order: (order as Order)
+                            order: (order as Order),
+                            user: usr
                         }),
-                        this.discountService.checkCreate(foundGood.id, dto.id),
-                        this.quantityService.checkCreate(foundGood.id, dto.id)
+                        this.discountService.update({
+                            discount: good.discount || 1,
+                            good: foundGood,
+                            order: (order as Order),
+                            user: usr
+                        }),
+                        this.quantityService.update({
+                            quantity: good.quantity || 1,
+                            good: foundGood,
+                            order: (order as Order),
+                            user: usr
+                        })
                     ])),
                 )),
-                reduce<IOrderReduceArr, IOrderReduce>(
-                    (acc, items) => acc.push(items),
-                    new OrderAccumulator()
-                )
+                mergeMap(() => this.orderRepository.updateOrder({
+                    id: order.id,
+                    enduser: enduser,
+                    status
+                })),
+                map(() => ({ message: `Заказ ${order.orderId} обновлён` }))
             ))
         );
     }
