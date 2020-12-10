@@ -1,10 +1,16 @@
-import { Observable, from, of, throwError, forkJoin } from 'rxjs';
+import { Observable, from, throwError, forkJoin } from 'rxjs';
 import { switchMap, map, mergeMap, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+    Injectable,
+    BadRequestException,
+    NotFoundException,
+    InternalServerErrorException
+} from '@nestjs/common';
 import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';
 import { AdminDictionaries } from '@dictionary/entities/adminDicts.entity';
 import { AdminDictDto } from '@dictionary/dto/adminDict.dto';
+import { checkEntity } from '@shared/utils';
 
 @Injectable()
 export class DictionaryAdminService {
@@ -14,15 +20,6 @@ export class DictionaryAdminService {
         @InjectRepository(AdminDictionaries)
         private readonly adminDictsRepository: Repository<AdminDictionaries>
     ) {}
-
-    checkDictionary(dict: AdminDictionaries | undefined) {
-        return (dict
-            ? of(dict)
-            : throwError(
-                new HttpException('Словарь не существует', HttpStatus.BAD_REQUEST)
-            )
-        );
-    }
 
     getDictionary(dictionary: string) {
         return this.entityManager.query(`select * from ${dictionary}`);
@@ -38,43 +35,27 @@ export class DictionaryAdminService {
 
                     return acc;
                 }, {}))),
-
-
-                catchError((err) => throwError(
-                    new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-                ))
+                catchError((err) => throwError(new InternalServerErrorException(err.message)))
             );
     }
 
     createAdminDictionary(name: string) {
         return from(this.adminDictsRepository.findOne({ where: { name } })).pipe(
-            mergeMap((dictionary) => {
-                if (dictionary?.name) {
-                    return throwError(
-                        new HttpException('Словарь уже существует', HttpStatus.BAD_REQUEST)
-                    );
-                }
-
-                return from(this.adminDictsRepository.save(
-                    this.adminDictsRepository.create({ name })
-                ));
-            })
+            mergeMap((dictionary) => (dictionary?.name ? throwError(
+                new BadRequestException('Словарь уже существует')
+            ) : from(this.adminDictsRepository.save(
+                this.adminDictsRepository.create({ name })))
+            ))
         );
     }
 
     removeAdminDictionary(name: string) {
         return from(this.adminDictsRepository.findOne({ where: { name } })).pipe(
-            mergeMap((dict) => this.checkDictionary(dict)),
+            mergeMap(checkEntity('Словарь не существует')),
             switchMap((dictionary) => from(this.adminDictsRepository.remove(dictionary)).pipe(
                 map(() => ({ message: `Словарь ${name} удалён` }))
             )),
-
-            catchError(() => throwError(
-                new HttpException(
-                    `Словарь ${name} не найден`,
-                    HttpStatus.BAD_REQUEST
-                )
-            ))
+            catchError(() => throwError(new NotFoundException(`Словарь ${name} не найден`)))
         );
     }
 }

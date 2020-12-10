@@ -8,7 +8,7 @@ import { CreateOrderDto, UpdateOrderDto } from '@order/dto';
 import { OrderStatusService } from '@order/order-status/order-status.service';
 import { UsersService } from '@users/services/users.service';
 import { CompanyService } from '@company/company.service';
-import { GoodService } from '@good/services/good.service';
+import { GoodService } from '@good/good.service';
 import { PriceService } from '@good/price/price.service';
 import { DiscountService } from '@good/discount/discount.service';
 import { MarginService } from '@good/margin/margin.service';
@@ -89,7 +89,9 @@ export class OrderService implements IOrderService {
         );
     }
 
-    find(id: string, serial = true) { return this.orderRepository.findOrder(id, serial); }
+    find(id: string, serial = true) {
+        return this.orderRepository.findOrder(id, serial);
+    }
 
     update(dto: UpdateOrderDto, user: Observable<UserDto>) {
         return forkJoin([
@@ -131,7 +133,9 @@ export class OrderService implements IOrderService {
         );
     }
 
-    remove(id: string) { return this.orderRepository.deleteOrder(id); }
+    remove(id: string) {
+        return this.orderRepository.deleteOrder(id);
+    }
 
     list({ page, limit }: IPaginationOptions, user: Observable<UserDto>) {
         return from(user).pipe(

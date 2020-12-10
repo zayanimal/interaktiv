@@ -14,7 +14,7 @@ import { memoryStorage } from 'multer';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { Roles } from '@auth/decorators/roles.decorator';
-import { GoodService } from '@good/services/good.service';
+import { GoodService } from '@good/good.service';
 import { SearchPipe } from '@shared/pipes/search.pipe';
 
 @Controller('good')

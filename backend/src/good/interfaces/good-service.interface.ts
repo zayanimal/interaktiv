@@ -16,12 +16,6 @@ export interface IGoodService {
     cleanDublicates(): Observable<Good[]>;
 
     /**
-     * Проверить существование товара
-     * @param good
-     */
-    checkGoodExistance(good: Good | undefined): Observable<Good>
-
-    /**
      * Поиск товара по заданной подстроке
      * @param name
      */

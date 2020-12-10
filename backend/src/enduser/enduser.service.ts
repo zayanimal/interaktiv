@@ -1,5 +1,5 @@
-import { Observable, of, from, forkJoin, throwError } from 'rxjs';
-import { filter, skip, map, mergeMap, catchError } from 'rxjs/operators';
+import { of, from } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

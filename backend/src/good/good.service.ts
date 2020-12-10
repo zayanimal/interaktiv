@@ -1,23 +1,22 @@
-import { of, from, forkJoin, throwError, Observable } from 'rxjs';
+import { of, from, forkJoin, throwError } from 'rxjs';
 import { filter, take, skip, map, mergeMap, toArray, catchError } from 'rxjs/operators';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, Raw, EntityManager } from 'typeorm';
+import { Repository, Like, Raw } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { parse } from 'node-xlsx';
 import { Good } from '@good/entities/good.entity';
-import { GoodView } from '@good/entities/good-view.entity';
 import { IGoodService } from '@good/interfaces/good-service.interface';
 import { IDlinkRow } from '@good/interfaces/row.interface';
 import { PriceService } from '@good/price/price.service';
 import { DescriptionService } from '@good/description/description.service';
+import { checkEntity } from '@shared/utils';
 
 @Injectable()
 export class GoodService implements IGoodService {
     constructor(
         @InjectRepository(Good)
         private readonly goodRepository: Repository<Good>,
-        private readonly entityManager: EntityManager,
         private priceService: PriceService,
         private descriptionService: DescriptionService,
     ) {}
@@ -59,17 +58,7 @@ export class GoodService implements IGoodService {
         );
     }
 
-    checkGoodExistance(good: Good | undefined) {
-        return (good ? of(good) : throwError(
-            new BadRequestException('Товар не существует')
-        ));
-    }
-
     search(name: string) {
-        // return this.entityManager.find(GoodView, {
-        //     name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)
-        // });
-
         return from(this.goodRepository.find({
             name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)
         }));
@@ -77,7 +66,7 @@ export class GoodService implements IGoodService {
 
     searchId(id: string) {
         return from(this.goodRepository.findOne({ id })).pipe(
-            mergeMap((good) => this.checkGoodExistance(good))
+            mergeMap(checkEntity('Товар не существует'))
         );
     }
 }
