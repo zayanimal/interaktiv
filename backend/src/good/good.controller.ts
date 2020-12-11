@@ -4,7 +4,6 @@ import {
     UseGuards,
     UseInterceptors,
     UploadedFile,
-    BadRequestException,
     Body,
     Get,
     Param
@@ -29,7 +28,7 @@ export class GoodController {
         @UploadedFile() { buffer }: { buffer: ArrayBuffer },
         @Body() { vendor }: { vendor: string }
     ) {
-        return this.goodService.createFromFile(buffer, vendor);
+        return this.goodService.update(buffer, vendor);
     }
 
     @Get(':name')

@@ -11,11 +11,6 @@ export interface IGoodService {
     createFromFile(buffer: ArrayBuffer, vendor: string): Observable<IMessage>;
 
     /**
-     * Очистить дубли оставшиейся после загрузки прайслиста
-     */
-    cleanDublicates(): Observable<Good[]>;
-
-    /**
      * Поиск товара по заданной подстроке
      * @param name
      */

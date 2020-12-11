@@ -36,5 +36,11 @@ export class Good {
     margin!: Margin[];
 
     @OneToMany(() => Quantity, (quantity) => quantity.good)
-    quantity!: Quantity[]
+    quantity!: Quantity[];
+
+    setDublicate() {
+        this.name = `${this.name}_dub`;
+
+        return this;
+    }
 }

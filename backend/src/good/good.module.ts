@@ -6,13 +6,13 @@ import { PriceModule } from '@good/price/price.module';
 import { MarginModule } from '@good/margin/margin.module';
 import { DescriptionModule } from '@good/description/description.module';
 import { DiscountModule } from '@good/discount/discount.module';
-import { Good } from '@good/entities/good.entity';
+import { GoodRepository } from '@good/good.repository';
 import { QuantityModule } from './quantity/quantity.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Good
+      GoodRepository
     ]),
     PriceModule,
     MarginModule,
