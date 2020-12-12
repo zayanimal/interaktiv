@@ -51,14 +51,10 @@ export class GoodService {
                             catchError(() => from(this.goodRepository.save(createdGood.setDublicate())))
                         )),
                         mergeMap((newGood) => forkJoin([
-                            this.priceService.create(price, newGood),
-                            this.descriptionService.create({
-                                description,
-                                vendor,
-                                good: newGood
-                            })
-                        ])))
-                    )
+                            this.descriptionService.create({ description, vendor, good: newGood }),
+                            this.priceService.create(price, newGood)
+                        ]).pipe(mergeMap(([descr]) => this.goodRepository.setDescription(newGood, descr))))
+                    ))
                 ))
             )),
             last(),
@@ -70,14 +66,12 @@ export class GoodService {
         );
     }
 
-    list(options: IPaginationOptions) {
+    list() {
         return this.goodRepository.listGoods();
-        // return from(paginate(_, options)).pipe(
-        //     mergeMap(({ items, meta }) => forkJoin({
-        //         items: of(),
-        //         meta: of(meta)
-        //     })),
-        // );
+    }
+
+    update(good: Good) {
+
     }
 
     search(name: string) {

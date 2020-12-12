@@ -4,6 +4,7 @@ import {
     PrimaryGeneratedColumn,
     OneToMany,
     OneToOne,
+    JoinColumn
 } from 'typeorm';
 import { Price } from '@good/price/entities/price.entity';
 import { Discount } from '@good/discount/entities/discount.entity';
@@ -24,6 +25,7 @@ export class Good {
     name!: string;
 
     @OneToOne(() => Description)
+    @JoinColumn()
     description!: Description;
 
     @OneToMany(() => Price, (price) => price.good)
@@ -37,6 +39,12 @@ export class Good {
 
     @OneToMany(() => Quantity, (quantity) => quantity.good)
     quantity!: Quantity[];
+
+    setDescription(description: Description) {
+        this.description = description;
+
+        return this;
+    }
 
     setDublicate() {
         this.name = `${this.name}_dub`;

@@ -104,3 +104,18 @@ inner join discount d
 on d."goodId" = g.id
 inner join margin m
 on m."goodId" = g.id
+
+
+-- выбрать с прайсом близким к текущей дате
+select
+    distinct on(p."goodId")
+    g.id,
+    g.name,
+    p.cost,
+    p.date,
+    d.vendor
+from good g
+left join description d on d."goodId" = g.id
+left join price p on p."goodId" = g.id
+where p.date <= current_timestamp
+order by p."goodId", p.date desc
