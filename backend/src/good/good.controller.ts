@@ -6,7 +6,9 @@ import {
     UploadedFile,
     Body,
     Get,
-    Param
+    Param,
+    Query,
+    ParseIntPipe
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
@@ -28,7 +30,17 @@ export class GoodController {
         @UploadedFile() { buffer }: { buffer: ArrayBuffer },
         @Body() { vendor }: { vendor: string }
     ) {
-        return this.goodService.update(buffer, vendor);
+        return this.goodService.updatePricelist(buffer, vendor);
+    }
+
+    @Get()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    list(
+        @Query('page', ParseIntPipe) page: number,
+        @Query('limit', ParseIntPipe) limit: number,
+    ) {
+        return this.goodService.list({ page, limit });
     }
 
     @Get(':name')

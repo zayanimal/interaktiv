@@ -13,6 +13,17 @@ export class GoodRepository extends Repository<Good> {
         );
     }
 
+    listGoods() {
+        return this.query(`
+            select
+                g.id,
+                g.name,
+                d.vendor
+            from good g
+            left join description d on d."goodId" = g.id
+        `);
+    }
+
     search(name: string) {
         return from(this.find({
             name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)

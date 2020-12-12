@@ -14,7 +14,7 @@ export class OrderRepository extends Repository<Order> {
     findOrder(id: string, serial = true) {
         return from(this.createQueryBuilder('o')
             .select(['o', 'u.username', 'c.name', 'e.name', 's.status', 'g.id',
-                'g.name', 'q.quantity', 'm.margin', 'd.discount', 'p.cost' ])
+                'g.name', 'q.quantity', 'm.margin', 'd.discount', 'p.cost'])
             .leftJoin('o.good', 'g')
             .leftJoin('o.price', 'op')
             .leftJoin('g.price', 'p', 'p.id = op.id')
