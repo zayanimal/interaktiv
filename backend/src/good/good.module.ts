@@ -8,7 +8,6 @@ import { DescriptionModule } from '@good/description/description.module';
 import { DiscountModule } from '@good/discount/discount.module';
 import { GoodRepository } from '@good/good.repository';
 import { QuantityModule } from './quantity/quantity.module';
-import { FoundBuffer } from '@good/found-buffer.util';
 
 @Module({
   imports: [
@@ -21,7 +20,7 @@ import { FoundBuffer } from '@good/found-buffer.util';
     DiscountModule,
     QuantityModule
   ],
-  providers: [GoodService, FoundBuffer],
+  providers: [GoodService],
   controllers: [GoodController],
   exports: [GoodService]
 })

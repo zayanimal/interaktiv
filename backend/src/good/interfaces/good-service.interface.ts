@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
-import { Good } from '@good/entities/good.entity';
+import { Good, GoodView } from '@good/entities';
+import { GoodEntity } from '@good/serializers';
 import { IMessage } from '@shared/interfaces/message.interface';
 
 export interface IGoodService {
@@ -8,13 +9,20 @@ export interface IGoodService {
      * @param buffer файл прайслиста
      * @param vendor название вендора
      */
-    createFromFile(buffer: ArrayBuffer, vendor: string): Observable<IMessage>;
+    updatePricelist(buffer: ArrayBuffer, vendor: string): Observable<IMessage>;
+
+    /**
+     * Список позиций прайслиста
+     * Чистый кост
+     */
+    list(): Promise<GoodView[]>
 
     /**
      * Поиск товара по заданной подстроке
+     * Кост включает в себя базовую прибыль
      * @param name
      */
-    search(name: string): Observable<Good[]>
+    search(name: string): Observable<GoodEntity[]>
 
     /**
      * Поиск товара по id

@@ -1,31 +1,32 @@
 import { of, from, forkJoin } from 'rxjs';
 import { filter, last, tap, mapTo, switchMap, skip, map, mergeMap, catchError } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager, Raw } from 'typeorm';
 import { plainToClass } from 'class-transformer';
-import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { parse } from 'node-xlsx';
 import { GoodRepository } from '@good/good.repository';
-import { IGoodService } from '@good/interfaces/good-service.interface';
-import { IDlinkRow } from '@good/interfaces/row.interface';
+import { IGoodService, IDlinkRow } from '@good/interfaces';
 import { PriceService } from '@good/price/price.service';
 import { DescriptionService } from '@good/description/description.service';
-import { RowEntity } from '@good/serializers/price-row.serializer';
-import { Good } from '@good/entities/good.entity';
+import { RowEntity, GoodEntity } from '@good/serializers';
+import { Good, GoodView } from '@good/entities';
 import { FoundBuffer } from '@good/found-buffer.util';
 
 @Injectable()
-export class GoodService {
+export class GoodService implements IGoodService {
     constructor(
         @InjectRepository(GoodRepository)
         private readonly goodRepository: GoodRepository,
+        @InjectEntityManager()
+        private readonly manager: EntityManager,
         private priceService: PriceService,
-        private descriptionService: DescriptionService,
-        private foundBuffer: FoundBuffer
+        private descriptionService: DescriptionService
     ) {}
 
     updatePricelist(buffer: ArrayBuffer, vendor: string) {
         const [{ data }] = parse(buffer);
+        const foundBuffer = new FoundBuffer();
 
         return from(data as IDlinkRow[]).pipe(
             skip(2),
@@ -39,8 +40,8 @@ export class GoodService {
                 map((found) => found || row),
                 mergeMap((entity) => entity instanceof Good
                 ? of(entity).pipe(
-                    tap((value) => this.foundBuffer.push(value.name)),
-                    mergeMap((good) => (this.foundBuffer.check(good.name)
+                    tap((value) => foundBuffer.push(value.name)),
+                    mergeMap((good) => (foundBuffer.check(good.name)
                         ? of(null)
                         : this.priceService.create(row.price, good))
                     )
@@ -59,7 +60,7 @@ export class GoodService {
             )),
             last(),
             switchMap(() => {
-                this.foundBuffer.clear();
+                foundBuffer.clear();
                 return this.goodRepository.cleanDublicates()
             }),
             mapTo({ message: 'Прайслист обновлён'})
@@ -67,15 +68,13 @@ export class GoodService {
     }
 
     list() {
-        return this.goodRepository.listGoods();
-    }
-
-    update(good: Good) {
-
+        return this.manager.find(GoodView);
     }
 
     search(name: string) {
-        return this.goodRepository.search(name);
+        return from(this.manager.find(GoodView, {
+            name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)
+        })).pipe(map((good) => plainToClass(GoodEntity, good)));
     }
 
     searchId(id: string) {

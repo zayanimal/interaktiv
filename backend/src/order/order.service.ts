@@ -18,6 +18,7 @@ import { OrderRepository } from '@order/order.repository';
 import { IOrderService, IOrderReduce, IOrderReduceArr } from '@order/interfaces';
 import { OrderAccumulator } from '@order/utils/order.util';
 import { Order } from './entities/order.entity';
+import { GoodConfig } from '@/good.config';
 
 @Injectable()
 export class OrderService implements IOrderService {
@@ -60,19 +61,19 @@ export class OrderService implements IOrderService {
                             of(foundGood),
                             this.priceService.searchId(good.id),
                             this.marginService.create({
-                                margin: 1.13,
+                                margin: GoodConfig.MARGIN,
                                 good: foundGood,
                                 company: orderData.company,
                                 order
                             }),
                             this.discountService.create({
-                                discount: 1,
+                                discount: GoodConfig.DISCOUNT,
                                 good: foundGood,
                                 enduser: orderData.enduser,
                                 order
                             }),
                             this.quantityService.create({
-                                quantity: good?.quantity || 1,
+                                quantity: good?.quantity || GoodConfig.QUANTITY,
                                 good: foundGood,
                                 order
                             })
@@ -104,19 +105,19 @@ export class OrderService implements IOrderService {
                 mergeMap((good) => this.goodService.searchId(good.id).pipe(
                     mergeMap((foundGood) => forkJoin([
                         this.marginService.update({
-                            margin: good.margin || 1.13,
+                            margin: good.margin || GoodConfig.MARGIN,
                             good: foundGood,
                             order: (order as Order),
                             user: usr
                         }),
                         this.discountService.update({
-                            discount: good.discount || 1,
+                            discount: good.discount || GoodConfig.DISCOUNT,
                             good: foundGood,
                             order: (order as Order),
                             user: usr
                         }),
                         this.quantityService.update({
-                            quantity: good.quantity || 1,
+                            quantity: good.quantity || GoodConfig.QUANTITY,
                             good: foundGood,
                             order: (order as Order),
                             user: usr

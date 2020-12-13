@@ -1,3 +1,4 @@
+import { round } from 'lodash';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { groupSerial } from '@shared/utils/serializer.util';
 import { Company } from "@company/entities/company.entity";
@@ -15,7 +16,7 @@ export const DEFAULT_GROUP = groupSerial('default');
 export const FIND_GROUP = groupSerial('find').concat(DEFAULT_GROUP);
 
 const computeCost = (...values: number[]) => values.reduce(
-    (acc, num) => +(acc * num).toFixed(2), 1);
+    (acc, num) => round(acc * num, 2), 1);
 
 export class OrderEntity implements IOrderEntity {
     @Expose({ groups: ['default'] }) id!: string;
