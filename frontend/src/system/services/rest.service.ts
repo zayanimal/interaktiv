@@ -1,15 +1,24 @@
 import { ajax } from 'rxjs/ajax';
-import { tokenService } from '@system/services/token.service';
+import { TokenService, tokenService } from '@system/services/token.service';
 import { IHeader } from '@system/interfaces/header.interface';
+import { ApiUrl } from '@system/decorators';
 
-export class ApiService {
-    constructor(private readonly url: string) {}
+@ApiUrl('http://interaktiv:8000/')
+export class RestService {
+    url: string;
+
+    tokenService: TokenService;
+
+    constructor(token: TokenService) {
+        this.url = '';
+        this.tokenService = token;
+    }
 
     private getHeader(params: IHeader) {
         return {
             url: this.url + params.url,
             headers: {
-                Authorization: `Bearer ${tokenService.getToken()}`,
+                Authorization: `Bearer ${this.tokenService.getToken()}`,
                 'Content-Type': 'application/json',
             },
             method: params.method,
@@ -46,4 +55,4 @@ export class ApiService {
     }
 }
 
-export const apiService = new ApiService('http://interaktiv:8000/');
+export const restService = new RestService(tokenService);

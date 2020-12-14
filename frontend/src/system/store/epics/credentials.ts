@@ -12,7 +12,7 @@ import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
 import { tokenService } from '@system/services/token.service';
-import { apiService } from '@system/services/api.service';
+import { restService } from '@system/services/rest.service';
 
 /**
  * Проверка прав доступа и установка метаданных пользователя
@@ -24,7 +24,7 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
     switchMap(() => state$.pipe(
         first(),
         map(systemSelectors.credentials),
-        mergeMap((credentials) => apiService.post$('auth/login', credentials)),
+        mergeMap((credentials) => restService.post$('auth/login', credentials)),
         mergeMap((request) => {
             tokenService.setToken(request.response.accessToken);
 
@@ -43,7 +43,7 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
  */
 export const getCurrentUser: Epic = (action$) => action$.pipe(
     filter(isActionOf(systemActions.checkAuth)),
-    mergeMap(() => apiService.get$('auth/current')),
+    mergeMap(() => restService.get$('auth/current')),
     map((request) => systemActions.setAuth(request.response)),
     catchError(() => of(systemActions.clearUser())),
 );

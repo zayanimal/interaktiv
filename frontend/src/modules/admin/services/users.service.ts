@@ -1,8 +1,8 @@
-import { ApiService, apiService } from '@system/services/api.service';
+import { RestService, restService } from '@system/services/rest.service';
 import { ICreateUser, INewUser } from '@admin/interfaces/users.interface';
 
 class UserService {
-    constructor(private api: ApiService) {}
+    constructor(private api: RestService) {}
 
     getList$(page: number) {
         return this.api.get$(`users?page=${page}&limit=30`);
@@ -25,4 +25,4 @@ class UserService {
     }
 }
 
-export const userService = new UserService(apiService);
+export const userService = new UserService(restService);
