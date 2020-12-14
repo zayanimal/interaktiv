@@ -1,22 +1,22 @@
 import { requestActions } from '@customer/store/actions';
 import { createReducer, getType } from 'typesafe-actions';
 
-export interface priceTypes {
+export interface IPriceTypes {
     id: number;
     model: string;
     price: number;
 }
 
-export interface priceTypesCount extends priceTypes {
+export interface IPriceTypesCount extends IPriceTypes {
     count: number;
 }
 
 interface InitialState {
     rate: number;
     modelInput: string,
-    modelsData: priceTypes[];
-    modelsDataInOrder: priceTypesCount[];
-    modelsSelected: priceTypes[];
+    modelsData: IPriceTypes[];
+    modelsDataInOrder: IPriceTypesCount[];
+    modelsSelected: IPriceTypes[];
     showList: boolean;
 }
 
@@ -26,45 +26,45 @@ const initialState = {
     modelsData: [],
     modelsDataInOrder: [],
     modelsSelected: [],
-    showList: false
+    showList: false,
 };
 
 const request = createReducer<InitialState>(initialState, {
     [getType(requestActions.fetchPriceList.success)]: (state, { payload }) => ({
         ...state,
         rate: payload.rate.Valute.USD.Value,
-        modelsData: payload.price
+        modelsData: payload.price,
     }),
 
     [getType(requestActions.cleanPriceList)]: (state) => ({
         ...state,
         modelsData: [],
-        modelsSelected: []
+        modelsSelected: [],
     }),
 
     [getType(requestActions.setModelInputValue)]: (state, { payload }) => ({
         ...state,
-        modelInput: payload
+        modelInput: payload,
     }),
 
     [getType(requestActions.setSelectedModels)]: (state, { payload }) => ({
         ...state,
-        modelsSelected: payload
+        modelsSelected: payload,
     }),
 
     [getType(requestActions.putModelInOrder)]: (state, { payload }) => ({
         ...state,
-        modelsDataInOrder: [...state.modelsDataInOrder, payload]
+        modelsDataInOrder: [...state.modelsDataInOrder, payload],
     }),
 
     [getType(requestActions.deleteModelInOrder)]: (state, { payload }) => ({
         ...state,
-        modelsDataInOrder: payload
+        modelsDataInOrder: payload,
     }),
 
     [getType(requestActions.updateModelInOrder)]: (state, { payload }) => ({
         ...state,
-        modelsDataInOrder: payload
+        modelsDataInOrder: payload,
     }),
 
     [getType(requestActions.clearOrder)]: (state) => ({
@@ -72,13 +72,13 @@ const request = createReducer<InitialState>(initialState, {
         modelInput: '',
         modelsDataInOrder: [],
         modelsSelected: [],
-        showList: false
+        showList: false,
     }),
 
     [getType(requestActions.showList)]: (state, { payload }) => ({
         ...state,
-        showList: payload
-    })
+        showList: payload,
+    }),
 });
 
 export { request };

@@ -9,7 +9,7 @@ import {
     map,
     filter,
     switchMap,
-    debounceTime
+    debounceTime,
 } from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
 
@@ -20,9 +20,9 @@ export const filterRequestPriceList: Epic = (action$, state$) => action$.pipe(
         first(),
         map(requestSelectors.modelsData),
         map((models) => models.filter(
-            ({ model }) => (model.includes(payload.toUpperCase()) && payload !== '')
+            ({ model }) => (model.includes(payload.toUpperCase()) && payload !== ''),
         )),
-        map(requestActions.setSelectedModels)
+        map(requestActions.setSelectedModels),
     )),
-    catchError((mes: string) => of(systemActions.errorNotification(mes)))
+    catchError((mes: string) => of(systemActions.errorNotification(mes))),
 );

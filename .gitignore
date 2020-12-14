@@ -44,3 +44,6 @@ frontend/coverage
 
 # vscode
 .vscode
+
+# eslint
+.eslintcache

@@ -1,20 +1,20 @@
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 
-export const requestState = (state: rootStateTypes) => state.customer.request;
+export const requestState = (state: RootStateTypes) => state.customer.request;
 
-export const rate = (state: rootStateTypes) => requestState(state).rate;
+export const rate = (state: RootStateTypes) => requestState(state).rate;
 
-export const modelInputValue = (state: rootStateTypes) => requestState(state).modelInput;
+export const modelInputValue = (state: RootStateTypes) => requestState(state).modelInput;
 
-export const modelsData = (state: rootStateTypes) => requestState(state).modelsData;
+export const modelsData = (state: RootStateTypes) => requestState(state).modelsData;
 
-export const modelsDataInOrder = (state: rootStateTypes) => requestState(state).modelsDataInOrder;
+export const modelsDataInOrder = (state: RootStateTypes) => requestState(state).modelsDataInOrder;
 
-export const modelsSelected = (state: rootStateTypes) => requestState(state).modelsSelected;
+export const modelsSelected = (state: RootStateTypes) => requestState(state).modelsSelected;
 
-export const listState = (state: rootStateTypes) => requestState(state).showList;
+export const listState = (state: RootStateTypes) => requestState(state).showList;
 
-export const orderForSend = (state: rootStateTypes) => ({
+export const orderForSend = (state: RootStateTypes) => ({
     modelsDataInOrder: modelsDataInOrder(state),
-    rate: rate(state)
+    rate: rate(state),
 });

@@ -4,7 +4,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    Chip
+    Chip,
 } from '@material-ui/core';
 import { handleInput, handleSelect } from '@utils/handlers';
 import { cn, UserControlProps } from '@admin/containers/UserControl';

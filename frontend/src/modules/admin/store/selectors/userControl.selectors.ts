@@ -1,35 +1,35 @@
 import _ from 'lodash';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 
-const userAddState = (state: rootStateTypes) => state.admin.userControl;
+const userAddState = (state: RootStateTypes) => state.admin.userControl;
 
-export const username = (state: rootStateTypes) => userAddState(state).username;
+export const username = (state: RootStateTypes) => userAddState(state).username;
 
-export const password = (state: rootStateTypes) => userAddState(state).password;
+export const password = (state: RootStateTypes) => userAddState(state).password;
 
-export const role = (state: rootStateTypes) => userAddState(state).role;
+export const role = (state: RootStateTypes) => userAddState(state).role;
 
-export const permissions = (state: rootStateTypes) => userAddState(state).permissions;
+export const permissions = (state: RootStateTypes) => userAddState(state).permissions;
 
-export const email = (state: rootStateTypes) => userAddState(state).email;
+export const email = (state: RootStateTypes) => userAddState(state).email;
 
-export const phone = (state: rootStateTypes) => userAddState(state).phone;
+export const phone = (state: RootStateTypes) => userAddState(state).phone;
 
-export const position = (state: rootStateTypes) => userAddState(state).position;
+export const position = (state: RootStateTypes) => userAddState(state).position;
 
-export const newUser = (state: rootStateTypes) => _.pick(userAddState(state), [
+export const newUser = (state: RootStateTypes) => _.pick(userAddState(state), [
     'username',
     'password',
     'role',
-    'permissions'
+    'permissions',
 ]);
 
-export const newContacts = (state: rootStateTypes) => _.pick(userAddState(state), [
+export const newContacts = (state: RootStateTypes) => _.pick(userAddState(state), [
     'email',
     'phone',
-    'position'
+    'position',
 ]);
 
-export const validFields = (state: rootStateTypes) => !Object
+export const validFields = (state: RootStateTypes) => !Object
     .values(newUser(state))
     .every((value) => value.length > 0);

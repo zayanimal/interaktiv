@@ -3,5 +3,5 @@ import * as userControlSelectors from './userControl.selectors';
 
 export {
     userSelectors,
-    userControlSelectors
+    userControlSelectors,
 };

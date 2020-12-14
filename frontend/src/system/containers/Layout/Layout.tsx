@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { systemActions } from '@system/store/actions';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 import { Main } from '@system/components/Main';
 import { Auth } from '@system/containers/Auth';
 import { Notification } from '@system/components/Notification';
@@ -12,7 +12,7 @@ import './Layout.scss';
 
 const cn = bem('Layout');
 
-const mapStateToProps = (state: rootStateTypes) => ({
+const mapStateToProps = (state: RootStateTypes) => ({
     authFetched: systemSelectors.authFetched(state),
     isLoggedIn: systemSelectors.isLoggedIn(state),
     drawerState: systemSelectors.drawer(state),
@@ -21,7 +21,7 @@ const mapStateToProps = (state: rootStateTypes) => ({
     typeNotification: systemSelectors.typeNotification(state),
     messageNotification: systemSelectors.messageNotification(state),
     openNotification: systemSelectors.openNotification(state),
-    username: systemSelectors.username(state)
+    username: systemSelectors.username(state),
 });
 
 const mapDispatchToProps = {
@@ -30,7 +30,7 @@ const mapDispatchToProps = {
     getRouterItems: systemActions.getRouterItems,
     closeNotification: systemActions.closeNotification,
     checkAuth: systemActions.checkAuth,
-    onLogOut: systemActions.logOut
+    onLogOut: systemActions.logOut,
 };
 
 export type LayoutProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;

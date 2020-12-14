@@ -4,7 +4,7 @@ import {
     first,
     map,
     switchMap,
-    catchError
+    catchError,
 } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
@@ -21,7 +21,7 @@ export const getRouterItems: Epic = (action$, state$) => action$.pipe(
         map(systemActions.setRouterItems),
         catchError((err, caught) => merge(
             of(systemActions.errorNotification(err.message)),
-            caught
-        ))
-    ))
+            caught,
+        )),
+    )),
 );

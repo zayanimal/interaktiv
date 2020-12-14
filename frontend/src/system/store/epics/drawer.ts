@@ -3,7 +3,7 @@ import {
     filter,
     switchMap,
     mergeMap,
-    catchError
+    catchError,
 } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
@@ -14,13 +14,13 @@ export const getDrawerState: Epic = (action$) => action$.pipe(
     filter(isActionOf(systemActions.getDrawerState)),
     switchMap(() => of(
         systemActions.setDrawerState(
-            getLs<boolean>('drawerState')
-        )
+            getLs<boolean>('drawerState'),
+        ),
     )),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.response.message)),
-        caught
-    ))
+        caught,
+    )),
 );
 
 export const setDrawerState: Epic = (action$) => action$.pipe(
@@ -32,6 +32,6 @@ export const setDrawerState: Epic = (action$) => action$.pipe(
     }),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.response.message)),
-        caught
-    ))
+        caught,
+    )),
 );

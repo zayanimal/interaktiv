@@ -10,7 +10,6 @@ const AuthScreen: React.FC<AuthProps> = (props) => {
     const location: Location = useLocation();
     const { pathname } = location?.state?.from || { pathname: '/' };
 
-
     if (isLoggedIn) {
         return <Redirect to={{ pathname }} />;
     }

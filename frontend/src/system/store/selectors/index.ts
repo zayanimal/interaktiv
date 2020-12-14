@@ -3,5 +3,5 @@ import * as dictionarySelectors from './dictionary.selectors';
 
 export {
     systemSelectors,
-    dictionarySelectors
+    dictionarySelectors,
 };

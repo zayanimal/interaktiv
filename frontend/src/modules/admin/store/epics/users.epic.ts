@@ -4,7 +4,7 @@ import {
     first,
     map,
     mergeMap,
-    catchError
+    catchError,
 } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
@@ -23,8 +23,8 @@ export const getUsersList: Epic = (action$) => action$.pipe(
     map(({ response }) => usersActions.getUsersList.success(response)),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.message)),
-        caught
-    ))
+        caught,
+    )),
 );
 
 /**
@@ -36,19 +36,19 @@ export const sendNewUser: Epic = (action$, state$) => action$.pipe(
     filter(isActionOf(userControlActions.addNewUser)),
     mergeMap(() => state$.pipe(
         first(),
-        map(userControlSelectors.newUser)
+        map(userControlSelectors.newUser),
     )),
     mergeMap((user) => state$.pipe(
         first(),
         map(userControlSelectors.newContacts),
-        map((contacts) => Object.assign(user, { contacts }))
+        map((contacts) => Object.assign(user, { contacts })),
     )),
     mergeMap((payload) => userService.add$(payload)),
     map(({ response }) => systemActions.successNotification(response.message)),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.response.message)),
-        caught
-    ))
+        caught,
+    )),
 );
 
 /**
@@ -59,16 +59,16 @@ export const removeUser: Epic = (action$, state$) => action$.pipe(
     filter(isActionOf(usersActions.removeUser)),
     mergeMap(({ payload }) => forkJoin({
         response: userService.delete$(payload),
-        payload: of(payload)
+        payload: of(payload),
     })),
     mergeMap(({ payload }) => state$.pipe(
         first(),
         map(userSelectors.list),
         map((list) => list.filter(({ username }) => username !== payload)),
-        map(usersActions.setFiltredUsersList)
+        map(usersActions.setFiltredUsersList),
     )),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.response.message)),
-        caught
-    ))
+        caught,
+    )),
 );

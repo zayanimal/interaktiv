@@ -14,10 +14,10 @@ const icons = new Map([
     ['Ballot', Ballot],
     ['AddBox', AddBox],
     ['AccountBox', AccountBox],
-    ['People', People]
+    ['People', People],
 ]);
 
 export const DrawerIcon = (icon: string) => createElement(
     (icons.get(icon) || 'div'),
-    { className: cn('icon') }
+    { className: cn('icon') },
 );

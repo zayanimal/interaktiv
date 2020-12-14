@@ -27,7 +27,6 @@ const AuthForm: React.FC<AuthProps> = (props) => {
         };
     }, [getCredentials]);
 
-
     const onChangeLogin = (event: ChangeEvent<HTMLInputElement>) => {
         setLogin(event.target.value);
     };

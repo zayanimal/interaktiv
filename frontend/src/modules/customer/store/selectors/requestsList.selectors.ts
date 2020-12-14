@@ -1,4 +1,4 @@
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 
-export const requestsListState = (state: rootStateTypes) => state.customer.requestsList;
-export const requests = (state: rootStateTypes) => requestsListState(state).requests;
+export const requestsListState = (state: RootStateTypes) => state.customer.requestsList;
+export const requests = (state: RootStateTypes) => requestsListState(state).requests;

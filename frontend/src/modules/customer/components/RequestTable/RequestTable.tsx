@@ -1,25 +1,24 @@
-import { priceTypesCount } from '@customer/store/reducers/request.reducer';
+import { IPriceTypesCount } from '@customer/store/reducers/request.reducer';
 import { Button, Input } from '@material-ui/core';
 import { DeleteOutline } from '@material-ui/icons';
 import { bem, numToRub, numToUsd } from '@utils/formatters';
 import MaterialTable from 'material-table';
-import clone from 'ramda/src/clone';
+import { clone } from 'lodash';
 import React, { ChangeEvent, useMemo } from 'react';
 import './RequestTable.scss';
-
 
 const cn = bem('RequestTable');
 
 interface Props {
     rate: number;
-    data: priceTypesCount[];
+    data: IPriceTypesCount[];
     onDelete: (e: string) => void;
-    onUpdate: (v: priceTypesCount[]) => void;
+    onUpdate: (v: IPriceTypesCount[]) => void;
 }
 
 const RequestTable: React.SFC<Props> = (props) => {
     const {
-        data, rate, onDelete, onUpdate
+        data, rate, onDelete, onUpdate,
     } = props;
     /** Material-table мутирует объекты расширяя их полем dataTable */
     const immutableData = useMemo(() => clone(data), [data]);
@@ -34,7 +33,7 @@ const RequestTable: React.SFC<Props> = (props) => {
         return [
             {
                 field: 'model',
-                title: 'Модель'
+                title: 'Модель',
             },
             {
                 field: 'count',
@@ -46,17 +45,17 @@ const RequestTable: React.SFC<Props> = (props) => {
                         value={count}
                         onChange={(e) => { countHandler({ e, id }); }}
                     />
-                )
+                ),
             },
             {
                 field: 'price',
                 title: 'Цена $',
-                render: ({ price }: { price: number; }) => numToUsd(price)
+                render: ({ price }: { price: number; }) => numToUsd(price),
             },
             {
                 field: 'price',
                 title: 'Цена р.',
-                render: ({ price }: { price: number; }) => numToRub(price * rate)
+                render: ({ price }: { price: number; }) => numToRub(price * rate),
             },
             {
                 title: 'Действие',
@@ -69,7 +68,7 @@ const RequestTable: React.SFC<Props> = (props) => {
                     >
                         <DeleteOutline />
                     </Button>
-                )
+                ),
             },
         ];
     },
@@ -87,12 +86,12 @@ const RequestTable: React.SFC<Props> = (props) => {
                     showFirstLastPageButtons: false,
                     showTitle: false,
                     toolbar: false,
-                    paging: false
+                    paging: false,
                 }}
                 localization={{
                     body: {
-                        emptyDataSourceMessage: 'нет выбранных моделей'
-                    }
+                        emptyDataSourceMessage: 'нет выбранных моделей',
+                    },
                 }}
             />
         </div>

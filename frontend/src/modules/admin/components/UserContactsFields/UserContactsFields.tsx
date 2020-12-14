@@ -10,7 +10,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
         phone,
         setPhone,
         position,
-        setPosition
+        setPosition,
     } = props;
 
     return (

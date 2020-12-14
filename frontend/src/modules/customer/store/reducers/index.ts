@@ -6,5 +6,5 @@ import { requestsList } from './requestsList.reducer';
 export const customerReducer = combineReducers({
     request,
     requestDrawer,
-    requestsList
+    requestsList,
 });

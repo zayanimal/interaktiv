@@ -3,5 +3,5 @@ import * as dictionaryActions from '@system/store/actions/dictionary.actions';
 
 export {
     systemActions,
-    dictionaryActions
+    dictionaryActions,
 };

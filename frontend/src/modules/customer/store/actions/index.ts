@@ -5,5 +5,5 @@ import * as requestsListActions from './requestsList.actions';
 export {
     requestActions,
     requestDrawerActions,
-    requestsListActions
+    requestsListActions,
 };

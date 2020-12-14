@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 import { systemActions, dictionaryActions } from '@system/store/actions';
 import { userControlActions, usersActions } from '@admin/store/actions';
 import { userSelectors, userControlSelectors } from '@admin/store/selectors';
@@ -14,7 +14,7 @@ import './UserControl.scss';
 
 export const cn = bem('UserControl');
 
-const mapStateToProps = (state: rootStateTypes) => ({
+const mapStateToProps = (state: RootStateTypes) => ({
     dicts: dictionarySelectors.dictionaries(state),
     userEditMode: userSelectors.userEditMode(state),
     userEditName: userSelectors.userEditName(state),
@@ -25,7 +25,7 @@ const mapStateToProps = (state: rootStateTypes) => ({
     email: userControlSelectors.email(state),
     phone: userControlSelectors.phone(state),
     position: userControlSelectors.position(state),
-    validFields: userControlSelectors.validFields(state)
+    validFields: userControlSelectors.validFields(state),
 });
 
 const mapDispatchToProps = {
@@ -41,7 +41,7 @@ const mapDispatchToProps = {
     setPhone: userControlActions.setPhone,
     setPosition: userControlActions.setPosition,
     addNewUser: userControlActions.addNewUser,
-    clearUserData: userControlActions.clearUserData
+    clearUserData: userControlActions.clearUserData,
 };
 
 export type UserControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -55,7 +55,7 @@ const UserControl: React.FC<UserControlProps> = (props) => {
         clearDictionary,
         validFields,
         addNewUser,
-        clearUserData
+        clearUserData,
     } = props;
 
     const { path } = useRouteMatch();
@@ -78,7 +78,7 @@ const UserControl: React.FC<UserControlProps> = (props) => {
         clearDictionary,
         setHeaderTitle,
         path,
-        setUserEditMode
+        setUserEditMode,
     ]);
 
     const onCancel = () => {

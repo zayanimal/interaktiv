@@ -7,7 +7,7 @@ import {
     catchError,
     filter,
     map,
-    switchMap
+    switchMap,
 } from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
 import price from './price.json';
@@ -25,11 +25,11 @@ export const getRequestPriceListData: Epic = (action$) => action$.pipe(
             catchError((err) => {
                 systemActions.errorNotification(err);
                 return of({ error: true, message: err.message });
-            })
+            }),
         ),
-        price: of(price)
+        price: of(price),
     }).pipe(
         map(requestActions.fetchPriceList.success),
-        catchError((mes: string) => of(requestActions.fetchPriceList.failure(mes)))
-    ))
+        catchError((mes: string) => of(requestActions.fetchPriceList.failure(mes))),
+    )),
 );

@@ -9,14 +9,14 @@ interface InitialState {
 
 const initialState = {
     roles: [],
-    permissions: []
+    permissions: [],
 };
 
 export const dictionaryReducer = createReducer<InitialState>(initialState, {
     [getType(dictionaryActions.setDictionary)]: (state, { payload }) => ({
         ...state,
-        ...payload
+        ...payload,
     }),
 
-    [getType(dictionaryActions.clearDictionary)]: () => ({ ...initialState })
+    [getType(dictionaryActions.clearDictionary)]: () => ({ ...initialState }),
 });

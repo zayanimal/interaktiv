@@ -16,7 +16,7 @@ const Header: React.FC<LayoutProps> = (props) => {
         headerTitle = '',
         username = '',
         setDrawerState = () => {},
-        onLogOut = () => {}
+        onLogOut = () => {},
     } = props;
 
     return (

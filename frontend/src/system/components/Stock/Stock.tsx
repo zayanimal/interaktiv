@@ -1,19 +1,19 @@
 import React, { Fragment } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone';
 import {
-    Button
+    Button,
 } from '@material-ui/core';
 
 const Stock: React.FC = () => (
-    <Fragment>
+    <>
         <p>В этом разделе вы можете закачать Excel файл с моделями и их наличием</p>
-        <br/>
+        <br />
         <a href="/">Образец файла</a>
-        <br/>
-        <DropzoneArea dropzoneText="Перетащите файл с моделями и их наличием"/>
-        <br/>
+        <br />
+        <DropzoneArea dropzoneText="Перетащите файл с моделями и их наличием" />
+        <br />
         <Button variant="contained" color="secondary">Отправить на сервер</Button>
-    </Fragment>
+    </>
 );
 
 export { Stock };

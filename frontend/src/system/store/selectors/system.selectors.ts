@@ -1,31 +1,31 @@
 import _ from 'lodash';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 
-export const systemState = (state: rootStateTypes) => state.system.system;
+export const systemState = (state: RootStateTypes) => state.system.system;
 
-export const drawer = (state: rootStateTypes) => systemState(state).drawer;
+export const drawer = (state: RootStateTypes) => systemState(state).drawer;
 
-export const routerItems = (state: rootStateTypes) => systemState(state).routerItems;
+export const routerItems = (state: RootStateTypes) => systemState(state).routerItems;
 
-export const headerTitle = (state: rootStateTypes) => systemState(state).headerTitle;
+export const headerTitle = (state: RootStateTypes) => systemState(state).headerTitle;
 
-export const openNotification = (state: rootStateTypes) => systemState(state).openNotification;
+export const openNotification = (state: RootStateTypes) => systemState(state).openNotification;
 
-export const typeNotification = (state: rootStateTypes) => systemState(state).typeNotification;
+export const typeNotification = (state: RootStateTypes) => systemState(state).typeNotification;
 
-export const messageNotification = (state: rootStateTypes) => systemState(state)
+export const messageNotification = (state: RootStateTypes) => systemState(state)
     .messageNotification;
 
-export const username = (state: rootStateTypes) => systemState(state).username;
+export const username = (state: RootStateTypes) => systemState(state).username;
 
-export const password = (state: rootStateTypes) => systemState(state).password;
+export const password = (state: RootStateTypes) => systemState(state).password;
 
-export const role = (state: rootStateTypes) => systemState(state).role;
+export const role = (state: RootStateTypes) => systemState(state).role;
 
-export const credentials = (state: rootStateTypes) => _.pick(systemState(state), ['username', 'password']);
+export const credentials = (state: RootStateTypes) => _.pick(systemState(state), ['username', 'password']);
 
-export const authFetched = (state: rootStateTypes) => systemState(state).authFetched;
+export const authFetched = (state: RootStateTypes) => systemState(state).authFetched;
 
-export const isLoggedIn = (state: rootStateTypes) => systemState(state).isLoggedIn;
+export const isLoggedIn = (state: RootStateTypes) => systemState(state).isLoggedIn;
 
-export const permissions = (state: rootStateTypes) => systemState(state).permissions;
+export const permissions = (state: RootStateTypes) => systemState(state).permissions;

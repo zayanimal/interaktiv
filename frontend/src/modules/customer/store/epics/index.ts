@@ -9,5 +9,5 @@ export const customerEpic: Epic = combineEpics(
     sendRequestNewProject,
     filterRequestPriceList,
     clearRequestDrawer,
-    getRequestsList
+    getRequestsList,
 );

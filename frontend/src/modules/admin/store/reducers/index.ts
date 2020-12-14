@@ -4,5 +4,5 @@ import { userControl } from '@admin/store/reducers/userControl.reducer';
 
 export const adminReducer = combineReducers({
     users,
-    userControl
+    userControl,
 });

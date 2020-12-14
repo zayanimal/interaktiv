@@ -13,7 +13,7 @@ const Drawer: React.FC<LayoutProps> = (props) => {
         drawerState,
         authFetched,
         routerItems,
-        getRouterItems
+        getRouterItems,
     } = props;
 
     const [hide, setHide] = useState(drawerState);
@@ -32,7 +32,7 @@ const Drawer: React.FC<LayoutProps> = (props) => {
         drawerState,
         authFetched,
         routerItems,
-        getRouterItems
+        getRouterItems,
     ]);
 
     return (

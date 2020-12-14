@@ -5,5 +5,5 @@ import * as requestsListSelectors from './requestsList.selectors';
 export {
     requestSelectors,
     requestDrawerSelectors,
-    requestsListSelectors
+    requestsListSelectors,
 };

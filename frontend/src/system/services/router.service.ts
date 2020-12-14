@@ -7,8 +7,8 @@ class RouterService {
     getRouterItems(keys: string[]): IRouterItem[] {
         return this.routeItems.filter(
             (item) => item.key === keys.find(
-                (key: string) => item.key === key
-            )
+                (key: string) => item.key === key,
+            ),
         );
     }
 }

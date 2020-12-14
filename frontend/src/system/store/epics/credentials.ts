@@ -5,7 +5,7 @@ import {
     map,
     switchMap,
     mergeMap,
-    catchError
+    catchError,
 } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
@@ -32,9 +32,9 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
         }),
         catchError((err, caught) => merge(
             of(systemActions.errorNotification(err.response.message)),
-            caught
-        ))
-    ))
+            caught,
+        )),
+    )),
 );
 
 /**
@@ -45,7 +45,7 @@ export const getCurrentUser: Epic = (action$) => action$.pipe(
     filter(isActionOf(systemActions.checkAuth)),
     mergeMap(() => apiService.get$('auth/current')),
     map((request) => systemActions.setAuth(request.response)),
-    catchError(() => of(systemActions.clearUser()))
+    catchError(() => of(systemActions.clearUser())),
 );
 
 /**
@@ -58,5 +58,5 @@ export const logout: Epic = (action$) => action$.pipe(
         tokenService.removeToken();
 
         return systemActions.clearUser();
-    })
+    }),
 );

@@ -5,7 +5,7 @@ class RouteComponent {
     constructor(
         private RequestsList: FC,
         private Request: FC,
-        private Users: FC
+        private Users: FC,
     ) {}
 
     create(name: LazyComponents) {
@@ -16,5 +16,5 @@ class RouteComponent {
 export const routeComponent = new RouteComponent(
     lazy(() => import('@customer/containers/RequestsList')),
     lazy(() => import('@customer/containers/Request')),
-    lazy(() => import('@admin/containers/Users'))
+    lazy(() => import('@admin/containers/Users')),
 );

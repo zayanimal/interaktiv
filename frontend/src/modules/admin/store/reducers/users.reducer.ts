@@ -16,31 +16,31 @@ const initialState = {
         itemCount: 0,
         itemsPerPage: 0,
         totalItems: 0,
-        totalPages: 0
+        totalPages: 0,
     },
     userEditMode: false,
-    userEditName: ''
+    userEditName: '',
 };
 
 export const users = createReducer<InitialState>(initialState, {
     [getType(usersActions.getUsersList.success)]: (state, { payload }) => ({
         ...state,
         list: [...state.list, ...payload.items],
-        meta: payload.meta
+        meta: payload.meta,
     }),
 
     [getType(usersActions.setFiltredUsersList)]: (state, { payload }) => ({
         ...state,
-        list: payload
+        list: payload,
     }),
 
     [getType(usersActions.setUserEditMode)]: (state, { payload }) => ({
         ...state,
-        userEditMode: payload
+        userEditMode: payload,
     }),
 
     [getType(usersActions.setUserEditName)]: (state, { payload }) => ({
         ...state,
-        userEditName: payload
+        userEditName: payload,
     }),
 });

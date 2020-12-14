@@ -25,11 +25,11 @@ const Modal: React.FC<Props> = (props) => {
         close = () => {},
         action: {
             actionName = 'Сохранить',
-            actionCall = () => {}
+            actionCall = () => {},
         },
         title = '',
         children,
-        footer
+        footer,
     } = props;
 
     return (open ? (

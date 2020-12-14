@@ -1,4 +1,4 @@
-import { priceTypes } from '@customer/store/reducers/request.reducer';
+import { IPriceTypes } from '@customer/store/reducers/request.reducer';
 import { TextField } from '@material-ui/core';
 import { bem } from '@utils/formatters';
 import React, { ChangeEvent, MouseEvent, useEffect } from 'react';
@@ -9,7 +9,7 @@ const cn = bem('RequestPartnumbers');
 
 interface Props {
     value: string,
-    selected: priceTypes[];
+    selected: IPriceTypes[];
     listState: boolean;
     setValue: (value: string) => void,
     filterModels: (value: string) => void;
@@ -25,7 +25,7 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
         onShowList,
         onPick,
         selected,
-        filterModels
+        filterModels,
     } = props;
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
     }, [
         selected,
         onShowList,
-        filterModels
+        filterModels,
     ]);
 
     const listHandler = (e: MouseEvent) => {
@@ -59,7 +59,7 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
         const {
             key,
             index,
-            style
+            style,
         } = props2;
 
         return (
@@ -100,11 +100,11 @@ const RequestPartnumbers: React.SFC<Props> = (props) => {
                         rowRenderer={rowRenderer}
                         containerStyle={{
                             width: '100%',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
                         }}
                         style={{
                             width: '100%',
-                            outline: 'none'
+                            outline: 'none',
                         }}
                     />
                 )}

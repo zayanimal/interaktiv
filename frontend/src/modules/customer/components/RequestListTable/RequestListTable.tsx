@@ -20,7 +20,7 @@ const stringDateReverse = (str: string) => str.split('.').reverse().join('.');
 const waitingTime = (date: string) => formatDistance(
     new Date(),
     new Date(stringDateReverse(date)),
-    { locale: Ru }
+    { locale: Ru },
 );
 
 const RequestListTable: React.FC<Props> = (props) => {
@@ -38,18 +38,18 @@ const RequestListTable: React.FC<Props> = (props) => {
         {
             field: 'pending',
             title: 'В ожидании',
-            render: ({ creationDate }: CreationDate) => waitingTime(creationDate)
+            render: ({ creationDate }: CreationDate) => waitingTime(creationDate),
         },
         {
             field: 'endUser',
-            title: 'Заказчик'
+            title: 'Заказчик',
         },
         {
             field: 'status',
             title: 'Статус',
             render: ({ status }: Status) => (
                 <Chip color="primary" label={status} />
-            )
+            ),
         },
         {
             title: 'Действие',
@@ -61,7 +61,7 @@ const RequestListTable: React.FC<Props> = (props) => {
                 >
                     Перейти
                 </Button>
-            )
+            ),
         },
     ],
     []);
@@ -78,12 +78,12 @@ const RequestListTable: React.FC<Props> = (props) => {
                     showFirstLastPageButtons: false,
                     showTitle: false,
                     toolbar: false,
-                    paging: false
+                    paging: false,
                 }}
                 localization={{
                     body: {
-                        emptyDataSourceMessage: 'у вас нет проектов'
-                    }
+                        emptyDataSourceMessage: 'у вас нет проектов',
+                    },
                 }}
             />
         </div>

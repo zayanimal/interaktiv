@@ -1,26 +1,26 @@
-import { rootStateTypes } from '@system/store/roots';
-import pick from 'ramda/src/pick';
+import { RootStateTypes } from '@system/store/roots';
+import { pick } from 'lodash';
 
-export const requestDrawerState = (state: rootStateTypes) => state.customer.requestDrawer;
+export const requestDrawerState = (state: RootStateTypes) => state.customer.requestDrawer;
 
-export const openDrawer = (state: rootStateTypes) => requestDrawerState(state).openDrawer;
+export const openDrawer = (state: RootStateTypes) => requestDrawerState(state).openDrawer;
 
-export const customer = (state: rootStateTypes) => requestDrawerState(state).customer;
-export const customerError = (state: rootStateTypes) => requestDrawerState(state).customerError;
+export const customer = (state: RootStateTypes) => requestDrawerState(state).customer;
+export const customerError = (state: RootStateTypes) => requestDrawerState(state).customerError;
 
-export const city = (state: rootStateTypes) => requestDrawerState(state).city;
-export const cityError = (state: rootStateTypes) => requestDrawerState(state).cityError;
+export const city = (state: RootStateTypes) => requestDrawerState(state).city;
+export const cityError = (state: RootStateTypes) => requestDrawerState(state).cityError;
 
-export const date = (state: rootStateTypes) => requestDrawerState(state).date;
+export const date = (state: RootStateTypes) => requestDrawerState(state).date;
 
-export const comment = (state: rootStateTypes) => requestDrawerState(state).comment;
-export const commentError = (state: rootStateTypes) => requestDrawerState(state).commentError;
+export const comment = (state: RootStateTypes) => requestDrawerState(state).comment;
+export const commentError = (state: RootStateTypes) => requestDrawerState(state).commentError;
 
-export const validation = (state: rootStateTypes) => requestDrawerState(state).validation;
+export const validation = (state: RootStateTypes) => requestDrawerState(state).validation;
 
-export const endUserData = (state: rootStateTypes) => pick([
+export const endUserData = (state: RootStateTypes) => pick(requestDrawerState(state), [
     'customer',
     'city',
     'date',
-    'comment'
-], requestDrawerState(state));
+    'comment',
+]);

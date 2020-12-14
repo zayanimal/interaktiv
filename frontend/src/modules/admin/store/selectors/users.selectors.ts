@@ -1,11 +1,11 @@
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 
-const usersState = (state: rootStateTypes) => state.admin.users;
+const usersState = (state: RootStateTypes) => state.admin.users;
 
-export const list = (state: rootStateTypes) => usersState(state).list;
+export const list = (state: RootStateTypes) => usersState(state).list;
 
-export const meta = (state: rootStateTypes) => usersState(state).meta;
+export const meta = (state: RootStateTypes) => usersState(state).meta;
 
-export const userEditMode = (state: rootStateTypes) => usersState(state).userEditMode;
+export const userEditMode = (state: RootStateTypes) => usersState(state).userEditMode;
 
-export const userEditName = (state: rootStateTypes) => usersState(state).userEditName;
+export const userEditName = (state: RootStateTypes) => usersState(state).userEditName;

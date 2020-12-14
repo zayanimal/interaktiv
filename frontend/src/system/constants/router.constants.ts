@@ -13,14 +13,14 @@ export const ROUTE_ITEMS: IRouterItem[] = [
         path: '/my-orders',
         name: 'Мои запросы',
         icon: 'Ballot',
-        component: 'RequestsList'
+        component: 'RequestsList',
     },
     {
         key: 'NEW_ORDER',
         path: '/new-order',
         name: 'Новый запрос',
         icon: 'AddBox',
-        component: 'Request'
+        component: 'Request',
     },
     // {
     //     key: 'PERSONAL',
@@ -34,6 +34,6 @@ export const ROUTE_ITEMS: IRouterItem[] = [
         path: '/users',
         name: 'Пользователи',
         icon: 'People',
-        component: 'Users'
-    }
+        component: 'Users',
+    },
 ];

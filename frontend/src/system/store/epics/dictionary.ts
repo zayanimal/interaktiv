@@ -4,14 +4,13 @@ import {
     first,
     map,
     mergeMap,
-    catchError
+    catchError,
 } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions, dictionaryActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
 import { dictionaryService } from '@system/services/dictionary.service';
-
 
 /**
  * Получить необходимый словарь
@@ -24,14 +23,14 @@ export const getDictionary: Epic = (action$, state$) => action$.pipe(
         first(),
         map((state) => ({
             type: systemSelectors.role(state),
-            names: payload
-        }))
+            names: payload,
+        })),
     )),
     mergeMap((req) => dictionaryService.get$(req)),
     map(({ response }) => response),
     map(dictionaryActions.setDictionary),
     catchError((err, caught) => merge(
         of(systemActions.errorNotification(err.response.message)),
-        caught
-    ))
+        caught,
+    )),
 );

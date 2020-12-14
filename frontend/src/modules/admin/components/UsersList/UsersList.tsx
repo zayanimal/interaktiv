@@ -18,7 +18,7 @@ const UsersList: React.FC<UsersProps> = (props) => {
         meta,
         removeUser,
         getList,
-        setUserEditName
+        setUserEditName,
     } = props;
 
     const { path } = useRouteMatch();
@@ -46,23 +46,23 @@ const UsersList: React.FC<UsersProps> = (props) => {
                             Удалить
                         </MenuItem>
                     </TableRowButton>
-                )
+                ),
             },
             {
                 dataKey: 'username',
                 label: 'Имя пользователя',
-                width: 300
+                width: 300,
             },
             {
                 dataKey: 'role',
                 label: 'Роль',
-                width: 250
+                width: 250,
             },
             {
                 dataKey: 'time',
                 label: 'Дата создания',
                 width: 300,
-                cellRenderer: ({ cellData }) => new Date(cellData).toLocaleDateString('ru')
+                cellRenderer: ({ cellData }) => new Date(cellData).toLocaleDateString('ru'),
             },
             {
                 dataKey: 'isActive',
@@ -72,14 +72,14 @@ const UsersList: React.FC<UsersProps> = (props) => {
                     <Chip label="Активен" size="small" color="primary" />
                 ) : (
                     <Chip label="Не активен" size="small" />
-                ))
-            }
+                )),
+            },
         ];
     }, [
         removeUser,
         path,
         history,
-        setUserEditName
+        setUserEditName,
     ]);
 
     return (

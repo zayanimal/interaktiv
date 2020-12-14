@@ -3,26 +3,26 @@ import {
     Switch,
     Route,
     useLocation,
-    useRouteMatch
+    useRouteMatch,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 import { systemActions } from '@system/store/actions';
 import { usersActions } from '@admin/store/actions';
 import { userSelectors } from '@admin/store/selectors';
 import { UsersList } from '@admin/components/UsersList';
 import { UserControl } from '@admin/containers/UserControl';
 
-const mapStateToProps = (state: rootStateTypes) => ({
+const mapStateToProps = (state: RootStateTypes) => ({
     list: userSelectors.list(state),
-    meta: userSelectors.meta(state)
+    meta: userSelectors.meta(state),
 });
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
     getList: usersActions.getUsersList.request,
     removeUser: usersActions.removeUser,
-    setUserEditName: usersActions.setUserEditName
+    setUserEditName: usersActions.setUserEditName,
 };
 
 export type UsersProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -42,7 +42,7 @@ const Users: React.FC<UsersProps> = (props) => {
         getList,
         setHeaderTitle,
         pathname,
-        meta
+        meta,
     ]);
 
     return (

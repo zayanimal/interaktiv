@@ -9,5 +9,5 @@ export const validation = {
 
     translit(value: string) {
         return /[a-z]/gmi.test(value);
-    }
+    },
 };

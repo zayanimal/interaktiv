@@ -4,5 +4,5 @@ import { getUsersList, sendNewUser, removeUser } from '@admin/store/epics/users.
 export const adminEpic: Epic = combineEpics(
     getUsersList,
     sendNewUser,
-    removeUser
+    removeUser,
 );

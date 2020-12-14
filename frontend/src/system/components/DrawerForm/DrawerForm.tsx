@@ -12,7 +12,7 @@ const transitionStyles = {
     entered: { transform: 'translateX(0)' },
     exiting: { transform: 'translateX(100%)' },
     exited: { transform: 'translateX(100%)' },
-    unmounted: { transform: 'translateX(100%)' }
+    unmounted: { transform: 'translateX(100%)' },
 };
 
 interface Props {
@@ -24,7 +24,7 @@ interface Props {
 
 const DrawerForm: React.FC<Props> = (props) => {
     const {
-        label, width, toggle, onClose, children
+        label, width, toggle, onClose, children,
     } = props;
 
     const drawer = useRef<HTMLHeadingElement>(null);
@@ -84,7 +84,7 @@ const DrawerForm: React.FC<Props> = (props) => {
 
 DrawerForm.defaultProps = {
     width: '450',
-    onClose: () => {}
+    onClose: () => {},
 };
 
 export { DrawerForm };

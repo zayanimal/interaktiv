@@ -3,7 +3,7 @@ import { requestDrawerSelectors } from '@customer/store/selectors';
 import TextField from '@material-ui/core/TextField';
 // import { KeyboardDatePicker } from '@material-ui/pickers';
 import { DrawerForm } from '@system/components/DrawerForm';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 import { bem } from '@utils/formatters';
 import { validation } from '@utils/validators';
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ import './RequestDrawer.scss';
 
 const cn = bem('RequestDrawer');
 
-const mapStateToProps = (state: rootStateTypes) => ({
+const mapStateToProps = (state: RootStateTypes) => ({
     open: requestDrawerSelectors.openDrawer(state),
     customer: requestDrawerSelectors.customer(state),
     customerError: requestDrawerSelectors.customerError(state),
@@ -20,7 +20,7 @@ const mapStateToProps = (state: rootStateTypes) => ({
     cityError: requestDrawerSelectors.cityError(state),
     date: requestDrawerSelectors.date(state),
     comment: requestDrawerSelectors.comment(state),
-    commentError: requestDrawerSelectors.commentError(state)
+    commentError: requestDrawerSelectors.commentError(state),
 });
 
 const mapDispatchToProps = {
@@ -32,7 +32,7 @@ const mapDispatchToProps = {
     setDate: requestDrawerActions.setDate,
     setComment: requestDrawerActions.setComment,
     setCommentError: requestDrawerActions.setCommentError,
-    setValid: requestDrawerActions.setValid
+    setValid: requestDrawerActions.setValid,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -60,7 +60,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
         commentError,
         setCommentError,
 
-        setValid
+        setValid,
     } = props;
 
     const [custHelpText, setCustHelpText] = useState('Обязательное поле');
@@ -77,7 +77,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
         customerError,
         cityError,
         commentError,
-        setValid
+        setValid,
     ]);
 
     const customerHandler = (e: ChangeEvent) => {

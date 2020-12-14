@@ -18,44 +18,44 @@ const initialState = {
     permissions: [],
     email: '',
     phone: '',
-    position: ''
+    position: '',
 };
 
 export const userControl = createReducer<InitialState>(initialState, {
     [getType(userControlActions.setUsername)]: (state, { payload }) => ({
         ...state,
-        username: payload
+        username: payload,
     }),
 
     [getType(userControlActions.setPassword)]: (state, { payload }) => ({
         ...state,
-        password: payload
+        password: payload,
     }),
 
     [getType(userControlActions.setRole)]: (state, { payload }) => ({
         ...state,
-        role: payload
+        role: payload,
     }),
 
     [getType(userControlActions.setPermissions)]: (state, { payload }) => ({
         ...state,
-        permissions: payload
+        permissions: payload,
     }),
 
     [getType(userControlActions.setEmail)]: (state, { payload }) => ({
         ...state,
-        email: payload
+        email: payload,
     }),
 
     [getType(userControlActions.setPhone)]: (state, { payload }) => ({
         ...state,
-        phone: payload
+        phone: payload,
     }),
 
     [getType(userControlActions.setPosition)]: (state, { payload }) => ({
         ...state,
-        position: payload
+        position: payload,
     }),
 
-    [getType(userControlActions.clearUserData)]: () => ({ ...initialState })
+    [getType(userControlActions.clearUserData)]: () => ({ ...initialState }),
 });

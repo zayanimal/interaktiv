@@ -1,3 +1,3 @@
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 
-export const dictionaries = (state: rootStateTypes) => state.system.dictionary;
+export const dictionaries = (state: RootStateTypes) => state.system.dictionary;

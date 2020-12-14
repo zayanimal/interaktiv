@@ -1,7 +1,7 @@
 import {
     get as getLs,
     set as setLs,
-    remove as removeLs
+    remove as removeLs,
 } from 'local-storage';
 
 export class TokenService {

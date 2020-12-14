@@ -11,5 +11,5 @@ export const systemEpic: Epic = combineEpics(
     logout,
     getDrawerState,
     setDrawerState,
-    getDictionary
+    getDictionary,
 );

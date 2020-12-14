@@ -5,7 +5,7 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
 } from '@material-ui/core';
 import React from 'react';
 

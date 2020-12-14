@@ -10,13 +10,13 @@ import { customerEpic } from '@customer/store/epics';
 export const rootReducer = combineReducers({
     system: mainReducer,
     admin: adminReducer,
-    customer: customerReducer
+    customer: customerReducer,
 });
 
 export const rootEpic: Epic = combineEpics(
     systemEpic,
     adminEpic,
-    customerEpic
+    customerEpic,
 );
 
-export type rootStateTypes = ReturnType<typeof rootReducer>;
+export type RootStateTypes = ReturnType<typeof rootReducer>;

@@ -12,7 +12,7 @@ const Notification: React.FC<LayoutProps> = (props) => {
         typeNotification,
         messageNotification,
         openNotification,
-        closeNotification = () => {}
+        closeNotification = () => {},
     } = props;
 
     const handleClose = (event?: SyntheticEvent, reason?: string) => {

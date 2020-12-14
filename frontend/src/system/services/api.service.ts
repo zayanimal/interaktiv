@@ -10,10 +10,10 @@ export class ApiService {
             url: this.url + params.url,
             headers: {
                 Authorization: `Bearer ${tokenService.getToken()}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             method: params.method,
-            body: params.body
+            body: params.body,
         };
     }
 
@@ -26,8 +26,8 @@ export class ApiService {
             this.getHeader({
                 url,
                 method: 'POST',
-                body: body || {}
-            })
+                body: body || {},
+            }),
         );
     }
 
@@ -36,8 +36,8 @@ export class ApiService {
             this.getHeader({
                 url,
                 method: 'PUT',
-                body: body || {}
-            })
+                body: body || {},
+            }),
         );
     }
 

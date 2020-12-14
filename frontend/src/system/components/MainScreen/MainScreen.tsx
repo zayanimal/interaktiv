@@ -3,7 +3,7 @@ import {
     Switch,
     Route,
     Redirect,
-    useLocation
+    useLocation,
 } from 'react-router-dom';
 import { Drawer } from '@system/components/Drawer';
 import { Header } from '@system/components/Header';

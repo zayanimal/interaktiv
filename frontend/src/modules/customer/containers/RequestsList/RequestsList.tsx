@@ -3,17 +3,17 @@ import { requestsListActions } from '@customer/store/actions';
 import { requestsListSelectors } from '@customer/store/selectors';
 import { DrawerForm } from '@system/components/DrawerForm';
 import { systemActions } from '@system/store/actions';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state: rootStateTypes) => ({
-    requests: requestsListSelectors.requests(state)
+const mapStateToProps = (state: RootStateTypes) => ({
+    requests: requestsListSelectors.requests(state),
 });
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
-    getRequestsList: requestsListActions.getRequestsList.request
+    getRequestsList: requestsListActions.getRequestsList.request,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -22,7 +22,7 @@ const RequestsList: React.FC<Props> = (props) => {
     const {
         setHeaderTitle,
         getRequestsList,
-        requests
+        requests,
     } = props;
 
     useEffect(() => {

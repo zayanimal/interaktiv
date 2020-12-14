@@ -3,5 +3,5 @@ import * as userControlActions from './userControl.actions';
 
 export {
     usersActions,
-    userControlActions
+    userControlActions,
 };

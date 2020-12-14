@@ -5,7 +5,7 @@ import { requestActions, requestDrawerActions } from '@customer/store/actions';
 import { requestDrawerSelectors, requestSelectors } from '@customer/store/selectors';
 import { Button } from '@material-ui/core';
 import { systemActions } from '@system/store/actions';
-import { rootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@system/store/roots';
 import { bem } from '@utils/formatters';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -13,14 +13,14 @@ import './Request.scss';
 
 const cn = bem('Request');
 
-const mapStateToProps = (state: rootStateTypes) => ({
+const mapStateToProps = (state: RootStateTypes) => ({
     rate: requestSelectors.rate(state),
     modelInputValue: requestSelectors.modelInputValue(state),
     modelsData: requestSelectors.modelsData(state),
     modelsDataInOrder: requestSelectors.modelsDataInOrder(state),
     modelsSelected: requestSelectors.modelsSelected(state),
     listState: requestSelectors.listState(state),
-    validation: requestDrawerSelectors.validation(state)
+    validation: requestDrawerSelectors.validation(state),
 });
 
 const mapDispatchToProps = {
@@ -34,7 +34,7 @@ const mapDispatchToProps = {
     updateModelInOrder: requestActions.updateModelInOrder,
     setHeaderTitle: systemActions.setHeaderTitle,
     showList: requestActions.showList,
-    showDrawer: requestDrawerActions.open
+    showDrawer: requestDrawerActions.open,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -58,7 +58,7 @@ const Request: React.FC<Props> = (props) => {
         listState,
         showList,
         showDrawer,
-        validation
+        validation,
     } = props;
 
     useEffect(() => {
@@ -74,7 +74,7 @@ const Request: React.FC<Props> = (props) => {
         putModelInOrder({
             // eslint-disable-next-line prefer-object-spread
             ...Object.assign({}, modelsData.find(({ model }) => model === value)),
-            count: 1
+            count: 1,
         });
     };
 

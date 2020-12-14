@@ -4,7 +4,7 @@ import {
     Column,
     AutoSizer,
     InfiniteLoader,
-    ColumnProps
+    ColumnProps,
 } from 'react-virtualized';
 import { bem } from '@utils/formatters';
 import { IUsersMeta } from '@admin/interfaces/users.interface';
@@ -28,8 +28,8 @@ const TableVirtual: React.FC<Props> = (props) => {
         meta: {
             currentPage,
             totalItems,
-            totalPages
-        }
+            totalPages,
+        },
     } = props;
 
     const loadMoreRows = () => {
