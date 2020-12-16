@@ -1,10 +1,12 @@
 import { createReducer, getType } from 'typesafe-actions';
 import { userControlActions } from '@admin/store/actions';
 
-interface InitialState {
+interface IInitialState {
+    loading: boolean;
     username: string;
     password: string;
     role: string;
+    isActive: boolean;
     permissions: string[];
     email: string;
     phone: string;
@@ -12,16 +14,32 @@ interface InitialState {
 }
 
 const initialState = {
+    loading: false,
     username: '',
     password: '',
     role: '',
+    isActive: true,
     permissions: [],
     email: '',
     phone: '',
     position: '',
 };
 
-export const userControl = createReducer<InitialState>(initialState, {
+export const userControl = createReducer<IInitialState>(initialState, {
+    [getType(userControlActions.getUser.request)]: (state) => ({ ...state, loading: true }),
+
+    [getType(userControlActions.getUser.success)]: (state, { payload }) => ({
+        ...state,
+        loading: false,
+        username: payload.username,
+        role: payload.role,
+        isActive: payload.isActive,
+        permissions: payload.permissions,
+        email: payload.contacts.email,
+        phone: payload.contacts.phone,
+        position: payload.contacts.position,
+    }),
+
     [getType(userControlActions.setUsername)]: (state, { payload }) => ({
         ...state,
         username: payload,

@@ -7,26 +7,24 @@ import {
     mergeMap,
     catchError,
 } from 'rxjs/operators';
-import { Epic } from 'redux-observable';
+import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
-import { tokenService } from '@system/services/token.service';
-import { restService } from '@system/services/rest.service';
 
 /**
  * Проверка прав доступа и установка метаданных пользователя
  * @param action$
  * @param state$
  */
-export const getCredentials: Epic = (action$, state$) => action$.pipe(
+export const getCredentials: Epic = (action$, state$, { rest, token }) => action$.pipe(
     filter(isActionOf(systemActions.getCredentials)),
     switchMap(() => state$.pipe(
         first(),
         map(systemSelectors.credentials),
-        mergeMap((credentials) => restService.post$('auth/login', credentials)),
+        mergeMap((credentials) => rest.post$('auth/login', credentials)),
         mergeMap((request) => {
-            tokenService.setToken(request.response.accessToken);
+            token.setToken(request.response.accessToken);
 
             return of(systemActions.setAuth(request.response));
         }),
@@ -41,9 +39,9 @@ export const getCredentials: Epic = (action$, state$) => action$.pipe(
  * Проверка состояния авторизации текущего пользователя
  * @param action$
  */
-export const getCurrentUser: Epic = (action$) => action$.pipe(
+export const getCurrentUser: Epic = (action$, _, { rest }) => action$.pipe(
     filter(isActionOf(systemActions.checkAuth)),
-    mergeMap(() => restService.get$('auth/current')),
+    mergeMap(() => rest.get$('auth/current')),
     map((request) => systemActions.setAuth(request.response)),
     catchError(() => of(systemActions.clearUser())),
 );
@@ -52,10 +50,10 @@ export const getCurrentUser: Epic = (action$) => action$.pipe(
  * Выход из системы
  * @param action$
  */
-export const logout: Epic = (action$) => action$.pipe(
+export const logout: Epic = (action$, _, { token }) => action$.pipe(
     filter(isActionOf(systemActions.logOut)),
     map(() => {
-        tokenService.removeToken();
+        token.removeToken();
 
         return systemActions.clearUser();
     }),

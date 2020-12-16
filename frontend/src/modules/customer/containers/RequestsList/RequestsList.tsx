@@ -3,7 +3,7 @@ import { requestsListActions } from '@customer/store/actions';
 import { requestsListSelectors } from '@customer/store/selectors';
 import { DrawerForm } from '@system/components/DrawerForm';
 import { systemActions } from '@system/store/actions';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 

@@ -1,4 +1,4 @@
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 
 export const requestState = (state: RootStateTypes) => state.customer.request;
 

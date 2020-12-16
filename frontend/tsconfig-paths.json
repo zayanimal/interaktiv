@@ -3,6 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["/*"],
+      "@config/*": ["config/*"],
       "@admin/*": ["modules/admin/*"],
       "@customer/*": ["modules/customer/*"],
       "@system/*": ["system/*"],

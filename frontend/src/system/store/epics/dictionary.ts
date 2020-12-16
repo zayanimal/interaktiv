@@ -6,18 +6,17 @@ import {
     mergeMap,
     catchError,
 } from 'rxjs/operators';
-import { Epic } from 'redux-observable';
+import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions, dictionaryActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
-import { dictionaryService } from '@system/services/dictionary.service';
 
 /**
  * Получить необходимый словарь
  * @param action$
  * @param state$
  */
-export const getDictionary: Epic = (action$, state$) => action$.pipe(
+export const getDictionary: Epic = (action$, state$, { dictionary }) => action$.pipe(
     filter(isActionOf(dictionaryActions.getDictionary)),
     mergeMap(({ payload }) => state$.pipe(
         first(),
@@ -26,7 +25,7 @@ export const getDictionary: Epic = (action$, state$) => action$.pipe(
             names: payload,
         })),
     )),
-    mergeMap((req) => dictionaryService.get$(req)),
+    mergeMap((req) => dictionary.get$(req)),
     map(({ response }) => response),
     map(dictionaryActions.setDictionary),
     catchError((err, caught) => merge(

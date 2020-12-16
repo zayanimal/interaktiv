@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 
 export const systemState = (state: RootStateTypes) => state.system.system;
 

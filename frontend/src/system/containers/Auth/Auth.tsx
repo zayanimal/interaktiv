@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 import { systemActions } from '@system/store/actions';
 import { systemSelectors } from '@system/store/selectors';
 import { AuthScreen } from '@system/components/AuthScreen';

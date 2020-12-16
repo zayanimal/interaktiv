@@ -37,10 +37,10 @@ node {
         }
     }
 
-    stage("Build frontend") {
-        if (checkDirectoryChanges('frontend')) {
-            sh "chmod +x jenkins/scripts/frontend_build.sh"
-            sh "./jenkins/scripts/frontend_build.sh"
-        }
-    }
+    // stage("Build frontend") {
+    //     if (checkDirectoryChanges('frontend')) {
+    //         sh "chmod +x jenkins/scripts/frontend_build.sh"
+    //         sh "./jenkins/scripts/frontend_build.sh"
+    //     }
+    // }
 }

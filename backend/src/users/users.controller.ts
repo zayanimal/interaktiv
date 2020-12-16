@@ -2,7 +2,7 @@ import {
     Controller,
     Delete,
     Get,
-    Patch,
+    Put,
     Param,
     Query,
     UseGuards,
@@ -47,7 +47,7 @@ export class UsersController {
         return this.usersService.getUsers(page, limit);
     }
 
-    @Patch('edit/:username')
+    @Put('edit/:username')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     editUser(

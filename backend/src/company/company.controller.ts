@@ -9,8 +9,7 @@ import {
     UseGuards,
     ParseIntPipe,
     ParseUUIDPipe,
-    ValidationPipe,
-    Patch
+    ValidationPipe
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
@@ -39,7 +38,7 @@ export class CompanyController {
      * @param id
      * @param data
      */
-    @Patch(':id')
+    @Put(':id')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     update(

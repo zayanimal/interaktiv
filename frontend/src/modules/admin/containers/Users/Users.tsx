@@ -6,7 +6,7 @@ import {
     useRouteMatch,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 import { systemActions } from '@system/store/actions';
 import { usersActions } from '@admin/store/actions';
 import { userSelectors } from '@admin/store/selectors';
@@ -23,6 +23,7 @@ const mapDispatchToProps = {
     getList: usersActions.getUsersList.request,
     removeUser: usersActions.removeUser,
     setUserEditName: usersActions.setUserEditName,
+    setUserEditMode: usersActions.setUserEditMode,
 };
 
 export type UsersProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -48,7 +49,7 @@ const Users: React.FC<UsersProps> = (props) => {
     return (
         <Switch>
             <Route path={`${path}/add`} component={UserControl} />
-            <Route path={`${path}/edit`} component={UserControl} />
+            <Route path={`${path}/edit/:user`} component={UserControl} />
             <Route
                 exact
                 path={path}

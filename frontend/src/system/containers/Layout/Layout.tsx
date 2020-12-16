@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { systemActions } from '@system/store/actions';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 import { Main } from '@system/components/Main';
 import { Auth } from '@system/containers/Auth';
 import { Notification } from '@system/components/Notification';

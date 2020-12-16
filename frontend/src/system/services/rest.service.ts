@@ -1,5 +1,5 @@
 import { ajax } from 'rxjs/ajax';
-import { TokenService, tokenService } from '@system/services/token.service';
+import { TokenService } from '@system/services/token.service';
 import { IHeader } from '@system/interfaces/header.interface';
 import { ApiUrl } from '@system/decorators';
 
@@ -54,5 +54,3 @@ export class RestService {
         return ajax(this.getHeader({ url, method: 'DELETE' }));
     }
 }
-
-export const restService = new RestService(tokenService);

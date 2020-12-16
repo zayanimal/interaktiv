@@ -5,7 +5,7 @@ import { requestActions, requestDrawerActions } from '@customer/store/actions';
 import { requestDrawerSelectors, requestSelectors } from '@customer/store/selectors';
 import { Button } from '@material-ui/core';
 import { systemActions } from '@system/store/actions';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 import { bem } from '@utils/formatters';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';

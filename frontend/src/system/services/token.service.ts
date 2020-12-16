@@ -42,5 +42,3 @@ export class TokenService {
         this.token = '';
     }
 }
-
-export const tokenService = new TokenService();

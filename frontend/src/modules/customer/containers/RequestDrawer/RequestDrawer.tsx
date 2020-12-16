@@ -3,7 +3,7 @@ import { requestDrawerSelectors } from '@customer/store/selectors';
 import TextField from '@material-ui/core/TextField';
 // import { KeyboardDatePicker } from '@material-ui/pickers';
 import { DrawerForm } from '@system/components/DrawerForm';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 import { bem } from '@utils/formatters';
 import { validation } from '@utils/validators';
 import React, { ChangeEvent, useEffect, useState } from 'react';

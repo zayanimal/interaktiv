@@ -11,7 +11,6 @@ import {
     ValidationPipe,
     ParseIntPipe,
     ParseUUIDPipe,
-    Patch,
     UsePipes
 } from '@nestjs/common';
 import { User } from '@shared/decorators/user.decorator';
@@ -44,7 +43,7 @@ export class OrderController {
         return this.orderService.find(id);
     }
 
-    @Patch()
+    @Put('update')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     @UsePipes(new ValidationPipe({ whitelist: true }))

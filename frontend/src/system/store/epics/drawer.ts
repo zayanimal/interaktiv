@@ -5,9 +5,9 @@ import {
     mergeMap,
     catchError,
 } from 'rxjs/operators';
-import { Epic } from 'redux-observable';
-import { isActionOf } from 'typesafe-actions';
 import { get as getLs, set as setLs } from 'local-storage';
+import { Epic } from '@config/interfaces';
+import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 
 export const getDrawerState: Epic = (action$) => action$.pipe(
@@ -18,7 +18,7 @@ export const getDrawerState: Epic = (action$) => action$.pipe(
         ),
     )),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.response.message)),
+        of(systemActions.errorNotification(err.message)),
         caught,
     )),
 );
@@ -31,7 +31,7 @@ export const setDrawerState: Epic = (action$) => action$.pipe(
         return of(systemActions.setDrawerState(payload));
     }),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.response.message)),
+        of(systemActions.errorNotification(err.message)),
         caught,
     )),
 );

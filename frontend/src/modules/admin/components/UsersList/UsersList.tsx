@@ -27,10 +27,12 @@ const UsersList: React.FC<UsersProps> = (props) => {
     const columns: ColumnProps[] = useMemo(() => {
         const onEdit = (rowData: any) => () => {
             setUserEditName(rowData.username);
-            history.push({ pathname: `${path}/edit` });
+            history.push({ pathname: `${path}/edit/${rowData.username}` });
         };
 
-        const onRemove = (rowData: any) => () => { removeUser(rowData.username); };
+        const onRemove = (rowData: any) => () => {
+            removeUser(rowData.username);
+        };
 
         return [
             {

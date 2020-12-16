@@ -1,4 +1,10 @@
-import { createAction } from 'typesafe-actions';
+import { createAction, createAsyncAction } from 'typesafe-actions';
+
+export const getUser = createAsyncAction(
+    '[ADMIN] GET_USER_REQUEST',
+    '[ADMIN] GET_USER_SUCCESS',
+    '[ADMIN] GET_USER_FAILURE',
+)<string, unknown, unknown>();
 
 export const setUsername = createAction('[ADMIN] USER_ADD_SET_USERNAME')<string>();
 

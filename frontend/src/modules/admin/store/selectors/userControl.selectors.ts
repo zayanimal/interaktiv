@@ -1,30 +1,32 @@
 import _ from 'lodash';
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 
-const userAddState = (state: RootStateTypes) => state.admin.userControl;
+const userControlState = (state: RootStateTypes) => state.admin.userControl;
 
-export const username = (state: RootStateTypes) => userAddState(state).username;
+export const loading = (state: RootStateTypes) => userControlState(state).loading;
 
-export const password = (state: RootStateTypes) => userAddState(state).password;
+export const username = (state: RootStateTypes) => userControlState(state).username;
 
-export const role = (state: RootStateTypes) => userAddState(state).role;
+export const password = (state: RootStateTypes) => userControlState(state).password;
 
-export const permissions = (state: RootStateTypes) => userAddState(state).permissions;
+export const role = (state: RootStateTypes) => userControlState(state).role;
 
-export const email = (state: RootStateTypes) => userAddState(state).email;
+export const permissions = (state: RootStateTypes) => userControlState(state).permissions;
 
-export const phone = (state: RootStateTypes) => userAddState(state).phone;
+export const email = (state: RootStateTypes) => userControlState(state).email;
 
-export const position = (state: RootStateTypes) => userAddState(state).position;
+export const phone = (state: RootStateTypes) => userControlState(state).phone;
 
-export const newUser = (state: RootStateTypes) => _.pick(userAddState(state), [
+export const position = (state: RootStateTypes) => userControlState(state).position;
+
+export const newUser = (state: RootStateTypes) => _.pick(userControlState(state), [
     'username',
     'password',
     'role',
     'permissions',
 ]);
 
-export const newContacts = (state: RootStateTypes) => _.pick(userAddState(state), [
+export const newContacts = (state: RootStateTypes) => _.pick(userControlState(state), [
     'email',
     'phone',
     'position',

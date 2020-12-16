@@ -1,4 +1,4 @@
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 
 const usersState = (state: RootStateTypes) => state.admin.users;
 

@@ -1,4 +1,4 @@
-import { RootStateTypes } from '@system/store/roots';
+import { RootStateTypes } from '@config/roots';
 import { pick } from 'lodash';
 
 export const requestDrawerState = (state: RootStateTypes) => state.customer.requestDrawer;

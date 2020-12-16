@@ -7,7 +7,6 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '@users/services/users.service';
 import { ContactsService } from '@users/services/contacts.service';
-import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { LoginUserDto } from '@users/dto/login-user.dto';
 import { LoginStatus } from '@auth/interfaces/login-status.interface';
