@@ -9,7 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Users } from '@users/entities/users.entity';
 import { Roles } from '@auth/entities/roles.entity';
 import { Permissions } from '@auth/entities/permissions.entity';
-import { ContactUser } from '@users/entities/contactUser.entity';
+import { ContactUser } from '@users/entities/contact-user.entity';
 
 @Module({
     imports: [

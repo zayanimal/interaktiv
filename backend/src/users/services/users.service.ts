@@ -1,57 +1,32 @@
-import { Observable, of, from, throwError, forkJoin } from 'rxjs';
-import { switchMap, map, mergeMap, catchError } from 'rxjs/operators';
-import {
-    Injectable,
-    HttpException,
-    HttpStatus,
-    Inject,
-    forwardRef,
-    BadRequestException
-} from '@nestjs/common';
+import { of, from, throwError, forkJoin } from 'rxjs';
+import { map, mergeMap, catchError, mapTo } from 'rxjs/operators';
+import { Injectable, Inject, forwardRef, InternalServerErrorException } from '@nestjs/common';
+import { checkEntity } from '@shared/utils';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { hash } from 'bcrypt';
 import { AuthService } from '@auth/auth.service';
-import { ContactsService } from '@users/services/contacts.service';
-import { UserDto } from '@users/dto/user.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
-import { Users } from '@users/entities/users.entity';
-import { ContactUser } from '@users/entities/contactUser.entity';
+import { UsersRepository } from '@users/repositories/users.repository';
+import { ContactsRepository } from '../repositories/contacts.repository';
 
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectRepository(Users)
-        private readonly usersRepository: Repository<Users>,
-        @InjectRepository(ContactUser)
-        private readonly contactsRepository: Repository<ContactUser>,
+        @InjectRepository(UsersRepository)
+        private readonly usersRepository: UsersRepository,
+        @InjectRepository(ContactsRepository)
+        private readonly contactsRepository: ContactsRepository,
         @Inject(forwardRef(() => AuthService))
-        private authService: AuthService,
-        private contactService: ContactsService
+        private authService: AuthService
     ) {}
-
-    dbRequest(username: string) {
-        return {
-            where: { username },
-            relations: ['roles', 'permissions']
-        };
-    }
-
-    checkUser(user: Users | undefined) {
-        return (user ? of(user) : throwError(
-            new BadRequestException('Пользователь не существует')
-        ));
-    }
 
     /**
      * Поиск пользователя по id
      * @param id
      */
     searchId(id: string) {
-        return from(this.usersRepository.findOne({ id })).pipe(
-            mergeMap((user) => this.checkUser(user))
-        );
+        return this.usersRepository.searchId(id);
     }
 
     /**
@@ -59,36 +34,20 @@ export class UsersService {
      * @param page
      * @param limit
      */
-    getUsers(page: number, limit: number): Observable<
-        Omit<Pagination<Omit<UserDto, 'permissions'>>, 'links'>
-    > {
+    getUsers(page: number, limit: number) {
         return from(
-            paginate(this.usersRepository
-                .createQueryBuilder('users')
-                .select([
-                    'users.id',
-                    'users.username',
-                    'r.name',
-                    'users.time',
-                    'users.isActive',
-                ])
-                .leftJoin('users.roles', 'r', 'users.rolesId = r.id')
-                .orderBy('users.time', 'ASC'),
+            paginate(
+                this.usersRepository.list(),
                 { page, limit }
             )
         ).pipe(
             map(({ items, meta }) => ({
-                items: items.map((user) => ({
-                    username: user.username,
-                    time: user.time,
-                    isActive: user.isActive,
-                    role: user.roles.name
-                })),
+                items: this.usersRepository.transformList(items),
                 meta
             })),
 
             catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+                new InternalServerErrorException(err.message)
             ))
         );
     }
@@ -97,24 +56,8 @@ export class UsersService {
      * Найти пользователя в базе по имени
      * @param param имя пользователя
      */
-    findByUsername(username: string): Observable<UserDto> {
-        return from(this.usersRepository.findOne(this.dbRequest(username))).pipe(
-            mergeMap((user) => (user
-                ? of(user).pipe(
-                    map((user) => ({
-                        username: user.username,
-                        userId: user.id,
-                        companyId: user.companyId,
-                        role: user.roles.name,
-                        isActive: user.isActive,
-                        permissions: user.permissions.map(({ name }) => name)
-                    }))
-                )
-                : throwError(
-                    new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED)
-                )
-            ))
-        );
+    findByUsername(username: string) {
+        return this.usersRepository.searchName(username);
     }
 
     /**
@@ -122,33 +65,7 @@ export class UsersService {
      * @param username
      */
     findUserForEdit(username: string) {
-        return from(this.usersRepository
-            .createQueryBuilder('users')
-            .select([
-                'users.username',
-                'users.isActive',
-                'rol.name',
-                'perm.name',
-                'cont.email',
-                'cont.phone',
-                'cont.position'
-            ])
-            .innerJoin('users.roles', 'rol')
-            .innerJoin('users.permissions', 'perm')
-            .innerJoin('users.contacts', 'cont')
-            .where('users.username = :name', { name: username })
-            .getOne()).pipe(
-                mergeMap((user) => (user
-                    ? of({
-                        username: user.username,
-                        isActive: user.isActive,
-                        role: user.roles.name,
-                        permissions: user.permissions.map(({ name }) => name),
-                        contacts: user.contact
-                    })
-                    : throwError(new HttpException('Пользователь не существует', HttpStatus.UNAUTHORIZED))
-                ))
-            );
+        return this.usersRepository.edit(username);
     }
 
     /**
@@ -160,9 +77,7 @@ export class UsersService {
         const { username, password, isActive, role, permissions, contacts } = userDto;
 
         return forkJoin({
-                user: from(this.usersRepository.findOne(this.dbRequest(editableUser))).pipe(
-                    mergeMap((user) => this.authService.checkUserExistance(user))
-                ),
+                user: this.usersRepository.searchRaw(editableUser),
                 foundRole: from(this.authService.checkRole(role)),
                 permissions: from(this.authService.checkPermissions(permissions)),
                 hashedPassword: (password.length ? from(hash(password, 10)) : of(''))
@@ -173,7 +88,7 @@ export class UsersService {
                 user.username = username;
                 if (hashedPassword.length) { user.password = hashedPassword; }
                 user.isActive = isActive;
-                user.roles = foundRole;
+                user.role = foundRole;
                 user.permissions = permissions;
 
                 return from(this.usersRepository.save(user));
@@ -181,7 +96,7 @@ export class UsersService {
             mergeMap(({ id }) => from(
                 this.contactsRepository.findOne({ where: { usersId: id }})
             ).pipe(
-                mergeMap((cntct) => this.contactService.checkContact(cntct)),
+                mergeMap(checkEntity('Пользователь не существует')),
                 mergeMap((contact) => {
                     const { email, phone, position } = contacts;
 
@@ -191,7 +106,7 @@ export class UsersService {
 
                     return from(this.contactsRepository.save(contact));
                 }),
-                map(() => ({ message: `Пользователь изменён` }))
+                mapTo({ message: `Пользователь изменён` })
             )),
             catchError((err) => of(err.message))
         );
@@ -199,22 +114,10 @@ export class UsersService {
 
     /**
      * Удалить пользователя
-     * @param userName
+     * @param username
      */
     removeUser(username: string) {
-        return from(this.usersRepository.findOne({ where: { username } })).pipe(
-            mergeMap((user) => this.authService.checkUserExistance(user)),
-            switchMap((user) => from(this.usersRepository.remove(user)).pipe(
-                map(() => ({ message: `Пользователь ${username} удалён` }))
-            )),
-
-            catchError(() => throwError(
-                new HttpException(
-                    `Пользователь ${username} не найден`,
-                    HttpStatus.BAD_REQUEST
-                )
-            ))
-        );
+        return this.usersRepository.removeUser(username);
     }
 
     /**
@@ -223,15 +126,7 @@ export class UsersService {
      * @param id айди компании
      */
     updateUserCompany(users: string[], id: string) {
-        return from(this.usersRepository.find({
-            where: users.map((username) => ({ username }))
-        })).pipe(
-            mergeMap((users) => from(users)),
-            mergeMap((user) => from(this.usersRepository.update(
-                { username: user.username },
-                { companyId: id }
-            )))
-        );
+        return this.usersRepository.updateUserCompany(users, id);
     }
 
     /**
@@ -239,6 +134,6 @@ export class UsersService {
      * @param companyId
      */
     removeUserCompany(companyId: string) {
-        return from(this.usersRepository.update({ companyId }, { companyId: null }));
+        return this.usersRepository.removeUserCompany(companyId);
     }
 }

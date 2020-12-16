@@ -12,11 +12,12 @@ import {
 import * as bcrypt from 'bcrypt';
 import { Roles } from '@auth/entities/roles.entity';
 import { Permissions } from '@auth/entities/permissions.entity';
-import { ContactUser } from '@users/entities/contactUser.entity';
+import { ContactUser } from '@users/entities/contact-user.entity';
 import { Company } from '@company/entities/company.entity';
+import { IUsersEntity } from '@users/interfaces/users-entity.interface';
 
 @Entity()
-export class Users {
+export class Users implements IUsersEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
@@ -37,18 +38,18 @@ export class Users {
     isActive!: boolean;
 
     @Column({ type: 'uuid', default: 'bbab9d8b-0bda-4f16-ae8d-59334e38a7c8' })
-    rolesId!: string;
+    roleId!: string;
 
     @ManyToOne(() => Roles)
     @JoinColumn()
-    roles!: Roles;
+    role!: Roles;
 
     @Column({ type: 'uuid', nullable: true })
-    contactId!: string;
+    contactsId!: string;
 
     @OneToOne(() => ContactUser)
     @JoinColumn()
-    contact!: ContactUser;
+    contacts!: ContactUser;
 
     @Column({ type: 'uuid', nullable: true })
     companyId!: string | null;

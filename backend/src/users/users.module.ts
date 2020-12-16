@@ -4,19 +4,15 @@ import { AuthModule } from '@auth/auth.module';
 import { UsersController } from '@users/users.controller';
 import { UsersService } from '@users/services/users.service';
 import { ContactsService } from '@users/services/contacts.service';
-import { Users } from '@users/entities/users.entity';
-import { Roles } from '@auth/entities/roles.entity';
-import { Permissions } from '@auth/entities/permissions.entity';
-import { ContactUser } from '@users/entities/contactUser.entity';
+import { UsersRepository } from '@users/repositories/users.repository';
+import { ContactsRepository } from '@users/repositories/contacts.repository';
 
 @Module({
   imports: [
     forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([
-      Users,
-      Roles,
-      Permissions,
-      ContactUser
+      UsersRepository,
+      ContactsRepository
     ])
   ],
   providers: [UsersService, ContactsService],

@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { ContactUser } from '@users/entities/contactUser.entity';
+import { ContactUser } from '@/users/entities/contact-user.entity';
 
 export class CreateUserDto {
     @IsNotEmpty()

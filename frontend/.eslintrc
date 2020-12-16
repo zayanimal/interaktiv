@@ -15,10 +15,11 @@
         "react/prop-types": "off",
         "react/jsx-indent-props": ["error", 4],
         "react/jsx-props-no-spreading": "off",
-        "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+        "lines-between-class-members": "off",
         "max-classes-per-file": "off",
         "func-names": "off",
-        "no-param-reassign": ["error", { "props": false }]
+        "no-param-reassign": ["error", { "props": false }],
+        "class-methods-use-this": "off"
     },
     "env": {
         "browser": true,

@@ -1,5 +1,5 @@
 import { Observable, of, from, throwError, forkJoin } from 'rxjs';
-import { toArray, map, mergeMap } from 'rxjs/operators';
+import { toArray, map, mergeMap, mapTo } from 'rxjs/operators';
 import { Injectable, HttpException, HttpStatus, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -35,7 +35,7 @@ export class AuthService {
      * Проверка пользователя для аутентификации
      * @param payload
      */
-    validateUser(payload: JwtPayload): Observable<UserDto> {
+    validateUser(payload: JwtPayload) {
         return this.usersService.findByUsername(payload.username);
     }
 
@@ -51,17 +51,6 @@ export class AuthService {
                     ) : of(user))
                 )
             );
-    }
-
-    /**
-     * Проверка на отсутствие пользователя
-     * @param user
-     */
-    checkUserExistance(user: Users | undefined) {
-        return (user
-            ? of(user)
-            : throwError(new HttpException('Пользователь не существует', HttpStatus.BAD_REQUEST))
-        );
     }
 
     /**
@@ -116,7 +105,7 @@ export class AuthService {
                 this.usersRepository.create({ username, password })
             ).pipe(
                 map((newUser) => {
-                    newUser.rolesId = roleId;
+                    newUser.roleId = roleId;
                     newUser.permissions = permissions;
 
                     return newUser;
@@ -128,9 +117,9 @@ export class AuthService {
             ))),
             mergeMap((savedContact) => from(this.usersRepository.update(
                 { username },
-                { contactId: savedContact.id }
+                { contactsId: savedContact.id }
             ))),
-            map(() => ({ message: `Пользователь ${username} добавлен` }))
+            mapTo({ message: `Пользователь ${username} добавлен` })
         )
     }
 
@@ -139,7 +128,10 @@ export class AuthService {
      * @param param введеные пользователем логин и пароль
      */
     login({ username, password }: LoginUserDto): Observable<LoginStatus> {
-        return from(this.usersRepository.findOne(this.usersService.dbRequest(username))).pipe(
+        return from(this.usersRepository.findOne({
+            where: { username },
+            relations: ['role', 'permissions']
+        })).pipe(
             mergeMap((user) => (user
                 ? from(compare(password, user.password)).pipe(
                     mergeMap((state) => (state
@@ -155,7 +147,7 @@ export class AuthService {
                     id: user.id,
                     username: user.username
                 }),
-                role: user.roles.name,
+                role: user.role.name,
                 isActive: user.isActive,
                 permissions: user.permissions.map(({ name }) => name)
             }))

@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    validate(payload: { username: string }): Observable<UserDto> {
+    validate(payload: { username: string }) {
         return this.authService.validateUser(payload);
     }
 }
