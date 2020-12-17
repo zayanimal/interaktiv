@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    TextField,
     Input,
     InputLabel,
     Select,
@@ -20,19 +21,22 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
         setRole,
         permissions,
         setPermissions,
+        errorUsername,
     } = props;
 
     return (
         <>
             <InputLabel>Имя пользователя</InputLabel>
-            <Input
+            <TextField
+                error={!!errorUsername}
+                helperText={errorUsername}
                 className={cn('input')}
                 type="text"
                 value={username}
                 onChange={handleInput(setUsername)}
             />
             <InputLabel>Пароль</InputLabel>
-            <Input
+            <TextField
                 className={cn('input')}
                 type="password"
                 value={password}

@@ -11,6 +11,11 @@ interface IInitialState {
     email: string;
     phone: string;
     position: string;
+    errorUsername: string;
+    errorPassword: string;
+    errorEmail: string;
+    errorPhone: string;
+    errorPosition: string;
 }
 
 const initialState = {
@@ -23,6 +28,11 @@ const initialState = {
     email: '',
     phone: '',
     position: '',
+    errorUsername: '',
+    errorPassword: '',
+    errorEmail: '',
+    errorPhone: '',
+    errorPosition: ''
 };
 
 export const userControl = createReducer<IInitialState>(initialState, {
@@ -73,6 +83,11 @@ export const userControl = createReducer<IInitialState>(initialState, {
     [getType(userControlActions.setPosition)]: (state, { payload }) => ({
         ...state,
         position: payload,
+    }),
+
+    [getType(userControlActions.setValidationErrors)]: (state, { payload }) => ({
+        ...state,
+        ...payload,
     }),
 
     [getType(userControlActions.clearUserData)]: () => ({ ...initialState }),

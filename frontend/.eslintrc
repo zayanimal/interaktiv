@@ -1,7 +1,7 @@
 {
     "extends": [
-        "react-app",
-        "airbnb-typescript"
+        "react-app"
+        // "airbnb-typescript"
     ],
     "parserOptions": {
         "project": "./tsconfig.json"

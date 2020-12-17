@@ -27,7 +27,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     email: userControlSelectors.email(state),
     phone: userControlSelectors.phone(state),
     position: userControlSelectors.position(state),
-    validFields: userControlSelectors.validFields(state),
+    ...userControlSelectors.validation(state)
 });
 
 const mapDispatchToProps = {
@@ -44,6 +44,7 @@ const mapDispatchToProps = {
     setPhone: userControlActions.setPhone,
     setPosition: userControlActions.setPosition,
     addNewUser: userControlActions.addNewUser,
+    editUser: userControlActions.editUser.request,
     clearUserData: userControlActions.clearUserData,
 };
 
@@ -58,8 +59,8 @@ const UserControl: React.FC<UserControlProps> = (props) => {
         setUserEditMode,
         getUser,
         clearDictionary,
-        // validFields,
         addNewUser,
+        editUser,
         clearUserData,
     } = props;
 
@@ -117,7 +118,7 @@ const UserControl: React.FC<UserControlProps> = (props) => {
                 <Button
                     variant="text"
                     color="primary"
-                    onClick={addNewUser}
+                    onClick={userEditMode ? editUser : addNewUser}
                 >
                     {userEditMode ? 'Редактировать' : 'Добавить'}
                 </Button>

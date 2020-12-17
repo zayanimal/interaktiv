@@ -3,7 +3,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { processType } from '@utils/pocessType';
 import { rootReducer, rootEpic } from '@config/roots';
-import { dependencies } from '@config/dependencies';
+import { dependencies } from '@config/container';
 
 const epicMiddleware = createEpicMiddleware({ dependencies });
 
