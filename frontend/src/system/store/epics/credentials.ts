@@ -29,8 +29,8 @@ export const getCredentials: Epic = (action$, state$, { rest, token }) => action
             return of(systemActions.setAuth(request.response));
         }),
         catchError((err, caught) => merge(
-            of(systemActions.errorNotification(err.response.message)),
             caught,
+            of(systemActions.errorNotification(err.response.message)),
         )),
     )),
 );

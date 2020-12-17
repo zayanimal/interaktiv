@@ -18,8 +18,8 @@ export const getDrawerState: Epic = (action$) => action$.pipe(
         ),
     )),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.message)),
         caught,
+        of(systemActions.errorNotification(err.message)),
     )),
 );
 
@@ -31,7 +31,7 @@ export const setDrawerState: Epic = (action$) => action$.pipe(
         return of(systemActions.setDrawerState(payload));
     }),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.message)),
         caught,
+        of(systemActions.errorNotification(err.message)),
     )),
 );

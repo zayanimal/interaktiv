@@ -21,8 +21,8 @@ export const getUsersList: Epic = (action$, _, { users }) => action$.pipe(
     mergeMap(({ payload }) => users.getList$(payload)),
     map(({ response }) => usersActions.getUsersList.success(response)),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.message)),
         caught,
+        of(systemActions.errorNotification(err.message)),
     )),
 );
 
@@ -45,8 +45,8 @@ export const sendNewUser: Epic = (action$, state$, { users }) => action$.pipe(
     mergeMap((payload) => users.add$(payload)),
     map(({ response }) => systemActions.successNotification(response.message)),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.response.message)),
         caught,
+        of(systemActions.errorNotification(err.response.message)),
     )),
 );
 
@@ -67,7 +67,7 @@ export const removeUser: Epic = (action$, state$, { users }) => action$.pipe(
         map(usersActions.setFiltredUsersList),
     )),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.response.message)),
         caught,
+        of(systemActions.errorNotification(err.response.message)),
     )),
 );

@@ -22,6 +22,7 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
         permissions,
         setPermissions,
         errorUsername,
+        errorPassword,
     } = props;
 
     return (
@@ -37,6 +38,8 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
             />
             <InputLabel>Пароль</InputLabel>
             <TextField
+                error={!!errorPassword}
+                helperText={errorPassword}
                 className={cn('input')}
                 type="password"
                 value={password}

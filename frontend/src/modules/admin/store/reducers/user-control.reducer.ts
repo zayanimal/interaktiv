@@ -87,7 +87,11 @@ export const userControl = createReducer<IInitialState>(initialState, {
 
     [getType(userControlActions.setValidationErrors)]: (state, { payload }) => ({
         ...state,
-        ...payload,
+        errorUsername: payload?.errorUsername || '',
+        errorPassword: payload?.errorPassword || '',
+        errorEmail: payload?.errorEmail || '',
+        errorPhone: payload?.errorPhone || '',
+        errorPosition: payload?.errorPosition || '',
     }),
 
     [getType(userControlActions.clearUserData)]: () => ({ ...initialState }),

@@ -31,3 +31,5 @@ export const clearUserData = createAction('[ADMIN] USER_ADD_CLEAR_USER_DATA')();
 export const addNewUser = createAction('[ADMIN] USER_ADD_ADD_NEW_USER')();
 
 export const setValidationErrors = createAction('[ADMIN] SET_VALIDATION_ERRORS')<object>();
+
+export const clearValidationErrors = createAction('[ADMIN] CLEAR_VALIDATION_ERRORS')();

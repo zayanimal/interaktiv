@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, InputLabel } from '@material-ui/core';
+import { InputLabel, TextField } from '@material-ui/core';
 import { handleInput } from '@utils/handlers';
 import { cn, UserControlProps } from '@admin/containers/UserControl';
 
@@ -11,26 +11,35 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
         setPhone,
         position,
         setPosition,
+        errorEmail,
+        errorPhone,
+        errorPosition,
     } = props;
 
     return (
         <>
             <InputLabel>Почта</InputLabel>
-            <Input
+            <TextField
+                error={!!errorEmail}
+                helperText={errorEmail}
                 className={cn('input')}
                 type="email"
                 value={email}
                 onChange={handleInput(setEmail)}
             />
             <InputLabel>Телефон</InputLabel>
-            <Input
+            <TextField
+                error={!!errorPhone}
+                helperText={errorPhone}
                 className={cn('input')}
                 type="text"
                 value={phone}
                 onChange={handleInput(setPhone)}
             />
             <InputLabel>Должность</InputLabel>
-            <Input
+            <TextField
+                error={!!errorPosition}
+                helperText={errorPosition}
                 className={cn('input')}
                 type="text"
                 value={position}

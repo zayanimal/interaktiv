@@ -19,8 +19,8 @@ export const getRouterItems: Epic = (action$, state$, { router }) => action$.pip
         map((permissions) => router.getRouterItems(permissions)),
         map(systemActions.setRouterItems),
         catchError((err, caught) => merge(
-            of(systemActions.errorNotification(err.message)),
             caught,
+            of(systemActions.errorNotification(err.message)),
         )),
     )),
 );

@@ -29,7 +29,7 @@ export const getDictionary: Epic = (action$, state$, { dictionary }) => action$.
     map(({ response }) => response),
     map(dictionaryActions.setDictionary),
     catchError((err, caught) => merge(
-        of(systemActions.errorNotification(err.response.message)),
         caught,
+        of(systemActions.errorNotification(err.response.message)),
     )),
 );

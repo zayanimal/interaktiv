@@ -1,5 +1,10 @@
-import { MinLength, MaxLength, IsOptional, ValidateNested } from 'class-validator';
-import { Transform } from 'class-transformer';
+import {
+    MinLength,
+    MaxLength,
+    ValidateIf,
+    ValidateNested,
+    IsAlphanumeric,
+} from 'class-validator';
 import { ContactsEntity } from '@admin/entities';
 
 export class UserFormEntity {
@@ -8,13 +13,14 @@ export class UserFormEntity {
     }
 
     @MinLength(4, { message: 'Не меньше 4-х символов'})
-    @MaxLength(10, { message: 'Не больше 10 символов'})
+    @MaxLength(10, { message: 'Не больше 10-ти символов'})
+    @IsAlphanumeric('en-US', { message: 'Только английские буквы или цифры' })
     username!: string;
 
-    @IsOptional()
-    @MinLength(7, { message: 'Не меньше 7-ми символов'})
-    @MaxLength(16, { message: 'Не меньше 16-ти символов'})
-    @Transform((pass) => pass || null)
+    @ValidateIf(({ password }) => !!password.length)
+    @MinLength(5, { message: 'Не меньше 5-ти символов'})
+    @MaxLength(30, { message: 'Не больше 30-ти символов'})
+    @IsAlphanumeric('en-US', { message: 'Только английские буквы или цифры' })
     password!: string;
 
     role!: string;

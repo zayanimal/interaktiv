@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
-import { useRouteMatch, useHistory } from 'react-router-dom';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
-import { systemActions, dictionaryActions } from '@system/store/actions';
-import { userControlActions, usersActions } from '@admin/store/actions';
+import { userControlActions } from '@admin/store/actions';
 import { userSelectors, userControlSelectors } from '@admin/store/selectors';
 import { dictionarySelectors } from '@system/store/selectors';
 import { Button } from '@material-ui/core';
@@ -31,11 +30,6 @@ const mapStateToProps = (state: RootStateTypes) => ({
 });
 
 const mapDispatchToProps = {
-    setHeaderTitle: systemActions.setHeaderTitle,
-    getDictionary: dictionaryActions.getDictionary,
-    clearDictionary: dictionaryActions.clearDictionary,
-    setUserEditMode: usersActions.setUserEditMode,
-    getUser: userControlActions.getUser.request,
     setUsername: userControlActions.setUsername,
     setPassword: userControlActions.setPassword,
     setRole: userControlActions.setRole,
@@ -53,42 +47,13 @@ export type UserControlProps = ReturnType<typeof mapStateToProps> & typeof mapDi
 const UserControl: React.FC<UserControlProps> = (props) => {
     const {
         loading,
-        setHeaderTitle,
-        getDictionary,
         userEditMode,
-        setUserEditMode,
-        getUser,
-        clearDictionary,
         addNewUser,
         editUser,
         clearUserData,
     } = props;
 
-    const { path, params } = useRouteMatch<{ user: string }>();
     const history = useHistory();
-
-    useEffect(() => {
-        getDictionary(['roles', 'permissions']);
-
-        if (path.includes('edit')) {
-            getUser(params.user);
-            setHeaderTitle('Редактирование пользователя');
-            setUserEditMode(true);
-        } else {
-            setHeaderTitle('Добавление пользователя');
-            setUserEditMode(false);
-        }
-
-        return () => { clearDictionary(); };
-    }, [
-        getDictionary,
-        clearDictionary,
-        setHeaderTitle,
-        path,
-        setUserEditMode,
-        getUser,
-        params,
-    ]);
 
     const onCancel = () => {
         clearUserData();

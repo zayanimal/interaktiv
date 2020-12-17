@@ -1,11 +1,11 @@
-import { of } from 'rxjs';
+import { of, merge } from 'rxjs';
 import {
     filter,
     first,
     map,
     mergeMap,
+    switchMap,
     catchError,
-    mapTo
 } from 'rxjs/operators';
 import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
@@ -27,7 +27,7 @@ export const getUser: Epic = (action$, _, { users }) => action$.pipe(
     catchError((err) => of(systemActions.errorNotification(err.response.message))),
 );
 
-export const editUser: Epic = (action$, state$, { validation }) => action$.pipe(
+export const editUser: Epic = (action$, state$, { validation, users }) => action$.pipe(
     filter(isActionOf(userControlActions.editUser.request)),
     mergeMap(() => state$.pipe(
         first(),
@@ -39,6 +39,13 @@ export const editUser: Epic = (action$, state$, { validation }) => action$.pipe(
         }))
     )),
     mergeMap((payload) => validation.check$(new UserFormEntity(payload))),
-    mapTo(systemActions.successNotification('Пользователь изменён')),
-    catchError((err) => of(userControlActions.setValidationErrors(err))),
+    mergeMap((user) => users.update$('test3', user)),
+    switchMap(() => merge(
+        of(userControlActions.setValidationErrors({})),
+        of(systemActions.successNotification('Пользователь изменён'))
+    )),
+    catchError((err, caught) => merge(
+        caught,
+        of(userControlActions.setValidationErrors(err)),
+    )),
 );
