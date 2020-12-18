@@ -17,8 +17,8 @@ import { UserFormEntity, ContactsEntity } from '@admin/entities';
 /**
  * Получить данные пользователя для редактирования
  * @param action$
- * @param _
- * @param param юзер сервис
+ * @param state$
+ * @param services сервисы
  */
 export const getUser: Epic = (action$, _, { users }) => action$.pipe(
     filter(isActionOf(userControlActions.getUser.request)),
@@ -27,6 +27,12 @@ export const getUser: Epic = (action$, _, { users }) => action$.pipe(
     catchError((err) => of(systemActions.errorNotification(err.response.message))),
 );
 
+/**
+ * Редактировать данные пользователя
+ * @param action$
+ * @param state$
+ * @param services сервисы
+ */
 export const editUser: Epic = (action$, state$, { validation, users }) => action$.pipe(
     filter(isActionOf(userControlActions.editUser.request)),
     mergeMap(({ payload }) => state$.pipe(

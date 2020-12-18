@@ -1,13 +1,10 @@
-import {
-    get as getLs,
-    set as setLs,
-    remove as removeLs,
-} from 'local-storage';
+import { get, set, remove } from 'local-storage';
+import { ITokenService } from '@system/interfaces';
 
-export class TokenService {
-    constructor(private token: string = getLs<string>('accessToken')) {}
+export class TokenService implements ITokenService {
+    public token = get<string>('accessToken');
 
-    isExpired() {
+    public isExpired() {
         if (!this.token) return true;
 
         const jwt = JSON.parse(atob(this.token.split('.')[1]));
@@ -16,28 +13,28 @@ export class TokenService {
         return (exp ? Date.now() > exp : false);
     }
 
-    getToken() {
+    public getToken() {
         if (!this.token) { return ''; }
 
         return this.token;
     }
 
-    setToken(token: string) {
+    public setToken(token: string) {
         if (token) {
-            setLs('accessToken', token);
+            set('accessToken', token);
         } else {
-            removeLs('accessToken');
+            remove('accessToken');
         }
 
         this.token = token;
     }
 
-    isLoggedIn() {
+    public isLoggedIn() {
         return !this.isExpired();
     }
 
-    removeToken() {
-        removeLs('accessToken');
+    public removeToken() {
+        remove('accessToken');
 
         this.token = '';
     }

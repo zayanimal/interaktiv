@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions';
 import { IUser } from '@system/interfaces/user.interface';
-import { IRouterItem } from '@system/interfaces/routerItem.interface';
+import { IRouterItem } from '@system/interfaces/router.interface';
 
 export const setLogin = createAction('[SYSTEM] SET_LOGIN')<string>();
 export const setPassword = createAction('[SYSTEM] SET_PASSWORD')<string>();

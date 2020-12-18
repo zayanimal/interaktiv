@@ -1,26 +1,26 @@
 import { RestService } from '@system/services/rest.service';
-import { INewUser } from '@admin/interfaces/users.interface';
+import { IUsersService, INewUser } from '@admin/interfaces';
 
-export class UsersService {
+export class UsersService implements IUsersService {
     constructor(private api: RestService) {}
 
-    getList$(page: number) {
+    public getList$(page: number) {
         return this.api.get$(`users?page=${page}&limit=30`);
     }
 
-    add$(dto: INewUser) {
+    public add$(dto: INewUser) {
         return this.api.put$('auth/register', dto);
     }
 
-    find$(username: string) {
+    public find$(username: string) {
         return this.api.get$(`users/${username}`);
     }
 
-    update$(username: string, dto: INewUser) {
+    public update$(username: string, dto: INewUser) {
         return this.api.put$(`users/edit/${username}`, dto);
     }
 
-    delete$(username: string) {
+    public delete$(username: string) {
         return this.api.delete$(`users/${username}`);
     }
 }

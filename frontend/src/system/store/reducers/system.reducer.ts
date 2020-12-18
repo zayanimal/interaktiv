@@ -1,6 +1,6 @@
 import { createReducer, getType } from 'typesafe-actions';
 import * as systemActions from '@system/store/actions/system.actions';
-import { IRouterItem } from '@system/interfaces/routerItem.interface';
+import { IRouterItem } from '@system/interfaces/router.interface';
 
 export interface SystemStateTypes {
     authFetched: boolean;

@@ -17,6 +17,8 @@ import { UserFormEntity, ContactsEntity } from '@admin/entities';
 /**
  * Получить список пользователей с пагинацией
  * @param action$
+ * @param state$
+ * @param services
  */
 export const getUsersList: Epic = (action$, _, { users }) => action$.pipe(
     filter(isActionOf(usersActions.getUsersList.request)),
@@ -32,6 +34,7 @@ export const getUsersList: Epic = (action$, _, { users }) => action$.pipe(
  * Добавить нового пользователя
  * @param action$
  * @param state$
+ * @param services
  */
 export const sendNewUser: Epic = (action$, state$, { users, validation }) => action$.pipe(
     filter(isActionOf(userControlActions.addNewUser)),
@@ -59,6 +62,8 @@ export const sendNewUser: Epic = (action$, state$, { users, validation }) => act
 /**
  * Удалить пользователя и отфильтровать список
  * @param action$
+ * @param state$
+ * @param services
  */
 export const removeUser: Epic = (action$, state$, { users }) => action$.pipe(
     filter(isActionOf(usersActions.removeUser)),

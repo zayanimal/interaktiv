@@ -1,8 +1,8 @@
 import { combineEpics, Epic } from 'redux-observable';
-import { getCredentials, getCurrentUser, logout } from './credentials';
-import { getRouterItems } from './router';
-import { getDrawerState, setDrawerState } from './drawer';
-import { getDictionary } from './dictionary';
+import { getCredentials, getCurrentUser, logout } from '@system/effects/credentials.epic';
+import { getRouterItems } from '@system/effects/router.epic';
+import { getDrawerState, setDrawerState } from '@system/effects/drawer.epic';
+import { getDictionary } from '@system/effects/dictionary.epic';
 
 export const systemEpic: Epic = combineEpics(
     getCredentials,

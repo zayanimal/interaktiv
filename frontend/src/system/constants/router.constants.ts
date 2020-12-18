@@ -1,4 +1,4 @@
-import { IRouterItem } from '@system/interfaces/routerItem.interface';
+import { IRouterItem } from '@system/interfaces/router.interface';
 
 export const ROUTE_ITEMS: IRouterItem[] = [
     // {
@@ -36,4 +36,11 @@ export const ROUTE_ITEMS: IRouterItem[] = [
         icon: 'People',
         component: 'Users',
     },
+    // {
+    //     key: 'COMPANIES',
+    //     path: '/comanies',
+    //     name: 'Компании',
+    //     icon: 'Business',
+    //     component: 'Companies',
+    // }
 ];

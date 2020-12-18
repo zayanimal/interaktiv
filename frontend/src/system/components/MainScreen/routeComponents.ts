@@ -1,5 +1,5 @@
 import { FC, lazy } from 'react';
-import { LazyComponents } from '@system/interfaces/routerItem.interface';
+import { LazyComponents } from '@system/interfaces/router.interface';
 
 class RouteComponent {
     constructor(

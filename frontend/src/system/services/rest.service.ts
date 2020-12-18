@@ -1,20 +1,15 @@
 import { ajax } from 'rxjs/ajax';
 import { TokenService } from '@system/services/token.service';
-import { IHeader } from '@system/interfaces/header.interface';
+import { IRestService, IHeader } from '@system/interfaces';
 import { ApiUrl } from '@system/decorators';
 
 @ApiUrl('http://interaktiv:8000/')
-export class RestService {
-    url: string;
+export class RestService implements IRestService {
+    constructor(private tokenService: TokenService) {}
 
-    tokenService: TokenService;
+    url = '';
 
-    constructor(token: TokenService) {
-        this.url = '';
-        this.tokenService = token;
-    }
-
-    private getHeader(params: IHeader) {
+    public getHeader(params: IHeader) {
         return {
             url: this.url + params.url,
             headers: {
@@ -26,11 +21,11 @@ export class RestService {
         };
     }
 
-    get$(url: string) {
+    public get$(url: string) {
         return ajax(this.getHeader({ url, method: 'GET' }));
     }
 
-    post$(url: string, body: object) {
+    public post$(url: string, body?: object) {
         return ajax(
             this.getHeader({
                 url,
@@ -40,7 +35,7 @@ export class RestService {
         );
     }
 
-    put$(url: string, body: object) {
+    public put$(url: string, body?: object) {
         return ajax(
             this.getHeader({
                 url,
@@ -50,7 +45,7 @@ export class RestService {
         );
     }
 
-    delete$(url: string) {
+    public delete$(url: string) {
         return ajax(this.getHeader({ url, method: 'DELETE' }));
     }
 }

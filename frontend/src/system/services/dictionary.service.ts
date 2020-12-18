@@ -1,10 +1,10 @@
 import { RestService } from '@system/services/rest.service';
-import { DictionaryPayload } from '@system/interfaces/dictionary.interface';
+import { IDictionaryService, DictionaryPayload } from '@system/interfaces';
 
-export class DictionaryService {
+export class DictionaryService implements IDictionaryService {
     constructor(private readonly api: RestService) {}
 
-    get$({ type, names }: DictionaryPayload) {
+    public get$({ type, names }: DictionaryPayload) {
         return this.api.get$(`dictionary/${type}?dicts=${names.join('%')}`);
     }
 }
