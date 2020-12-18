@@ -10,7 +10,7 @@ export const editUser = createAsyncAction(
     '[ADMIN] EDIT_USER_REQUEST',
     '[ADMIN] EDIT_USER_SUCCESS',
     '[ADMIN] EDIT_USER_FAILURE',
-)<any, any, any>();
+)<string, any, any>();
 
 export const setUsername = createAction('[ADMIN] USER_ADD_SET_USERNAME')<string>();
 
@@ -25,6 +25,8 @@ export const setEmail = createAction('[ADMIN] USER_ADD_SET_EMAIL')<string>();
 export const setPhone = createAction('[ADMIN] USER_ADD_SET_PHONE')<string>();
 
 export const setPosition = createAction('[ADMIN] USER_ADD_SET_POSITION')<string>();
+
+export const setIsActive = createAction('[ADMIN] USER_ADD_SET_IS_ACTIVE')<boolean>();
 
 export const clearUserData = createAction('[ADMIN] USER_ADD_CLEAR_USER_DATA')();
 

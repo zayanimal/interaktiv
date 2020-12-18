@@ -4,6 +4,7 @@ import {
     first,
     map,
     mergeMap,
+    switchMap,
     catchError,
 } from 'rxjs/operators';
 import { Epic } from '@config/interfaces';
@@ -11,6 +12,7 @@ import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 import { usersActions, userControlActions } from '@admin/store/actions';
 import { userSelectors, userControlSelectors } from '@admin/store/selectors';
+import { UserFormEntity, ContactsEntity } from '@admin/entities';
 
 /**
  * Получить список пользователей с пагинацией
@@ -31,22 +33,26 @@ export const getUsersList: Epic = (action$, _, { users }) => action$.pipe(
  * @param action$
  * @param state$
  */
-export const sendNewUser: Epic = (action$, state$, { users }) => action$.pipe(
+export const sendNewUser: Epic = (action$, state$, { users, validation }) => action$.pipe(
     filter(isActionOf(userControlActions.addNewUser)),
     mergeMap(() => state$.pipe(
         first(),
-        map(userControlSelectors.newUser),
+        map((state) => ({
+            ...userControlSelectors.newUser(state),
+            contacts: ContactsEntity.of(
+                userControlSelectors.newContacts(state)
+            )
+        })),
+        mergeMap((payld) => validation.check$(UserFormEntity.of(payld))),
+        mergeMap((payload) => users.add$(payload)),
     )),
-    mergeMap((user) => state$.pipe(
-        first(),
-        map(userControlSelectors.newContacts),
-        map((contacts) => Object.assign(user, { contacts })),
-    )),
-    mergeMap((payload) => users.add$(payload)),
-    map(({ response }) => systemActions.successNotification(response.message)),
+    switchMap(({ response }) => merge(
+        of(userControlActions.setValidationErrors({})),
+        of(systemActions.successNotification(response.message)))
+    ),
     catchError((err, caught) => merge(
         caught,
-        of(systemActions.errorNotification(err.response.message)),
+        of(userControlActions.setValidationErrors(err)),
     )),
 );
 

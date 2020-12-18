@@ -1,14 +1,19 @@
-import { mapKeys, upperFirst } from 'lodash';
+import { transform, set, get, isObject, isArray, upperFirst, merge } from 'lodash';
 import { Observable, of, from, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { validate, ValidationError } from 'class-validator';
+import { ValidationErrors } from '@system/interfaces/validation-errors.interface';
 
 export class ValidationService {
+    private entity = {};
+
     /**
      * Проверить сущность на ошибки валидации
      * @param entity
      */
-    public check$<T extends object>(entity: T): Observable<T> {
+    public check$<T>(entity: T): Observable<T> {
+        this.entity = this.flatEntity(entity);
+
         return from(validate(entity)).pipe(
             mergeMap((msgs) => (msgs.length
                 ? throwError(this.wrapKeys(this.parse(msgs)))
@@ -24,23 +29,9 @@ export class ValidationService {
      */
     private parse(messages: ValidationError[], buffer = {}): object {
         return messages.reduce((acc, err) => (err.constraints
-            ? this.push(acc, err)
-            : Object.assign(acc, this.parse(err.children, buffer))
+            ? set(buffer, err.property, this.buildMessage(err.constraints!))
+            : merge(acc, this.parse(err.children, buffer))
         ), buffer);
-    }
-
-    /**
-     * Положить сообщение в буффер
-     * @param buffer
-     * @param err
-     */
-    private push(buffer: object, err: ValidationError): object {
-        return Object.defineProperty(buffer, err.property, {
-            value: this.buildMessage(err.constraints!),
-            configurable: true,
-            enumerable: true,
-            writable: true,
-        });
     }
 
     /**
@@ -58,9 +49,23 @@ export class ValidationService {
      * Обернуть имена ключей в ошибочные
      * @param fields
      */
-    private wrapKeys(fields: object) {
-        return mapKeys(fields,
-            (_, key) => `error${upperFirst(key)}`
-        );
+    private wrapKeys(errors: object): ValidationErrors {
+        return transform(this.entity, (acc, _, key) => set(
+            acc,
+            `error${upperFirst(key)}`,
+            get(errors, key, '')
+        ), {});
+    }
+
+    /**
+     * Извлечь вложенные объекты сущности
+     * @param entity
+     */
+    private flatEntity(entity = {}): object {
+        return transform(entity, (acc, value, key) => (
+            isObject(value) && !isArray(value)
+                ? merge(acc, this.flatEntity(value))
+                : set(acc, key, value)
+        ), this.entity);
     }
 }

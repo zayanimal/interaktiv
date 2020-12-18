@@ -29,17 +29,17 @@ export const getUser: Epic = (action$, _, { users }) => action$.pipe(
 
 export const editUser: Epic = (action$, state$, { validation, users }) => action$.pipe(
     filter(isActionOf(userControlActions.editUser.request)),
-    mergeMap(() => state$.pipe(
+    mergeMap(({ payload }) => state$.pipe(
         first(),
         map((state) => ({
             ...userControlSelectors.newUser(state),
-            contacts: new ContactsEntity(
+            contacts: ContactsEntity.of(
                 userControlSelectors.newContacts(state)
             )
-        }))
+        })),
+        mergeMap((payld) => validation.check$(UserFormEntity.of(payld))),
+        mergeMap((user) => users.update$(payload, user)),
     )),
-    mergeMap((payload) => validation.check$(new UserFormEntity(payload))),
-    mergeMap((user) => users.update$('test3', user)),
     switchMap(() => merge(
         of(userControlActions.setValidationErrors({})),
         of(systemActions.successNotification('Пользователь изменён'))

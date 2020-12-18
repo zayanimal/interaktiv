@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
 import { systemActions } from '@system/store/actions';
@@ -22,15 +22,7 @@ const mapDispatchToProps = {
 export type AuthProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Auth: React.FC<AuthProps> = (props) => {
-    const {
-        isLoggedIn,
-        authFetched,
-        checkAuth,
-    } = props;
-
-    useEffect(() => {
-        if (isLoggedIn) { checkAuth(); }
-    }, [checkAuth, isLoggedIn, authFetched]);
+    const { authFetched } = props;
 
     if (!authFetched) { return null; }
 

@@ -19,11 +19,14 @@ export const phone = (state: RootStateTypes) => userControlState(state).phone;
 
 export const position = (state: RootStateTypes) => userControlState(state).position;
 
+export const isActive = (state: RootStateTypes) => userControlState(state).isActive;
+
 export const newUser = (state: RootStateTypes) => _.pick(userControlState(state), [
     'username',
     'password',
     'role',
     'permissions',
+    'isActive',
 ]);
 
 export const newContacts = (state: RootStateTypes) => _.pick(userControlState(state), [

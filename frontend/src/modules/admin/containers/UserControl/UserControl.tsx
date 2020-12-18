@@ -1,11 +1,13 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
 import { userControlActions } from '@admin/store/actions';
+import { usersActions } from '@admin/store/actions';
 import { userSelectors, userControlSelectors } from '@admin/store/selectors';
+import { systemActions, dictionaryActions } from '@system/store/actions';
 import { dictionarySelectors } from '@system/store/selectors';
-import { Button } from '@material-ui/core';
+import { Button, Checkbox, InputLabel } from '@material-ui/core';
 import { UserAuthFields } from '@admin/components/UserAuthFields';
 import { UserContactsFields } from '@admin/components/UserContactsFields';
 import { Preloader } from '@system/components/Preloader';
@@ -26,10 +28,16 @@ const mapStateToProps = (state: RootStateTypes) => ({
     email: userControlSelectors.email(state),
     phone: userControlSelectors.phone(state),
     position: userControlSelectors.position(state),
+    isActive: userControlSelectors.isActive(state),
     ...userControlSelectors.validation(state)
 });
 
 const mapDispatchToProps = {
+    setHeaderTitle: systemActions.setHeaderTitle,
+    getDictionary: dictionaryActions.getDictionary,
+    clearDictionary: dictionaryActions.clearDictionary,
+    setUserEditMode: usersActions.setUserEditMode,
+    getUser: userControlActions.getUser.request,
     setUsername: userControlActions.setUsername,
     setPassword: userControlActions.setPassword,
     setRole: userControlActions.setRole,
@@ -37,6 +45,7 @@ const mapDispatchToProps = {
     setEmail: userControlActions.setEmail,
     setPhone: userControlActions.setPhone,
     setPosition: userControlActions.setPosition,
+    setIsActive: userControlActions.setIsActive,
     addNewUser: userControlActions.addNewUser,
     editUser: userControlActions.editUser.request,
     clearUserData: userControlActions.clearUserData,
@@ -47,18 +56,39 @@ export type UserControlProps = ReturnType<typeof mapStateToProps> & typeof mapDi
 const UserControl: React.FC<UserControlProps> = (props) => {
     const {
         loading,
+        setHeaderTitle,
+        getDictionary,
         userEditMode,
+        setUserEditMode,
+        getUser,
+        isActive,
+        setIsActive,
+        clearDictionary,
         addNewUser,
         editUser,
         clearUserData,
     } = props;
 
+    const { path, params } = useRouteMatch<{ user: string }>();
     const history = useHistory();
 
-    const onCancel = () => {
-        clearUserData();
-        history.push('/users');
-    };
+    useEffect(() => {
+        getDictionary(['roles', 'permissions']);
+
+        if (path.includes('edit')) {
+            getUser(params.user);
+            setHeaderTitle('Редактирование пользователя');
+            setUserEditMode(true);
+        } else {
+            setHeaderTitle('Добавление пользователя');
+            setUserEditMode(false);
+        }
+
+        return () => { clearDictionary(); };
+    }, []); // eslint-disable-line
+
+    const onCancel = () => { clearUserData(); history.push('/users'); };
+    const onEdit = () => { editUser(params.user); }
 
     return (userEditMode && loading ? <Preloader /> : (
         <>
@@ -70,6 +100,15 @@ const UserControl: React.FC<UserControlProps> = (props) => {
                 <div className={cn('column')}>
                     <h3>Контакты</h3>
                     <UserContactsFields {...props} />
+
+                    <div className={cn('status')}>
+                        <Checkbox
+                            checked={isActive}
+                            onChange={({ target }) => setIsActive(target.checked)}
+                            color="primary"
+                        />
+                        <InputLabel>Статус пользователя</InputLabel>
+                    </div>
                 </div>
             </div>
             <div className={cn('controls')}>
@@ -83,7 +122,7 @@ const UserControl: React.FC<UserControlProps> = (props) => {
                 <Button
                     variant="text"
                     color="primary"
-                    onClick={userEditMode ? editUser : addNewUser}
+                    onClick={userEditMode ? onEdit : addNewUser}
                 >
                     {userEditMode ? 'Редактировать' : 'Добавить'}
                 </Button>

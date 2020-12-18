@@ -1,6 +1,6 @@
 import { combineEpics, Epic } from 'redux-observable';
-import { getUsersList, sendNewUser, removeUser } from '@admin/store/epics/users.epic';
-import { getUser, editUser } from '@admin/store/epics/form.epic';
+import { getUsersList, sendNewUser, removeUser } from '@admin/effects/users.epic';
+import { getUser, editUser } from '@admin/effects/user-form.epic';
 
 export const adminEpic: Epic = combineEpics(
     getUsersList,

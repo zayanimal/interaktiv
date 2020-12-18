@@ -22,9 +22,9 @@ const initialState = {
     loading: false,
     username: '',
     password: '',
-    role: '',
+    role: 'customer',
     isActive: true,
-    permissions: [],
+    permissions: ['MY_ORDERS', 'NEW_ORDER', 'PERSONAL'],
     email: '',
     phone: '',
     position: '',
@@ -85,13 +85,18 @@ export const userControl = createReducer<IInitialState>(initialState, {
         position: payload,
     }),
 
+    [getType(userControlActions.setIsActive)]: (state, { payload }) => ({
+        ...state,
+        isActive: payload,
+    }),
+
     [getType(userControlActions.setValidationErrors)]: (state, { payload }) => ({
         ...state,
-        errorUsername: payload?.errorUsername || '',
-        errorPassword: payload?.errorPassword || '',
-        errorEmail: payload?.errorEmail || '',
-        errorPhone: payload?.errorPhone || '',
-        errorPosition: payload?.errorPosition || '',
+        errorUsername: payload.errorUsername,
+        errorPassword: payload.errorPassword,
+        errorEmail: payload.errorEmail,
+        errorPhone: payload.errorPhone,
+        errorPosition: payload.errorPosition,
     }),
 
     [getType(userControlActions.clearUserData)]: () => ({ ...initialState }),
