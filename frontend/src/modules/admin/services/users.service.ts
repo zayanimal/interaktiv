@@ -1,14 +1,14 @@
 import { RestService } from '@system/services/rest.service';
-import { IUsersService, INewUser } from '@admin/interfaces';
+import { IListableService, INewUser } from '@admin/interfaces';
 
-export class UsersService implements IUsersService {
-    constructor(private api: RestService) {}
+export class UsersService implements IListableService {
+    constructor(private readonly api: RestService) {}
 
     public getList$(page: number) {
         return this.api.get$(`users?page=${page}&limit=30`);
     }
 
-    public add$(dto: INewUser) {
+    public create$(dto: INewUser) {
         return this.api.put$('auth/register', dto);
     }
 

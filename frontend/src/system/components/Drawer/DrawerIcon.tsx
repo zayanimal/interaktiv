@@ -4,6 +4,7 @@ import Ballot from '@material-ui/icons/Ballot';
 import AddBox from '@material-ui/icons/AddBox';
 import AccountBox from '@material-ui/icons/AccountBox';
 import People from '@material-ui/icons/People';
+import Business from '@material-ui/icons/Business';
 import { bem } from '@utils/formatters';
 import './Drawer.scss';
 
@@ -15,6 +16,7 @@ const icons = new Map([
     ['AddBox', AddBox],
     ['AccountBox', AccountBox],
     ['People', People],
+    ['Business', Business],
 ]);
 
 export const DrawerIcon = (icon: string) => createElement(

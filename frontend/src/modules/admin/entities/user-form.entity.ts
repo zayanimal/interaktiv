@@ -8,10 +8,6 @@ import {
 import { ContactsEntity } from '@admin/entities';
 
 export class UserFormEntity {
-    constructor(payload: UserFormEntity) { Object.assign(this, payload); }
-
-    static of(payload: UserFormEntity) { return new UserFormEntity(payload); }
-
     @MinLength(4, { message: 'Не меньше 4-х символов'})
     @MaxLength(15, { message: 'Не больше 15-ти символов'})
     @IsAlphanumeric('en-US', { message: 'Только английские буквы или цифры' })

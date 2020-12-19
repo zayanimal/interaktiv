@@ -7,7 +7,7 @@ import {
     ColumnProps,
 } from 'react-virtualized';
 import { bem } from '@utils/formatters';
-import { IUsersMeta } from '@admin/interfaces/users.interface';
+import { IPaginationMeta } from '@shared/interfaces';
 import 'react-virtualized/styles.css';
 import './TableVirtual.scss';
 
@@ -17,7 +17,7 @@ interface Props {
     list: any[];
     getList: (limit: number) => void;
     columns: ColumnProps[];
-    meta: IUsersMeta;
+    meta: IPaginationMeta;
 }
 
 const TableVirtual: React.FC<Props> = (props) => {

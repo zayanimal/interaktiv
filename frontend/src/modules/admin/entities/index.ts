@@ -1,2 +1,2 @@
-export * from '@admin/entities/form.entity';
-export * from '@admin/entities/contacts.entity';
+export * from '@admin/entities/user-form.entity';
+export * from '@admin/entities/user-contact.entity';

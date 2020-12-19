@@ -1,13 +1,6 @@
 import { createReducer, getType } from 'typesafe-actions';
 import { usersActions } from '@admin/store/actions';
-import { IUser, IUsersMeta } from '@admin/interfaces/users.interface';
-
-interface InitialState {
-    list: IUser[],
-    meta: IUsersMeta;
-    userEditMode: boolean;
-    userEditName: string;
-}
+import { IUsersInitialState } from '@admin/interfaces';
 
 const initialState = {
     list: [],
@@ -22,7 +15,7 @@ const initialState = {
     userEditName: '',
 };
 
-export const users = createReducer<InitialState>(initialState, {
+export const users = createReducer<IUsersInitialState>(initialState, {
     [getType(usersActions.getUsersList.success)]: (state, { payload }) => ({
         ...state,
         list: [...state.list, ...payload.items],

@@ -1,10 +1,6 @@
 import { IsEmail, MinLength, MaxLength, IsPhoneNumber } from 'class-validator';
 
 export class ContactsEntity {
-    constructor(payload: ContactsEntity) { Object.assign(this, payload); }
-
-    static of(payload: ContactsEntity) { return new ContactsEntity(payload); }
-
     @IsEmail({}, { message: 'Здесь должна быть почта' })
     email!: string;
 

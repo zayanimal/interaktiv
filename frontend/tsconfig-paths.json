@@ -4,6 +4,7 @@
     "paths": {
       "@/*": ["/*"],
       "@config/*": ["config/*"],
+      "@shared/*": ["modules/shared/*"],
       "@admin/*": ["modules/admin/*"],
       "@customer/*": ["modules/customer/*"],
       "@system/*": ["system/*"],

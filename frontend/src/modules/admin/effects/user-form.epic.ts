@@ -7,6 +7,7 @@ import {
     switchMap,
     catchError,
 } from 'rxjs/operators';
+import { plainToClass } from 'class-transformer';
 import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
@@ -39,11 +40,9 @@ export const editUser: Epic = (action$, state$, { validation, users }) => action
         first(),
         map((state) => ({
             ...userControlSelectors.newUser(state),
-            contacts: ContactsEntity.of(
-                userControlSelectors.newContacts(state)
-            )
+            contacts: plainToClass(ContactsEntity, userControlSelectors.newContacts(state))
         })),
-        mergeMap((payld) => validation.check$(UserFormEntity.of(payld))),
+        mergeMap((payld) => validation.check$(plainToClass(UserFormEntity, payld))),
         mergeMap((user) => users.update$(payload, user)),
     )),
     switchMap(() => merge(

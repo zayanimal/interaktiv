@@ -2,9 +2,9 @@ import { transform, set, get, isObject, isArray, upperFirst, merge } from 'lodas
 import { Observable, of, from, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { validate, ValidationError } from 'class-validator';
-import { ValidationErrors } from '@system/interfaces/validation-errors.interface';
+import { IValidationService, ValidationErrors } from '@system/interfaces';
 
-export class ValidationService {
+export class ValidationService implements IValidationService {
     private entity = {};
 
     /**

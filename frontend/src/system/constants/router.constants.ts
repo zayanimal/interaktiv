@@ -36,11 +36,11 @@ export const ROUTE_ITEMS: IRouterItem[] = [
         icon: 'People',
         component: 'Users',
     },
-    // {
-    //     key: 'COMPANIES',
-    //     path: '/comanies',
-    //     name: 'Компании',
-    //     icon: 'Business',
-    //     component: 'Companies',
-    // }
+    {
+        key: 'COMPANIES',
+        path: '/comanies',
+        name: 'Компании',
+        icon: 'Business',
+        component: 'Companies',
+    }
 ];

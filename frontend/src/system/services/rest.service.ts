@@ -7,9 +7,9 @@ import { ApiUrl } from '@system/decorators';
 export class RestService implements IRestService {
     constructor(private tokenService: TokenService) {}
 
-    url = '';
+    private url = '';
 
-    public getHeader(params: IHeader) {
+    private getHeader(params: IHeader): object {
         return {
             url: this.url + params.url,
             headers: {
@@ -17,7 +17,7 @@ export class RestService implements IRestService {
                 'Content-Type': 'application/json',
             },
             method: params.method,
-            body: params.body,
+            body: params?.body || {},
         };
     }
 
@@ -26,23 +26,11 @@ export class RestService implements IRestService {
     }
 
     public post$(url: string, body?: object) {
-        return ajax(
-            this.getHeader({
-                url,
-                method: 'POST',
-                body: body || {},
-            }),
-        );
+        return ajax(this.getHeader({ url, method: 'POST', body }));
     }
 
     public put$(url: string, body?: object) {
-        return ajax(
-            this.getHeader({
-                url,
-                method: 'PUT',
-                body: body || {},
-            }),
-        );
+        return ajax(this.getHeader({ url, method: 'PUT', body }));
     }
 
     public delete$(url: string) {
