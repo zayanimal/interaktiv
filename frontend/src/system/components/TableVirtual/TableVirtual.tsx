@@ -55,7 +55,6 @@ const TableVirtual: React.FC<Props> = (props) => {
         return [cols, range(10).map(() => row)];
     };
 
-
     return (
         <div style={{ height: 'calc(100vh - 8.1992em)' }}>
             <InfiniteLoader
