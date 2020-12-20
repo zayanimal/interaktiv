@@ -26,7 +26,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
     const columns: ColumnProps[] = useMemo(() => {
         const onEdit = (rowData: any) => () => {
             setCompanyEditName(rowData.name);
-            history.push({ pathname: `${path}/edit/${rowData.name}` });
+            history.push({ pathname: `${path}/edit/${rowData.id}` });
         };
 
         const onRemove = (rowData: any) => () => {

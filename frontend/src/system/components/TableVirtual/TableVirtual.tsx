@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
     Table,
     Column,
@@ -14,6 +14,21 @@ import './TableVirtual.scss';
 
 const cn = bem('TableVirtual');
 
+const getSkeleton = (columns: ColumnProps[]): [ColumnProps[], object[]] => {
+    const cols = columns.map((column, idx) => transform(column, (acc, value, key) => {
+        set(acc, key, value);
+        set(acc, 'cellRenderer', () => (
+            <div key={idx} className={cn('mock')} />
+        ));
+
+        return acc;
+    }, {} as ColumnProps));
+
+    const row = columns.reduce((acc, item) => set(acc, item.dataKey, ''), {});
+
+    return [cols, range(10).map(() => row)];
+};
+
 interface Props {
     list: any[];
     getList: (limit: number) => void;
@@ -26,39 +41,35 @@ const TableVirtual: React.FC<Props> = (props) => {
         list,
         getList,
         columns,
-        meta: {
-            currentPage,
-            totalItems,
-            totalPages,
-        },
+        meta: { currentPage, totalItems, totalPages },
     } = props;
 
-    const loadMoreRows = () => {
+    const [mockCols, mockList] = useMemo(() => getSkeleton(columns), [columns]);
+    const [filledList, setFilledList] = useState([{}]);
+    const [cols, setCols] = useState<ColumnProps[]>([]);
+
+    useEffect(() => {
+        setFilledList(mockList);
+        setCols(mockCols);
+
+        if (list.length) {
+            setFilledList(list);
+            setCols(columns);
+        }
+    }, [list, columns, mockList, mockCols]);
+
+    const loadMoreRows = useCallback(() => {
         if (currentPage <= totalPages) {
             getList(currentPage + 1);
         }
 
         return Promise.resolve();
-    };
-
-
-    const skeleton = (columns: ColumnProps[]) => {
-        const cols = columns.map((column, idx) => transform(column, (acc, value, key) => {
-            set(acc, key, value);
-            set(acc, 'cellRenderer', () => (<div key={idx}></div>));
-
-            return acc;
-        }, {}));
-
-        const row = columns.reduce((acc, item) => set(acc, item.dataKey, ''), {});
-
-        return [cols, range(10).map(() => row)];
-    };
+    }, [currentPage, totalPages, getList]);
 
     return (
         <div style={{ height: 'calc(100vh - 8.1992em)' }}>
             <InfiniteLoader
-                isRowLoaded={({ index }) => !!list[index]}
+                isRowLoaded={({ index }) => !!filledList[index]}
                 loadMoreRows={loadMoreRows}
                 rowCount={totalItems}
             >
@@ -74,10 +85,10 @@ const TableVirtual: React.FC<Props> = (props) => {
                                 headerHeight={60}
                                 rowClassName={cn('row')}
                                 rowHeight={60}
-                                rowCount={list.length}
-                                rowGetter={({ index }) => list[index]}
+                                rowCount={filledList.length}
+                                rowGetter={({ index }) => filledList[index]}
                             >
-                                {columns.map((col) => (
+                                {cols.map((col) => (
                                     <Column
                                         key={col.dataKey}
                                         label={col.label}

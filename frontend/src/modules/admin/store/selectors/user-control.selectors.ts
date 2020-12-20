@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { pick } from 'lodash';
 import { RootStateTypes } from '@config/roots';
 
 const userControlState = (state: RootStateTypes) => state.admin.userControl;
@@ -21,7 +21,7 @@ export const position = (state: RootStateTypes) => userControlState(state).posit
 
 export const isActive = (state: RootStateTypes) => userControlState(state).isActive;
 
-export const newUser = (state: RootStateTypes) => _.pick(userControlState(state), [
+export const newUser = (state: RootStateTypes) => pick(userControlState(state), [
     'username',
     'password',
     'role',
@@ -29,13 +29,13 @@ export const newUser = (state: RootStateTypes) => _.pick(userControlState(state)
     'isActive',
 ]);
 
-export const newContacts = (state: RootStateTypes) => _.pick(userControlState(state), [
+export const newContacts = (state: RootStateTypes) => pick(userControlState(state), [
     'email',
     'phone',
     'position',
 ]);
 
-export const validation = (state: RootStateTypes) => _.pick(userControlState(state), [
+export const validation = (state: RootStateTypes) => pick(userControlState(state), [
     'errorUsername',
     'errorPassword',
     'errorEmail',
