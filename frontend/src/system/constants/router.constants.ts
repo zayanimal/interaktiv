@@ -38,7 +38,7 @@ export const ROUTE_ITEMS: IRouterItem[] = [
     },
     {
         key: 'COMPANIES',
-        path: '/comanies',
+        path: '/companies',
         name: 'Компании',
         icon: 'Business',
         component: 'Companies',

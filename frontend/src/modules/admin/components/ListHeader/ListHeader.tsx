@@ -3,11 +3,11 @@ import { useRouteMatch, useHistory } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import { bem } from '@utils/formatters';
-import './UsersHeader.scss';
+import './ListHeader.scss';
 
-const cn = bem('UsersHeader');
+const cn = bem('ListHeader');
 
-const UsersHeader: React.FC = () => {
+const ListHeader: React.FC = () => {
     const { path } = useRouteMatch();
     const history = useHistory();
 
@@ -24,4 +24,4 @@ const UsersHeader: React.FC = () => {
     );
 };
 
-export { UsersHeader };
+export { ListHeader };

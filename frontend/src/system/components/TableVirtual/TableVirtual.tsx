@@ -6,6 +6,7 @@ import {
     InfiniteLoader,
     ColumnProps,
 } from 'react-virtualized';
+import { range, set, transform } from 'lodash';
 import { bem } from '@utils/formatters';
 import { IPaginationMeta } from '@shared/interfaces';
 import 'react-virtualized/styles.css';
@@ -39,6 +40,21 @@ const TableVirtual: React.FC<Props> = (props) => {
 
         return Promise.resolve();
     };
+
+
+    const skeleton = (columns: ColumnProps[]) => {
+        const cols = columns.map((column, idx) => transform(column, (acc, value, key) => {
+            set(acc, key, value);
+            set(acc, 'cellRenderer', () => (<div key={idx}></div>));
+
+            return acc;
+        }, {}));
+
+        const row = columns.reduce((acc, item) => set(acc, item.dataKey, ''), {});
+
+        return [cols, range(10).map(() => row)];
+    };
+
 
     return (
         <div style={{ height: 'calc(100vh - 8.1992em)' }}>

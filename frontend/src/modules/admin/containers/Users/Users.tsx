@@ -40,12 +40,7 @@ const Users: React.FC<UsersProps> = (props) => {
 
             if (!meta.currentPage) { getList(1); }
         }
-    }, [
-        getList,
-        setHeaderTitle,
-        pathname,
-        meta,
-    ]);
+    }, [getList, setHeaderTitle, pathname, meta]);
 
     return (
         <Switch>
