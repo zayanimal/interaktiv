@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 @import '@styles/_colors.scss';
+@import '@styles/_grid.scss';
 
 :root {
     box-sizing: border-box;
@@ -19,4 +20,13 @@ html, body {
 
 body {
     overflow: hidden;
+}
+
+ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+}
+
+li + li {
+    margin-top: 0.5em;
 }

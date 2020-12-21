@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { systemActions } from '@system/store/actions';
@@ -38,7 +38,7 @@ export type LayoutProps = ReturnType<typeof mapStateToProps> & typeof mapDispatc
 const Layout: React.FC<LayoutProps> = (props) => {
     const { checkAuth, getDrawerState } = props;
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         checkAuth();
         getDrawerState();
     }, [checkAuth, getDrawerState]);

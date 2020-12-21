@@ -7,7 +7,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import ruLocale from 'date-fns/locale/ru';
 import { App } from '@system/components/App';
 import { configureStore } from '@config/configure-store';
-import './index.scss';
+import '@styles/index.scss';
 
 const store = configureStore();
 

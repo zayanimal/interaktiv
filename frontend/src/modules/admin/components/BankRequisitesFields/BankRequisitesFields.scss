@@ -1,0 +1,30 @@
+.BankRequisitesFields {
+    position: relative;
+    margin-top: 2em;
+    padding: 2em;
+    border: 1px solid var(--color-smooth-blue);
+    border-radius: 4px;
+
+    &__label {
+        color: var(--color-blue);
+    }
+
+    &__input {
+        width: 100%;
+
+        & + label {
+            margin-top: 2em;
+        }
+    }
+
+    &__button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0.4em;
+    }
+
+    &__icon {
+        color: var(--color-blue);
+    }
+}

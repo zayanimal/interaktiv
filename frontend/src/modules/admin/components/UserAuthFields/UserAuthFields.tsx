@@ -8,7 +8,10 @@ import {
     Chip,
 } from '@material-ui/core';
 import { handleInput, handleSelect } from '@utils/handlers';
-import { cn, UserControlProps } from '@admin/containers/UserControl';
+import { UserControlProps } from '@admin/containers/UserControl';
+import { bem } from '@utils/formatters';
+
+const grid = bem('FlexGrid');
 
 const UserAuthFields: React.FC<UserControlProps> = (props) => {
     const {
@@ -31,7 +34,7 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
             <TextField
                 error={!!errorUsername}
                 helperText={errorUsername}
-                className={cn('input')}
+                className={grid('input')}
                 type="text"
                 value={username}
                 onChange={handleInput(setUsername)}
@@ -40,14 +43,14 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
             <TextField
                 error={!!errorPassword}
                 helperText={errorPassword}
-                className={cn('input')}
+                className={grid('input')}
                 type="password"
                 value={password}
                 onChange={handleInput(setPassword)}
             />
             <InputLabel>Роль пользователя</InputLabel>
             <Select
-                className={cn('select')}
+                className={grid('select')}
                 value={role}
                 onChange={handleSelect(setRole)}
             >
@@ -62,16 +65,16 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
             </Select>
             <InputLabel>Права пользователя</InputLabel>
             <Select
-                className={cn('select')}
+                className={grid('select')}
                 placeholder="Права"
                 value={permissions}
                 multiple
                 onChange={handleSelect(setPermissions)}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
-                    <div className={cn('select-multiple')}>
+                    <div className={grid('select-multiple')}>
                         {(selected as string[]).map((value) => (
-                            <Chip key={value} label={value} />
+                            <Chip key={value} label={value} size="small" />
                         ))}
                     </div>
                 )}

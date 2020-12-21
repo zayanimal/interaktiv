@@ -1,54 +1,6 @@
 .UserControl {
-    $width: 60%;
-    $padding: 2em;
-    $margin-top: 3em;
-    position: relative;
-    display: flex;
-
-    &__column {
-        padding: $padding;
-        flex: 1;
-        min-height: 23em;
-
-        h3 + * {
-            margin-top: $margin-top;
-        }
-    }
-
-    &__input {
-        width: $width;
-
-        & + label {
-            margin-top: $margin-top;
-        }
-    }
-
-    &__select {
-        width: $width;
-
-        & + label {
-            margin-top: $margin-top;
-        }
-
-        &-multiple {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .3em;
-        }
-    }
-
-    &__controls {
-        position: absolute;
-        bottom: 3em;
-        left: 3em;
-
-        button + button {
-            margin-left: 2em;
-        }
-    }
-
     &__status {
-        margin-top: $margin-top * 1.5;
+        margin-top: 3em * 1.5;
         display: flex;
         align-items: center;
 

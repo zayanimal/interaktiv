@@ -1,0 +1,11 @@
+.RequisitesDrawer {
+    &__body {
+        display: flex;
+        height: calc(100% - 4.25em);
+        overflow-y: auto;
+    }
+
+    &__button {
+        margin: 1.5em 0;
+    }
+}

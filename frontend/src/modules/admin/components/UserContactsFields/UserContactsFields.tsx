@@ -1,7 +1,10 @@
 import React from 'react';
 import { InputLabel, TextField } from '@material-ui/core';
 import { handleInput } from '@utils/handlers';
-import { cn, UserControlProps } from '@admin/containers/UserControl';
+import { UserControlProps } from '@admin/containers/UserControl';
+import { bem } from '@utils/formatters';
+
+const grid = bem('FlexGrid');
 
 const UserContactsFields: React.FC<UserControlProps> = (props) => {
     const {
@@ -22,7 +25,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
             <TextField
                 error={!!errorEmail}
                 helperText={errorEmail}
-                className={cn('input')}
+                className={grid('input')}
                 type="email"
                 value={email}
                 onChange={handleInput(setEmail)}
@@ -31,7 +34,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
             <TextField
                 error={!!errorPhone}
                 helperText={errorPhone}
-                className={cn('input')}
+                className={grid('input')}
                 type="text"
                 value={phone}
                 onChange={handleInput(setPhone)}
@@ -40,7 +43,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
             <TextField
                 error={!!errorPosition}
                 helperText={errorPosition}
-                className={cn('input')}
+                className={grid('input')}
                 type="text"
                 value={position}
                 onChange={handleInput(setPosition)}

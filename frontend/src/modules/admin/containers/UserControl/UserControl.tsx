@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
 import { userControlActions } from '@admin/store/actions';
@@ -7,14 +7,16 @@ import { usersActions } from '@admin/store/actions';
 import { userSelectors, userControlSelectors } from '@admin/store/selectors';
 import { systemActions, dictionaryActions } from '@system/store/actions';
 import { dictionarySelectors } from '@system/store/selectors';
-import { Button, Checkbox, InputLabel } from '@material-ui/core';
+import { Checkbox, InputLabel } from '@material-ui/core';
 import { UserAuthFields } from '@admin/components/UserAuthFields';
 import { UserContactsFields } from '@admin/components/UserContactsFields';
+import { FormControls } from '@admin/components/FormControls';
 import { Preloader } from '@system/components/Preloader';
-import { bem } from '@utils/formatters';
+import { bem, classes } from '@utils/formatters';
 import './UserControl.scss';
 
-export const cn = bem('UserControl');
+const cn = bem('UserControl');
+const grid = bem('FlexGrid');
 
 const mapStateToProps = (state: RootStateTypes) => ({
     dicts: dictionarySelectors.dictionaries(state),
@@ -70,7 +72,6 @@ const UserControl: React.FC<UserControlProps> = (props) => {
     } = props;
 
     const { path, params } = useRouteMatch<{ user: string }>();
-    const history = useHistory();
 
     useEffect(() => {
         getDictionary(['roles', 'permissions']);
@@ -87,17 +88,16 @@ const UserControl: React.FC<UserControlProps> = (props) => {
         return () => { clearDictionary(); };
     }, []); // eslint-disable-line
 
-    const onCancel = () => { clearUserData(); history.push('/users'); };
     const onEdit = () => { editUser(params.user); }
 
     return (userEditMode && loading ? <Preloader /> : (
         <>
-            <div className={cn()}>
-                <div className={cn('column')}>
+            <div className={classes(grid('row'))}>
+                <div className={grid('col-6')}>
                     <h3>Аутентификация</h3>
                     <UserAuthFields {...props} />
                 </div>
-                <div className={cn('column')}>
+                <div className={grid('col-6')}>
                     <h3>Контакты</h3>
                     <UserContactsFields {...props} />
 
@@ -111,22 +111,13 @@ const UserControl: React.FC<UserControlProps> = (props) => {
                     </div>
                 </div>
             </div>
-            <div className={cn('controls')}>
-                <Button
-                    variant="text"
-                    color="primary"
-                    onClick={onCancel}
-                >
-                    Назад
-                </Button>
-                <Button
-                    variant="text"
-                    color="primary"
-                    onClick={userEditMode ? onEdit : addNewUser}
-                >
-                    {userEditMode ? 'Редактировать' : 'Добавить'}
-                </Button>
-            </div>
+            <FormControls
+                mode={userEditMode}
+                backward="/users"
+                onEdit={onEdit}
+                onAdd={addNewUser}
+                onClean={clearUserData}
+            />
         </>
     ));
 };

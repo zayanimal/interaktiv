@@ -11,6 +11,7 @@ import { systemActions } from '@system/store/actions';
 import { companiesActions } from '@admin/store/actions';
 import { companySelectors } from '@admin/store/selectors';
 import { CompaniesList } from '@admin/components/CompaniesList';
+import { CompanyControl } from '@admin/containers/CompanyControl';
 
 const mapStateToProps = (state: RootStateTypes) => ({
     list: companySelectors.list(state),
@@ -42,8 +43,8 @@ const Companies: React.FC<CompaniesProps> = (props) => {
 
     return (
         <Switch>
-            <Route path={`${path}/add`} />
-            <Route path={`${path}/edit/:company`} />
+            <Route path={`${path}/add`} component={CompanyControl} />
+            <Route path={`${path}/edit/:id`} component={CompanyControl} />
             <Route
                 exact
                 path={path}
