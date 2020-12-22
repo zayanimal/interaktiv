@@ -1,15 +1,12 @@
 import React from 'react';
 import { InputLabel, TextField } from '@material-ui/core';
 import { bem } from '@utils/formatters';
+import { CompanyControlProps } from '@admin/containers/CompanyControl';
 
 const grid = bem('FlexGrid');
 
-interface Props {
-
-}
-
-const CompanyFields: React.FC<Props> = (props) => {
-    // const {} = props;
+const CompanyFields: React.FC<CompanyControlProps> = (props) => {
+    const { name, email, phone, website } = props;
 
     return (
         <>
@@ -19,7 +16,7 @@ const CompanyFields: React.FC<Props> = (props) => {
                 helperText={''}
                 className={grid('input')}
                 type="text"
-                value={''}
+                value={name}
                 onChange={() => {}}
             />
             <InputLabel>Почта</InputLabel>
@@ -28,7 +25,7 @@ const CompanyFields: React.FC<Props> = (props) => {
                 helperText={''}
                 className={grid('input')}
                 type="text"
-                value={''}
+                value={email}
                 onChange={() => {}}
             />
             <InputLabel>Телефон</InputLabel>
@@ -37,7 +34,7 @@ const CompanyFields: React.FC<Props> = (props) => {
                 helperText={''}
                 className={grid('input')}
                 type="text"
-                value={''}
+                value={phone}
                 onChange={() => {}}
             />
             <InputLabel>Сайт</InputLabel>
@@ -46,7 +43,7 @@ const CompanyFields: React.FC<Props> = (props) => {
                 helperText={''}
                 className={grid('input')}
                 type="text"
-                value={''}
+                value={website}
                 onChange={() => {}}
             />
         </>

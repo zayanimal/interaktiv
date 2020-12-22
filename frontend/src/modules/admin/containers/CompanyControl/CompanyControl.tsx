@@ -17,6 +17,10 @@ const grid = bem('FlexGrid');
 const mapStateToProps = (state: RootStateTypes) => ({
     loading: companyControlSelectors.loading(state),
     companyEditMode: companySelectors.companyEditMode(state),
+    name: companyControlSelectors.name(state),
+    email: companyControlSelectors.email(state),
+    phone: companyControlSelectors.phone(state),
+    website: companyControlSelectors.website(state),
 });
 
 const mapDispatchToProps = {
@@ -25,9 +29,9 @@ const mapDispatchToProps = {
     getCompany: companyControlActions.getCompany.request,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const CompanyControl: React.FC<Props> = (props) => {
+const CompanyControl: React.FC<CompanyControlProps> = (props) => {
     const {
         loading,
         setHeaderTitle,
@@ -54,7 +58,7 @@ const CompanyControl: React.FC<Props> = (props) => {
             <div className={grid('row')}>
                 <div className={grid('col-6')}>
                     <h3>Данные</h3>
-                    <CompanyFields />
+                    <CompanyFields {...props} />
                 </div>
                 <div className={grid('col-6')}>
                     <h3>Реквизиты</h3>

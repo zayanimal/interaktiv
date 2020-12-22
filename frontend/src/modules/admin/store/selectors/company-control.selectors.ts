@@ -11,11 +11,13 @@ export const name = (state: RootStateTypes) => companyControlState(state).name;
 
 export const users = (state: RootStateTypes) => companyControlState(state).users;
 
-export const email = (state: RootStateTypes) => companyControlState(state).email;
+const contact = (state: RootStateTypes) => companyControlState(state).contact;
 
-export const phone = (state: RootStateTypes) => companyControlState(state).phone;
+export const email = (state: RootStateTypes) => contact(state).email;
 
-export const website = (state: RootStateTypes) => companyControlState(state).website;
+export const phone = (state: RootStateTypes) => contact(state).phone;
+
+export const website = (state: RootStateTypes) => contact(state).website;
 
 export const validation = (state: RootStateTypes) => pick(companyControlState(state), [
     'errorName',
