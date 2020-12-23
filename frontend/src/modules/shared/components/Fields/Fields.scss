@@ -1,0 +1,7 @@
+.Fields {
+    width: 60%;
+
+    & + & {
+        margin-top: 3em;
+    }
+}

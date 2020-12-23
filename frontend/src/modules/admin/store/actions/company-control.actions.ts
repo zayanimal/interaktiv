@@ -12,15 +12,17 @@ export const editCompany = createAsyncAction(
     '[ADMIN] EDIT_COMPANY_FAILURE',
 )<string, any, any>();
 
-export const setName = createAction('[ADMIN] COMPANY_SET_NAME')<string>();
+export const setDrawerState = createAction('[ADMIN] SET_DRAWER_STATE')<boolean>();
+
+export const setCurrentRequisites = createAction('[ADMIN] SET_CURRENT_REQUISITES')<string>();
+
+export const setCompanyForm = createAction('[ADMIN] SET_COMPANY_FORM')<object>();
+
+export const setContactForm = createAction('[ADMIN] SET_CONTACT_FORM')<object>();
+
+export const setRequsitesForm = createAction('[ADMIN] SET_REQUISITES_FORM')<object>();
 
 export const setUsers = createAction('[ADMIN] COMPANY_SET_USERS')<string[]>();
-
-export const setEmail = createAction('[ADMIN] COMPANY_SET_EMAIL')<string>();
-
-export const setPhone = createAction('[ADMIN] COMPANY_SET_PHONE')<string>();
-
-export const setWebsite = createAction('[ADMIN] COMPANY_SET_WEBSITE')<string>();
 
 export const setValidationErrors = createAction('[ADMIN] SET_COMPANY_VALIDATION_ERRORS')<object>();
 

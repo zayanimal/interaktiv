@@ -1,16 +1,14 @@
 import React from 'react';
 import { IconButton, InputLabel, TextField } from '@material-ui/core';
 import { Clear } from '@material-ui/icons';
+// import { Fields } from '@shared/components/Fields';
 import { bem } from '@utils/formatters';
+import { CompanyControlProps } from '@admin/containers/CompanyControl';
 import './BankRequisitesFields.scss';
 
 const cn = bem('BankRequisitesFields');
 
-interface Props {
-
-}
-
-const BankRequisitesFields: React.FC<Props> = (props) => {
+const BankRequisitesFields: React.FC<CompanyControlProps> = (props) => {
     // const {
 
     // } = props;

@@ -6,6 +6,11 @@ export interface ICompanyContact {
     website: string;
 }
 
+export interface ICompanyForm {
+    name: string;
+    contact: ICompanyContact;
+}
+
 export interface ICompanyListItem {
     id: string;
     name: string;

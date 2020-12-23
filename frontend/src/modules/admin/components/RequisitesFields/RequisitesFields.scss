@@ -1,9 +1,5 @@
 .RequisitesFields {
-    &__input {
-        width: 100%;
-
-        & + label {
-            margin-top: 2em;
-        }
+    & + & {
+        margin-top: 1.7em;
     }
 }

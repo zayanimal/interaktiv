@@ -17,16 +17,22 @@ const grid = bem('FlexGrid');
 const mapStateToProps = (state: RootStateTypes) => ({
     loading: companyControlSelectors.loading(state),
     companyEditMode: companySelectors.companyEditMode(state),
-    name: companyControlSelectors.name(state),
-    email: companyControlSelectors.email(state),
-    phone: companyControlSelectors.phone(state),
-    website: companyControlSelectors.website(state),
+    companyForm: companyControlSelectors.companyForm(state),
+    contactForm: companyControlSelectors.contactForm(state),
+    drawer: companyControlSelectors.drawer(state),
+    requisites: companyControlSelectors.requisites(state),
+    requisitesById: companyControlSelectors.requisitesById(state),
 });
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
     setCompanyEditMode: companiesActions.setCompanyEditMode,
     getCompany: companyControlActions.getCompany.request,
+    setDrawer: companyControlActions.setDrawerState,
+    setCurrentRequisites: companyControlActions.setCurrentRequisites,
+    setCompanyForm: companyControlActions.setCompanyForm,
+    setContactForm: companyControlActions.setContactForm,
+    setRequisitesForm: companyControlActions.setRequsitesForm,
 };
 
 export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -61,8 +67,9 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                     <CompanyFields {...props} />
                 </div>
                 <div className={grid('col-6')}>
+                    <h3>Пользователи</h3>
                     <h3>Реквизиты</h3>
-                    <CompanyRequisites />
+                    <CompanyRequisites {...props} />
                 </div>
             </div>
             <FormControls
@@ -71,7 +78,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                 onEdit={() => {}}
                 onAdd={() => {}}
             />
-            <RequisitesDrawer />
+            <RequisitesDrawer {...props} />
         </>
     ));
 };
