@@ -1,4 +1,4 @@
-import { pick } from 'lodash';
+import _ from 'lodash/fp';
 import { RootStateTypes } from '@config/roots';
 
 interface FormEntity { [key: string]: string; }
@@ -17,7 +17,7 @@ export const name = (state: RootStateTypes) => companyControlState(state).name;
 
 export const users = (state: RootStateTypes) => companyControlState(state).users;
 
-export const companyForm = (state: RootStateTypes) => pick(companyControlState(state), ['name']);
+export const companyForm = (state: RootStateTypes) => _.pick(['name'], companyControlState(state));
 
 export const contactForm = (state: RootStateTypes): FormEntity => companyControlState(state).contact;
 
@@ -26,3 +26,15 @@ const entities = (state: RootStateTypes) => companyControlState(state).entities;
 export const requisites = (state: RootStateTypes) => Object.values(entities(state).requisites);
 
 export const requisitesById = (state: RootStateTypes) => entities(state).requisites[requisitesId(state)];
+
+const bankRequisitesIds = (state: RootStateTypes): string[] | undefined => requisitesById(state)?.bank;
+
+const bankRequisitesItem = (state: RootStateTypes) => entities(state).bank;
+
+export const bankRequisites = (state: RootStateTypes) => _.pipe(
+    bankRequisitesIds,
+    _.cond([
+        [_.isArray, _.map((id: string) => bankRequisitesItem(state)[id])],
+        [_.T, _.identity],
+    ]),
+)(state)

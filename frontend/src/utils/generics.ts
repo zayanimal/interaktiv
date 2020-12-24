@@ -1,12 +1,9 @@
-/**
- * Исключить типа в зависимости от условия
- */
-export type FilterFlags<Base, Condition> = {
-    [Key in keyof Base]:
-    Base[Key] extends Condition ? Key : never
+/** Исключить типа в зависимости от условия */
+export type FilterFlags<B, C> = {
+    [K in keyof B]: B[K] extends C ? K : never
 };
 
-/**
- * Привести обычную сущность к нормализованному типу
- */
-export type NormalisedEntity<T> = { [key: string]: FilterFlags<T, string> }
+/** Привести обычную сущность к нормализованному типу */
+export type Normalised<T> = { [key: string]: {
+    [K in keyof T]: T[K] extends string ? K : string[];
+} }

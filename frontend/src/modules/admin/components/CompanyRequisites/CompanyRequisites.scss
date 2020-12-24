@@ -8,4 +8,8 @@
     div + button {
         margin-left: 0.5em;
     }
+
+    &__chip {
+        max-width: 14em;
+    }
 }

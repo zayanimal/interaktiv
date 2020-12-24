@@ -16,7 +16,7 @@ export interface Field {
 
 interface Props {
     fields: Field[];
-    entity: { [key: string]: string; };
+    entity: { [key: string]: string | string[]; };
     handler: (obj: object) => void;
 }
 
@@ -25,7 +25,7 @@ const Fields: React.FC<Props> = memo((props) => {
 
     const onChange = (event: ChangeEvent) => {
         const { name, value } = event.target as HTMLInputElement;
-        handler({ [name]: value });
+        handler({ id: entity.id, [name]: value });
     };
 
     return (

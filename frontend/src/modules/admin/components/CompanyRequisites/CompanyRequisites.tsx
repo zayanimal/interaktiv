@@ -20,6 +20,7 @@ const CompanyRequisites: React.FC<CompanyControlProps> = (props) => {
             {requisites.map((req) => (
                 <Chip
                     key={req.id}
+                    className={cn('chip')}
                     label={req.name}
                     onClick={onClick(req.id)}
                     onDelete={() => {}}

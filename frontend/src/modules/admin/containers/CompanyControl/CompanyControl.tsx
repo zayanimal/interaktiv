@@ -22,6 +22,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     drawer: companyControlSelectors.drawer(state),
     requisites: companyControlSelectors.requisites(state),
     requisitesById: companyControlSelectors.requisitesById(state),
+    bankRequisites: companyControlSelectors.bankRequisites(state),
 });
 
 const mapDispatchToProps = {
@@ -33,6 +34,8 @@ const mapDispatchToProps = {
     setCompanyForm: companyControlActions.setCompanyForm,
     setContactForm: companyControlActions.setContactForm,
     setRequisitesForm: companyControlActions.setRequsitesForm,
+    setBankForm: companyControlActions.setBankForm,
+    deleteBankForm: companyControlActions.deleteBankForm,
 };
 
 export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;

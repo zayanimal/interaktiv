@@ -22,6 +22,10 @@ export const setContactForm = createAction('[ADMIN] SET_CONTACT_FORM')<object>()
 
 export const setRequsitesForm = createAction('[ADMIN] SET_REQUISITES_FORM')<object>();
 
+export const setBankForm = createAction('[ADMIN] SET_BANK_FORM')<object>();
+
+export const deleteBankForm = createAction('[ADMIN] DELETE_BANK_FORM')<string>();
+
 export const setUsers = createAction('[ADMIN] COMPANY_SET_USERS')<string[]>();
 
 export const setValidationErrors = createAction('[ADMIN] SET_COMPANY_VALIDATION_ERRORS')<object>();

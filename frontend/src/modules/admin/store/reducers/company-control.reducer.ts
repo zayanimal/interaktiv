@@ -1,7 +1,7 @@
 import { createReducer, getType } from 'typesafe-actions';
 import { companyControlActions } from '@admin/store/actions';
 import { RequisitesEntity, BankRequisitesEntity } from '@admin/entities';
-import { NormalisedEntity } from '@utils/generics';
+import { Normalised } from '@utils/generics';
 
 const initialState = {
     drawer: false,
@@ -13,8 +13,8 @@ const initialState = {
     contact: { phone: '', email: '', website: '' },
     requisites: [''],
     entities: {
-        requisites: {} as NormalisedEntity<RequisitesEntity>,
-        bank: {} as NormalisedEntity<BankRequisitesEntity>,
+        requisites: {} as Normalised<RequisitesEntity>,
+        bank: {} as Normalised<BankRequisitesEntity>,
     },
 };
 
@@ -54,11 +54,41 @@ export const companyControl = createReducer<typeof initialState>(initialState, {
             ...state.entities,
             requisites: {
                 ...state.entities.requisites,
-                [state.currentRequisitesId]: {
-                    ...state.entities.requisites[state.currentRequisitesId],
+                [payload.id]: {
+                    ...(state.entities.requisites[payload.id] || {}),
                     ...payload,
                 },
             },
         },
     }),
+
+    [getType(companyControlActions.setBankForm)]: (state, { payload }) => ({
+        ...state,
+        entities: {
+            ...state.entities,
+            bank: {
+                ...state.entities.bank,
+                [payload.id]: {
+                    ...(state.entities.bank[payload.id] || {}),
+                    ...payload,
+                }
+            }
+        }
+    }),
+
+    [getType(companyControlActions.deleteBankForm)]: (state, { payload }) => ({
+        ...state,
+        entities: {
+            ...state.entities,
+            requisites: {
+                ...state.entities.requisites,
+                [state.currentRequisitesId]: {
+                    ...(state.entities.requisites[state.currentRequisitesId] || {}),
+                    bank: state.entities.requisites[state.currentRequisitesId].bank.filter(
+                        (id) => id !== payload
+                    )
+                },
+            },
+        },
+    })
 });
