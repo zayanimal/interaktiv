@@ -3,7 +3,7 @@
  */
 export const REQUISITES_FIELDS = [
     { label: 'Название', name: 'name', class: 'RequisitesFields' },
-    { label: 'ИНН', name: 'inn', class: 'RequisitesFields' },
-    { label: 'КПП', name: 'kpp', class: 'RequisitesFields' },
-    { label: 'ОГРН', name: 'ogrn', class: 'RequisitesFields' },
+    { label: 'ИНН', name: 'inn', type: 'number', class: 'RequisitesFields' },
+    { label: 'КПП', name: 'kpp', type: 'number', class: 'RequisitesFields' },
+    { label: 'ОГРН', name: 'ogrn', type: 'number', class: 'RequisitesFields' },
 ];

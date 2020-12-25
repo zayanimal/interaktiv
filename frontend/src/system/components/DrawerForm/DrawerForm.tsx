@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { cond } from 'lodash';
 import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
 import { Transition } from 'react-transition-group';
@@ -24,30 +25,21 @@ interface Props {
 
 const DrawerForm: React.FC<Props> = (props) => {
     const {
-        label, width, toggle, onClose, children,
+        label,
+        width = '450',
+        toggle,
+        onClose = () => {},
+        children,
     } = props;
 
     const drawer = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
-        const handleClick = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-
-            /** Обработка закрытия дровера в случаях когда открыт Popover материал */
-            const closeHandler = (htarget: HTMLElement) => {
-                const popover = htarget.closest('.MuiPopover-root');
-
-                if (popover !== null || htarget.getAttribute('aria-hidden')) {
-                    return false;
-                }
-
-                return !drawer.current?.contains(htarget);
-            };
-
-            if (closeHandler(target)) {
-                onClose();
-            }
-        };
+        const handleClick = (e: MouseEvent) => cond([
+            [(t: HTMLElement) => t.querySelector('button')?.id !== 'close', () => {}],
+            [(t: HTMLElement) => t.closest('.MuiPopover-root') !== null, onClose],
+            [(t: HTMLElement) => !!t.getAttribute('aria-hidden'), () => onClose],
+        ])(e.target as HTMLElement);
 
         document.addEventListener('click', handleClick, false);
 
@@ -71,7 +63,7 @@ const DrawerForm: React.FC<Props> = (props) => {
                         className={cn('header')}
                     >
                         {label}
-                        <IconButton size="small" onClick={onClose}>
+                        <IconButton id="close" size="small" onClick={onClose}>
                             <Close />
                         </IconButton>
                     </div>
@@ -80,11 +72,6 @@ const DrawerForm: React.FC<Props> = (props) => {
             )}
         </Transition>
     );
-};
-
-DrawerForm.defaultProps = {
-    width: '450',
-    onClose: () => {},
 };
 
 export { DrawerForm };

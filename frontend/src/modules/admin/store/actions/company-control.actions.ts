@@ -12,22 +12,34 @@ export const editCompany = createAsyncAction(
     '[ADMIN] EDIT_COMPANY_FAILURE',
 )<string, any, any>();
 
+export const updateCompany = createAction('[ADMIN] UPDATE_COMPANY')();
+
 export const setDrawerState = createAction('[ADMIN] SET_DRAWER_STATE')<boolean>();
 
-export const setCurrentRequisites = createAction('[ADMIN] SET_CURRENT_REQUISITES')<string>();
+export const updateCurrentRequisites = createAction('[ADMIN] UPDATE_CURRENT_REQUISITES')<string>();
 
-export const setCompanyForm = createAction('[ADMIN] SET_COMPANY_FORM')<object>();
+export const updateCompanyForm = createAction('[ADMIN] UPDATE_COMPANY_FORM')<object>();
 
-export const setContactForm = createAction('[ADMIN] SET_CONTACT_FORM')<object>();
+export const updateContactForm = createAction('[ADMIN] UPDATE_CONTACT_FORM')<object>();
 
-export const setRequsitesForm = createAction('[ADMIN] SET_REQUISITES_FORM')<object>();
+export const updateRequsitesForm = createAction('[ADMIN] UPDATE_REQUISITES_FORM')<object>();
 
-export const setBankForm = createAction('[ADMIN] SET_BANK_FORM')<object>();
+export const deleteRequsitesForm = createAction('[ADMIN] DELETE_REQUISITES_FORM')<string>();
+
+export const createRequsitesForm = createAction('[ADMIN] CREATE_REQUISITES_FORM')();
+
+export const putRequsitesForm = createAction('[ADMIN] PUT_REQUISITES_FORM')<object>();
+
+export const updateBankForm = createAction('[ADMIN] UPDATE_BANK_FORM')<object>();
 
 export const deleteBankForm = createAction('[ADMIN] DELETE_BANK_FORM')<string>();
 
-export const setUsers = createAction('[ADMIN] COMPANY_SET_USERS')<string[]>();
+export const createBankForm = createAction('[ADMIN] CREATE_BANK_FORM')();
 
-export const setValidationErrors = createAction('[ADMIN] SET_COMPANY_VALIDATION_ERRORS')<object>();
+export const putBankForm = createAction('[ADMIN] PUT_BANK_FORM')<object>();
+
+export const updateUsers = createAction('[ADMIN] COMPANY_UPDATE_USERS')<string[]>();
+
+export const updateValidationErrors = createAction('[ADMIN] UPDATE_COMPANY_VALIDATION_ERRORS')<object>();
 
 export const clearValidationErrors = createAction('[ADMIN] CLEAR_COMPANY_VALIDATION_ERRORS')();

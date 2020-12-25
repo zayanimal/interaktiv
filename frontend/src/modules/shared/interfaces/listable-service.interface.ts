@@ -25,7 +25,7 @@ export interface IListableService {
      * @param item
      * @param dto
      */
-    update$(item: string, dto: object): Observable<AjaxResponse>;
+    update$(dto: object, item?: string): Observable<AjaxResponse>;
 
     /**
      * Удалить по имени

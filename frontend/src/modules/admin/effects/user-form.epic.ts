@@ -43,7 +43,7 @@ export const editUser: Epic = (action$, state$, { validation, users }) => action
             contacts: plainToClass(ContactsEntity, userControlSelectors.newContacts(state))
         })),
         mergeMap((payld) => validation.check$(plainToClass(UserFormEntity, payld))),
-        mergeMap((user) => users.update$(payload, user)),
+        mergeMap((user) => users.update$(user, payload)),
     )),
     switchMap(() => merge(
         of(userControlActions.setValidationErrors({})),

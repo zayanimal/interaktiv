@@ -16,7 +16,7 @@ export class UsersService implements IListableService {
         return this.api.get$(`users/${username}`);
     }
 
-    public update$(username: string, dto: INewUser) {
+    public update$(dto: INewUser, username: string) {
         return this.api.put$(`users/edit/${username}`, dto);
     }
 

@@ -3,7 +3,7 @@ import { RootStateTypes } from '@config/roots';
 
 interface FormEntity { [key: string]: string; }
 
-const companyControlState = (state: RootStateTypes) => state.admin.companyControl;
+export const companyControlState = (state: RootStateTypes) => state.admin.companyControl;
 
 export const loading = (state: RootStateTypes) => companyControlState(state).loading;
 
@@ -23,7 +23,16 @@ export const contactForm = (state: RootStateTypes): FormEntity => companyControl
 
 const entities = (state: RootStateTypes) => companyControlState(state).entities;
 
-export const requisites = (state: RootStateTypes) => Object.values(entities(state).requisites);
+export const requisites = (state: RootStateTypes) => entities(state).requisites;
+
+export const requisitesArr = (state: RootStateTypes) => _.pipe(
+    companyControlState,
+    _.get('requisites'),
+    _.cond([
+        [(arr) => !!arr?.length, _.map((id: string) => requisites(state)[id])],
+        [_.T, _.always([])],
+    ]),
+)(state);
 
 export const requisitesById = (state: RootStateTypes) => entities(state).requisites[requisitesId(state)];
 

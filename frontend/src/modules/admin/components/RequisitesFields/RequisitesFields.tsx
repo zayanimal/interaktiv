@@ -5,14 +5,14 @@ import { REQUISITES_FIELDS } from '@admin/constants';
 import './RequisitesFields.scss';
 
 const RequisitesFields: React.FC<CompanyControlProps> = (props) => {
-    const { requisitesById, setRequisitesForm } = props;
+    const { requisitesById, updateRequisitesForm } = props;
 
     return (requisitesById
         ? (
             <Fields
                 fields={REQUISITES_FIELDS}
                 entity={requisitesById}
-                handler={setRequisitesForm}
+                handler={updateRequisitesForm}
             />
         ) : null);
 };

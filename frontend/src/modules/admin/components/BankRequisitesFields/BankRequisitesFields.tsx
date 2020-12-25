@@ -10,7 +10,7 @@ import './BankRequisitesFields.scss';
 const cn = bem('BankRequisitesFields');
 
 const BankRequisitesFields: React.FC<CompanyControlProps> = (props) => {
-    const { bankRequisites, setBankForm, deleteBankForm } = props;
+    const { bankRequisites, updateBankForm, deleteBankForm } = props;
 
     const onDelete = (id: string) => () => { deleteBankForm(id); };
 
@@ -26,7 +26,7 @@ const BankRequisitesFields: React.FC<CompanyControlProps> = (props) => {
                         >
                             <Clear className={cn('icon')} />
                         </IconButton>
-                        <Fields fields={BANK_FIELDS} entity={req} handler={setBankForm} />
+                        <Fields fields={BANK_FIELDS} entity={req} handler={updateBankForm} />
                     </div>
                 ))}
             </>

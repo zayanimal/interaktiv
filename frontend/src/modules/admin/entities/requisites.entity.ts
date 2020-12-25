@@ -1,15 +1,17 @@
 import { BankRequisitesEntity } from '@admin/entities';
 
 export class RequisitesEntity {
-    id!: string;
+    constructor(id?: string) { if (id) { this.id = id; } }
 
-    name!: string;
+    id = '';
 
-    inn!: string;
+    name = '';
 
-    kpp!: string;
+    inn = '';
 
-    ogrn!: string;
+    kpp = '';
 
-    bank!: BankRequisitesEntity[];
+    ogrn = '';
+
+    bank: BankRequisitesEntity[] = [];
 }

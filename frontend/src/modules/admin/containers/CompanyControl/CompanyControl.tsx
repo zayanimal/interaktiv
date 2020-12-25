@@ -20,7 +20,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     companyForm: companyControlSelectors.companyForm(state),
     contactForm: companyControlSelectors.contactForm(state),
     drawer: companyControlSelectors.drawer(state),
-    requisites: companyControlSelectors.requisites(state),
+    requisites: companyControlSelectors.requisitesArr(state),
     requisitesById: companyControlSelectors.requisitesById(state),
     bankRequisites: companyControlSelectors.bankRequisites(state),
 });
@@ -29,13 +29,17 @@ const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
     setCompanyEditMode: companiesActions.setCompanyEditMode,
     getCompany: companyControlActions.getCompany.request,
+    updateCompany: companyControlActions.updateCompany,
     setDrawer: companyControlActions.setDrawerState,
-    setCurrentRequisites: companyControlActions.setCurrentRequisites,
-    setCompanyForm: companyControlActions.setCompanyForm,
-    setContactForm: companyControlActions.setContactForm,
-    setRequisitesForm: companyControlActions.setRequsitesForm,
-    setBankForm: companyControlActions.setBankForm,
+    updateCurrentRequisites: companyControlActions.updateCurrentRequisites,
+    updateCompanyForm: companyControlActions.updateCompanyForm,
+    updateContactForm: companyControlActions.updateContactForm,
+    updateRequisitesForm: companyControlActions.updateRequsitesForm,
+    deleteRequisitesFrom: companyControlActions.deleteRequsitesForm,
+    createRequisitesFrom: companyControlActions.createRequsitesForm,
+    updateBankForm: companyControlActions.updateBankForm,
     deleteBankForm: companyControlActions.deleteBankForm,
+    createBankForm: companyControlActions.createBankForm,
 };
 
 export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -47,6 +51,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         companyEditMode,
         setCompanyEditMode,
         getCompany,
+        updateCompany,
     } = props;
 
     const { path, params } = useRouteMatch<{ id: string }>();
@@ -76,9 +81,9 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                 </div>
             </div>
             <FormControls
-                mode={false}
+                mode={companyEditMode}
                 backward="/companies"
-                onEdit={() => {}}
+                onEdit={updateCompany}
                 onAdd={() => {}}
             />
             <RequisitesDrawer {...props} />

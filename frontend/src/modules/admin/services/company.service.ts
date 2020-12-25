@@ -1,5 +1,6 @@
 import { RestService } from '@system/services/rest.service';
 import { IListableService, INewUser } from '@admin/interfaces';
+import { CompanyEntity } from '@admin/entities';
 
 export class CompanyService implements IListableService {
     constructor(private readonly api: RestService) {}
@@ -20,8 +21,8 @@ export class CompanyService implements IListableService {
         return this.api.get$(`company/search-name/${name}`);
     }
 
-    public update$(name: string, dto: INewUser) {
-        return this.api.put$(`company/${name}`, dto);
+    public update$(dto: CompanyEntity, id: string) {
+        return this.api.put$(`company/${id}`, dto);
     }
 
     public delete$(name: string) {

@@ -11,11 +11,9 @@ const grid = bem('FlexGrid');
 const cn = bem('RequisitesDrawer');
 
 const RequisitesDrawer: React.FC<CompanyControlProps> = (props) => {
-    const { drawer, setDrawer } = props;
+    const { drawer, setDrawer, createBankForm } = props;
 
-    const onClose = () => {
-        setDrawer(false);
-    };
+    const onClose = () => { setDrawer(false); };
 
     return (
         <DrawerForm
@@ -32,6 +30,7 @@ const RequisitesDrawer: React.FC<CompanyControlProps> = (props) => {
                         className={cn('button')}
                         variant="outlined"
                         color="primary"
+                        onClick={createBankForm}
                     >
                         Добавить банк
                     </Button>

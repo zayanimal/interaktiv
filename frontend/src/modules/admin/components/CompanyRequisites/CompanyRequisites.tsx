@@ -8,11 +8,19 @@ import './CompanyRequisites.scss';
 const cn = bem('CompanyRequisites');
 
 const CompanyRequisites: React.FC<CompanyControlProps> = (props) => {
-    const { requisites, setDrawer, setCurrentRequisites } = props;
+    const {
+        requisites,
+        updateCurrentRequisites,
+        deleteRequisitesFrom,
+        createRequisitesFrom,
+    } = props;
 
     const onClick = (id: string) => () => {
-        setDrawer(true);
-        setCurrentRequisites(id);
+        updateCurrentRequisites(id);
+    };
+
+    const onDelete = (id: string) => () => {
+        deleteRequisitesFrom(id);
     };
 
     return (
@@ -23,10 +31,10 @@ const CompanyRequisites: React.FC<CompanyControlProps> = (props) => {
                     className={cn('chip')}
                     label={req.name}
                     onClick={onClick(req.id)}
-                    onDelete={() => {}}
+                    onDelete={onDelete(req.id)}
                 />
             ))}
-            <IconButton onClick={() => {}} size="small">
+            <IconButton onClick={createRequisitesFrom} size="small">
                 <Add />
             </IconButton>
         </div>

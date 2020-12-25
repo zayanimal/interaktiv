@@ -1,13 +1,15 @@
 export class BankRequisitesEntity {
-    id!: string;
+    constructor(id?: string) { if (id) { this.id = id; } }
 
-    name!: string;
+    id = '';
 
-    rs!: string;
+    name = '';
 
-    ks!: string;
+    rs = '';
 
-    bik!: string;
+    ks = '';
 
-    address!: string;
+    bik = '';
+
+    address = '';
 }
