@@ -2,10 +2,9 @@ import { IsNotEmpty, IsObject, IsArray, IsUUID, IsOptional } from 'class-validat
 import { ContactDto } from '@company/dto/contact.dto';
 import { RequisitesDto } from '@company/requisites/requisites.dto';
 
-export class CreateCompanyDto {
-    @IsOptional()
+export class UpdateCompanyDto {
     @IsUUID()
-    id?: string;
+    id!: string;
 
     @IsNotEmpty()
     name!: string;

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Users } from '@users/entities/users.entity';
 import { Requisites } from '@company/requisites/entities/requisites.entity';
-import { ContactCompany } from '@company/contact-company/entities/contact-company.entity';
+import { ContactCompany } from '@/company/entities/contact-company.entity';
 import { Margin } from '@good/margin/entities/margin.entity';
 
 @Entity()
@@ -41,4 +41,6 @@ export class Company {
 
     @OneToMany(() => Margin, (margin) => margin.company)
     margin!: Margin;
+
+    set(props: object) { return Object.assign(this.contact, props); }
 }

@@ -1,11 +1,12 @@
 import { omit } from 'lodash';
-import { from, throwError } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { from } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Bank } from '@company/bank/entities/bank.entity';
 import { BankDto } from '@company/bank/bank.dto';
+import { catchServerError } from '@shared/utils';
 
 @Injectable()
 export class BankService {
@@ -17,19 +18,17 @@ export class BankService {
     /**
      * Создать новые банковские реквизиты компании
      * @param bankDto
-     * @param id
+     * @param requisitesId
      */
-    create(bankDto: BankDto[], id: string) {
+    create(bankDto: BankDto[], requisitesId: string) {
         return from(bankDto).pipe(
             map((bankReqs) => this.bankRepository.create(bankReqs)),
             mergeMap((createdBank) => {
-                createdBank.requisitesId = id;
+                createdBank.requisitesId = requisitesId;
 
                 return from(this.bankRepository.save(createdBank));
             }),
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
+            catchServerError()
         )
     }
 
@@ -43,9 +42,7 @@ export class BankService {
                 { id: bank.id },
                 omit(bank, ['id'])
             ))),
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
+            catchServerError()
         );
     }
 
@@ -56,9 +53,7 @@ export class BankService {
     remove(id: string) {
         return from(this.bankRepository.delete(id)).pipe(
             map(() => ({ message: 'Банковские реквизиты удалены' })),
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
+            catchServerError()
         );
     }
 }

@@ -1,12 +1,13 @@
 import { omit } from 'lodash';
-import { of, from, forkJoin, throwError } from 'rxjs';
+import { of, from, forkJoin } from 'rxjs';
 import { toArray, map, mergeMap, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Requisites } from '@company/requisites/entities/requisites.entity';
 import { RequisitesDto } from '@company/requisites/requisites.dto';
 import { BankService } from '@company/bank/bank.service';
+import { catchServerError } from '@shared/utils';
 
 @Injectable()
 export class RequisitesService {
@@ -38,28 +39,30 @@ export class RequisitesService {
                 );
             }),
             toArray(),
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
-        )
+            catchServerError()
+        );
     }
 
     /**
      * Обновить реквизиты компании
-     * @param requisitesDto
+     * @param requisitesDto данные реквизитов
+     * @param companyId айди компании
      */
-    update(requisitesDto: RequisitesDto[]) {
+    update(requisitesDto: RequisitesDto[], companyId: string) {
         return from(requisitesDto).pipe(
-            mergeMap((requisites) => forkJoin([
-                from(this.requisitesRepository.update(
-                    { id: requisites.id },
-                    omit(requisites, ['id', 'bank'])
-                )),
-                from(this.bankSevice.update(requisites.bank))
-            ])),
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
+            mergeMap((requisites) => from(this.requisitesRepository.findOne(requisites.id)).pipe(
+                mergeMap((found) => (found
+                    ? forkJoin([
+                        from(this.requisitesRepository.update(
+                            { id: requisites.id },
+                            omit(requisites, ['id', 'bank'])
+                        )),
+                        from(this.bankSevice.update(requisites.bank))
+                    ])
+                    : this.create(requisitesDto, companyId)
+                ))
+            )),
+            catchServerError()
         );
     }
 
@@ -70,9 +73,7 @@ export class RequisitesService {
     remove(id: string) {
         return from(this.requisitesRepository.delete(id)).pipe(
             map(() => ({ message: 'Реквизиты удалены' })),
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
+            catchServerError()
         );
     }
 }

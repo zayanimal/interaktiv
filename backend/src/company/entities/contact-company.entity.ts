@@ -27,4 +27,10 @@ export class ContactCompany {
     @OneToOne(() => Company, { cascade: true, onDelete: 'CASCADE' })
     @JoinColumn()
     company!: Company;
+
+    setId(id: string) {
+        this.id = id;
+
+        return this;
+    }
 }

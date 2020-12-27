@@ -15,7 +15,7 @@ import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { RolesGuard } from '@auth/guards/roles.guard';
 import { Roles } from '@auth/decorators/roles.decorator';
 import { CompanyService } from '@company/company.service';
-import { CreateCompanyDto } from '@company/dto/createCompany.dto';
+import { CreateCompanyDto, UpdateCompanyDto } from '@company/dto';
 import { SearchPipe } from '@shared/pipes/search.pipe';
 
 @Controller('company')
@@ -35,17 +35,15 @@ export class CompanyController {
 
     /**
      * Редактирование компании
-     * @param id
      * @param data
      */
-    @Put(':id')
+    @Put('update')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     update(
-        @Param('id') id: string,
-        @Body(ValidationPipe) data: CreateCompanyDto
+        @Body(ValidationPipe) dto: UpdateCompanyDto
     ) {
-        return this.companyService.update(id, data);
+        return this.companyService.update(dto);
     }
 
     /**

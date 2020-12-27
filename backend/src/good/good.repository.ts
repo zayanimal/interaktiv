@@ -1,5 +1,5 @@
-import { of, from, throwError } from 'rxjs';
-import { map, mergeMap, switchMap } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { mergeMap, switchMap } from 'rxjs/operators';
 import { Repository, EntityRepository, Like } from 'typeorm';
 import { Good } from '@good/entities/good.entity';
 import { checkEntity } from '@shared/utils/check-entity.util';

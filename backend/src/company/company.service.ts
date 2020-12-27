@@ -1,53 +1,39 @@
 import { of, from, throwError, forkJoin } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
-import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
+import { map, mapTo, mergeMap, mergeMapTo } from 'rxjs/operators';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Raw } from 'typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { UsersService } from '@users/services/users.service';
-import { ContactCompanyService } from '@company/contact-company/contact-company.service';
 import { RequisitesService } from '@company/requisites/requisites.service';
-import { CreateCompanyDto } from '@company/dto/createCompany.dto';
+import { CreateCompanyDto, UpdateCompanyDto } from '@company/dto';
 import { Company } from '@company/entities/company.entity';
+import { CompanyRepository, ContactRepository } from '@company/repositories';
+import { checkEntity, catchServerError } from '@shared/utils';
 
 @Injectable()
 export class CompanyService {
     constructor(
-        @InjectRepository(Company)
-        private readonly companyRepository: Repository<Company>,
+        @InjectRepository(CompanyRepository)
+        private readonly companyRepository: CompanyRepository,
+        @InjectRepository(ContactRepository)
+        private readonly contactRepository: ContactRepository,
         private userService: UsersService,
-        private contactService: ContactCompanyService,
         private requisitesService: RequisitesService
     ) {}
+
+    errorMessage = 'Компания не существует';
 
     /**
      * Поиск компании по имени
      * @param name
      */
-    search(name: string) {
-        return this.companyRepository.find({
-            where: {
-                name: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${name}:*')`)
-            },
-            select: ['id', 'name']
-        });
-    }
-
-    checkCompany(company: Company | undefined) {
-        return (company ? of(company) : throwError(
-            new BadRequestException('Компания не существует')
-        ));
-    }
+    search(name: string) { return this.companyRepository.searchName(name); }
 
     /**
      * Поиск компании по id
      * @param id
      */
-    searchId(id: string) {
-        return from(this.companyRepository.findOne({ id })).pipe(
-            mergeMap((company) => this.checkCompany(company))
-        );
-    }
+    searchId(id: string) { return this.companyRepository.searchId(id); }
 
     /**
      * Список компаний с пагинацией
@@ -56,35 +42,13 @@ export class CompanyService {
      */
     list(page: number, limit: number) {
         return from(
-            paginate(this.companyRepository
-                .createQueryBuilder('company')
-                .select([
-                    'company.id',
-                    'company.name',
-                    'company.time',
-                    'c.phone',
-                    'c.website'
-                ])
-                .leftJoin('company.contact', 'c', 'company.contactId = c.id')
-                .orderBy('company.time', 'ASC'),
+            paginate(
+                this.companyRepository.list(),
                 { page, limit }
             )
         ).pipe(
             map(({ items, meta }) => ({ items, meta })),
-            catchError((err) => throwError(
-                new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            ))
-        );
-    }
-
-    /**
-     * Проверить существование компании
-     * @param company
-     */
-    checkCompanyExistance(company: Company | undefined) {
-        return (company
-            ? of(company)
-            : throwError(new HttpException('Компания не существует', HttpStatus.BAD_REQUEST))
+            catchServerError()
         );
     }
 
@@ -96,13 +60,10 @@ export class CompanyService {
     checkCreateCompany(company: Company | undefined, companyDto: CreateCompanyDto) {
         return of(company).pipe(
             mergeMap((foundCompany) => (foundCompany
-                ? throwError(
-                    new HttpException('Компания уже существует', HttpStatus.BAD_REQUEST)
-                )
-                : of(this.companyRepository.create({ name: companyDto.name })).pipe(
-                    mergeMap((createdCompany) => from(this.companyRepository.save(createdCompany)))
-                )
-            ))
+                ? throwError(new BadRequestException('Компания уже существует'))
+                : this.companyRepository.createCompany(companyDto)
+            )),
+            catchServerError()
         );
     }
 
@@ -117,40 +78,37 @@ export class CompanyService {
             mergeMap((check) => this.checkCreateCompany(check, companyDto)),
             mergeMap((newCompany) => forkJoin({
                 user: this.userService.updateUserCompany(companyDto.users, newCompany.id),
-                contact: this.contactService.create(companyDto.contact, newCompany.id),
-                reqs: this.requisitesService.create(companyDto.requisites, newCompany.id),
+                contact: this.contactRepository.createContact(companyDto.contact, newCompany.id),
+                requisites: this.requisitesService.create(companyDto.requisites, newCompany.id),
                 id: of(newCompany.id)
             })),
-            mergeMap(({ contact, reqs, id }) => {
+            mergeMap(({ contact, requisites, id }) => {
                 return from(this.companyRepository.findOne({ where: { id }})).pipe(
-                    mergeMap((cmp) => this.checkCompanyExistance(cmp)),
-                    mergeMap((company) => {
-                        company.contact = contact;
-                        company.requisites = reqs;
-
-                        return from(this.companyRepository.save(company));
-                    })
+                    mergeMap(checkEntity(this.errorMessage)),
+                    mergeMap((company) => from(
+                        this.companyRepository.save(company.set({ contact, requisites }))
+                    ))
                 );
-            })
+            }),
+            catchServerError()
         )
     }
 
     /**
      * Обновление данных компании
-     * @param id
+     * @param dto
      */
-    update(id: string, data: CreateCompanyDto) {
-        return from(this.companyRepository.findOne({ id })).pipe(
-            mergeMap((cmp) => this.checkCompanyExistance(cmp)),
+    update(dto: UpdateCompanyDto) {
+        return from(this.companyRepository.findOne({ id: dto.id })).pipe(
+            mergeMap(checkEntity(this.errorMessage)),
             mergeMap((company) => forkJoin([
-                from(this.contactService.update(data.contact, company.id)),
-                from(this.userService.updateUserCompany(data.users, company.id)),
-                from(this.requisitesService.update(data.requisites))
+                this.contactRepository.updateContact(dto.contact, company.id),
+                this.userService.updateUserCompany(dto.users, company.id),
+                this.requisitesService.update(dto.requisites, dto.id)
             ])),
-            mergeMap(() => from(this.companyRepository.update({ id }, {
-                name: data.name
-            }))),
-            map(() => ({ message: 'Данные компании обновлены' }))
+            mergeMapTo(from(this.companyRepository.update({ id: dto.id }, { name: dto.name }))),
+            mapTo({ message: 'Данные компании обновлены' }),
+            catchServerError()
         );
     }
 
@@ -159,40 +117,14 @@ export class CompanyService {
      * @param id айди компании
      */
     getFullCompany(id: string) {
-        return from(this.companyRepository
-            .createQueryBuilder('company')
-            .select([
-                'company.id',
-                'company.name',
-                'c.email',
-                'c.phone',
-                'c.website',
-                'u.id',
-                'u.username',
-                'r.id',
-                'r.name',
-                'r.inn',
-                'r.kpp',
-                'r.ogrn',
-                'b.id',
-                'b.name',
-                'b.rs',
-                'b.ks',
-                'b.bik',
-                'b.address'
-            ])
-            .leftJoin('company.contact', 'c', 'company.contactId = c.id')
-            .leftJoin('company.users', 'u', 'company.id = u.companyId')
-            .leftJoin('company.requisites', 'r', 'company.id = r.companyId')
-            .leftJoin('r.bank', 'b', 'r.id = b.requisitesId')
-            .where('company.id = :id', { id })
-            .getOne()).pipe(
-                mergeMap((cmp) => this.checkCompanyExistance(cmp)),
-                map((company) => ({
-                    ...company,
-                    users: company.users.map(({ username }) => username)
-                }))
-            );
+        return from(this.companyRepository.getFullCompany(id)).pipe(
+            mergeMap(checkEntity(this.errorMessage)),
+            map((company) => ({
+                ...company,
+                users: company.users.map(({ username }) => username)
+            })),
+            catchServerError()
+        );
     }
 
     /**
@@ -202,7 +134,8 @@ export class CompanyService {
     remove(companyId: string) {
         return this.userService.removeUserCompany(companyId).pipe(
             mergeMap(() => from(this.companyRepository.delete(companyId))),
-            map(() => ({ message: 'Компания полностью удалена' }))
+            mapTo({ message: 'Компания полностью удалена' }),
+            catchServerError()
         );
     }
 }
