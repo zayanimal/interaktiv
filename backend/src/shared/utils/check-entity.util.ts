@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { Observable, of, throwError } from 'rxjs';
 import { NotFoundException } from '@nestjs/common';
 
@@ -10,8 +11,8 @@ type EntityObservable<T> = Observable<NonNullable<T>>;
  */
 export function checkEntity<T>(errorMessage: string) {
     return function (entity: T): EntityObservable<T> {
-        return (entity ? (of(entity) as EntityObservable<T>) : throwError(
-            new NotFoundException(errorMessage)
-        ));
+        return (isEmpty(entity)
+            ? throwError(new NotFoundException(errorMessage))
+            : of(entity) as EntityObservable<T>);
     }
 };

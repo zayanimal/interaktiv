@@ -28,8 +28,8 @@ export class ContactCompany {
     @JoinColumn()
     company!: Company;
 
-    setId(id: string) {
-        this.id = id;
+    setCompanyId(id: string) {
+        this.companyId = id;
 
         return this;
     }

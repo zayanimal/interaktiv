@@ -1,5 +1,5 @@
-import { of, from, throwError } from 'rxjs';
-import { map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
+import { of, from } from 'rxjs';
+import { map, mapTo, mergeMap, switchMapTo, switchMap, mergeMapTo } from 'rxjs/operators';
 import { Repository, EntityRepository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { Users } from '@users/entities/users.entity';
@@ -79,16 +79,17 @@ export class UsersRepository extends Repository<Users> {
         );
     }
 
-    updateUserCompany(users: string[], id: string) {
-        return from(this.find({
-            where: users.map((username) => ({ username }))
-        })).pipe(
-            mergeMap((users) => from(users)),
-            mergeMap((user) => from(this.update(
-                { username: user.username },
-                { companyId: id }
-            )))
-        )
+    updateUserCompany(users: string[], companyId: string) {
+        return from(this.find({ companyId })).pipe(
+            mergeMap((usrs) => (usrs.length
+                ? from(usrs).pipe(
+                    mergeMap(({ username }) => this.update({ username }, { companyId: null })),
+                    switchMapTo(from(users))
+                )
+                : from(users)
+            )),
+            mergeMap((username) => this.update({ username }, { companyId }))
+        );
     }
 
     removeUserCompany(companyId: string) {

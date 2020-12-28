@@ -1,5 +1,5 @@
 import { of, from, throwError, forkJoin } from 'rxjs';
-import { map, mapTo, mergeMap, mergeMapTo } from 'rxjs/operators';
+import { map, mapTo, mergeMap, mergeMapTo, tap } from 'rxjs/operators';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
@@ -62,35 +62,33 @@ export class CompanyService {
             mergeMap((foundCompany) => (foundCompany
                 ? throwError(new BadRequestException('Компания уже существует'))
                 : this.companyRepository.createCompany(companyDto)
-            )),
-            catchServerError()
+            ))
         );
     }
 
     /**
      * Создать новую компания со всеми зависимостями
-     * @param companyDto
+     * @param dto
      */
-    create(companyDto: CreateCompanyDto) {
+    create(dto: CreateCompanyDto) {
         return from(this.companyRepository.findOne({
-            where: { name: companyDto.name }
+            where: { name: dto.name }
         })).pipe(
-            mergeMap((check) => this.checkCreateCompany(check, companyDto)),
-            mergeMap((newCompany) => forkJoin({
-                user: this.userService.updateUserCompany(companyDto.users, newCompany.id),
-                contact: this.contactRepository.createContact(companyDto.contact, newCompany.id),
-                requisites: this.requisitesService.create(companyDto.requisites, newCompany.id),
-                id: of(newCompany.id)
-            })),
-            mergeMap(({ contact, requisites, id }) => {
+            mergeMap((check) => this.checkCreateCompany(check, dto)),
+            mergeMap((newCompany) => forkJoin([
+                this.userService.updateUserCompany(dto.users, newCompany.id),
+                this.contactRepository.createContact(dto.contact, newCompany.id),
+                this.requisitesService.create(dto.requisites, newCompany.id),
+                of(newCompany.id)
+            ])),
+            mergeMap(([_, contact, requisites, id]) => {
                 return from(this.companyRepository.findOne({ where: { id }})).pipe(
                     mergeMap(checkEntity(this.errorMessage)),
                     mergeMap((company) => from(
                         this.companyRepository.save(company.set({ contact, requisites }))
                     ))
                 );
-            }),
-            catchServerError()
+            })
         )
     }
 
@@ -98,17 +96,16 @@ export class CompanyService {
      * Обновление данных компании
      * @param dto
      */
-    update(dto: UpdateCompanyDto) {
-        return from(this.companyRepository.findOne({ id: dto.id })).pipe(
+    update({ id, ...dto }: UpdateCompanyDto) {
+        return from(this.companyRepository.findOne({ id })).pipe(
             mergeMap(checkEntity(this.errorMessage)),
-            mergeMap((company) => forkJoin([
-                this.contactRepository.updateContact(dto.contact, company.id),
-                this.userService.updateUserCompany(dto.users, company.id),
-                this.requisitesService.update(dto.requisites, dto.id)
+            mergeMap(({ id }) => forkJoin([
+                this.contactRepository.updateContact(dto.contact, id),
+                this.userService.updateUserCompany(dto.users, id),
+                this.requisitesService.update(dto.requisites, id)
             ])),
-            mergeMapTo(from(this.companyRepository.update({ id: dto.id }, { name: dto.name }))),
-            mapTo({ message: 'Данные компании обновлены' }),
-            catchServerError()
+            mergeMapTo(from(this.companyRepository.update(id, { name: dto.name }))),
+            mapTo({ message: 'Данные компании обновлены' })
         );
     }
 
@@ -116,16 +113,7 @@ export class CompanyService {
      * Получить все данные о компании для дальнейшего редактирования
      * @param id айди компании
      */
-    getFullCompany(id: string) {
-        return from(this.companyRepository.getFullCompany(id)).pipe(
-            mergeMap(checkEntity(this.errorMessage)),
-            map((company) => ({
-                ...company,
-                users: company.users.map(({ username }) => username)
-            })),
-            catchServerError()
-        );
-    }
+    getFullCompany(id: string) { return this.companyRepository.getFullCompany(id); }
 
     /**
      * Каскадное удаление компании со всеми зависимостями

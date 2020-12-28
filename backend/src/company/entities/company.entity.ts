@@ -42,5 +42,5 @@ export class Company {
     @OneToMany(() => Margin, (margin) => margin.company)
     margin!: Margin;
 
-    set(props: object) { return Object.assign(this.contact, props); }
+    set(props: object) { return Object.assign(this, props); }
 }

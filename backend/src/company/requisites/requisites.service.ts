@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
 import { of, from, forkJoin } from 'rxjs';
-import { toArray, map, mergeMap, catchError } from 'rxjs/operators';
+import { toArray, map, mergeMap, filter, switchMapTo } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,7 +14,7 @@ export class RequisitesService {
     constructor(
         @InjectRepository(Requisites)
         private readonly requisitesRepository: Repository<Requisites>,
-        private bankSevice: BankService
+        private bankService: BankService
     ) {}
 
     /**
@@ -32,7 +32,7 @@ export class RequisitesService {
                     mergeMap((newReqs) => (prepReqs?.bank?.length
                         ? forkJoin({
                             newReq: of(newReqs),
-                            bank: this.bankSevice.create(prepReqs.bank, newReqs.id)
+                            bank: this.bankService.create(prepReqs.bank, newReqs.id)
                         }).pipe(map(({ newReq }) => newReq))
                         : of(newReqs)
                     )),
@@ -49,7 +49,19 @@ export class RequisitesService {
      * @param companyId айди компании
      */
     update(requisitesDto: RequisitesDto[], companyId: string) {
-        return from(requisitesDto).pipe(
+        return of(requisitesDto).pipe(
+            mergeMap((requisites) => (requisites.length
+                ? from(this.requisitesRepository.find({ companyId })).pipe(
+                    mergeMap((requisites) => from(requisites).pipe(
+                        filter((item) => requisitesDto.some(({ id }) => item?.id !== id)),
+                        mergeMap((filtredItem) => from(this.requisitesRepository.remove(filtredItem))),
+                        switchMapTo(from(requisitesDto))
+                    ))
+                ) : from(this.requisitesRepository.find({ companyId })).pipe(
+                    mergeMap((filtredItem) => from(this.requisitesRepository.remove(filtredItem))),
+                    switchMapTo(from(requisitesDto))
+                )
+            )),
             mergeMap((requisites) => from(this.requisitesRepository.findOne(requisites.id)).pipe(
                 mergeMap((found) => (found
                     ? forkJoin([
@@ -57,12 +69,11 @@ export class RequisitesService {
                             { id: requisites.id },
                             omit(requisites, ['id', 'bank'])
                         )),
-                        from(this.bankSevice.update(requisites.bank))
+                        this.bankService.update(requisites.bank)
                     ])
                     : this.create(requisitesDto, companyId)
                 ))
             )),
-            catchServerError()
         );
     }
 

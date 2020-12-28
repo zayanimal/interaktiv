@@ -1,6 +1,5 @@
-import { of, from, throwError } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
-import { InternalServerErrorException } from '@nestjs/common';
+import { of, from } from 'rxjs';
+import { mergeMap, map } from 'rxjs/operators';
 import { Repository, EntityRepository, Raw } from 'typeorm';
 import { Company } from '@company/entities/company.entity';
 import { checkEntity } from '@shared/utils';
@@ -21,7 +20,6 @@ export class CompanyRepository extends Repository<Company> {
     searchId(id: string) {
         return from(this.findOne({ id })).pipe(
             mergeMap(checkEntity('Компания не существует')),
-            catchServerError()
         );
     }
 
@@ -41,7 +39,6 @@ export class CompanyRepository extends Repository<Company> {
     createCompany(companyDto: CreateCompanyDto) {
         return of(this.create({ name: companyDto.name })).pipe(
             mergeMap((created) => from(this.save(created))),
-            catchServerError()
         );
     }
 
@@ -72,6 +69,12 @@ export class CompanyRepository extends Repository<Company> {
             .leftJoin('company.requisites', 'r', 'company.id = r.companyId')
             .leftJoin('r.bank', 'b', 'r.id = b.requisitesId')
             .where('company.id = :id', { id })
-            .getOne());
+            .getOne()).pipe(
+                mergeMap(checkEntity('Компания не существует')),
+                map((company) => ({
+                    ...company,
+                    users: company.users.map(({ username }) => username)
+                }))
+            );
     }
 }
