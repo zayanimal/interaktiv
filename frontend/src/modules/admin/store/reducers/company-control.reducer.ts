@@ -31,7 +31,10 @@ export const companyControl = createReducer<typeof initialState>(initialState, {
         }
     }),
 
-    [getType(companyControlActions.updateCompanyForm)]: (state, { payload }) => ({ ...state, ...payload }),
+    [getType(companyControlActions.updateCompanyForm)]: (state, { payload }) => ({
+        ...state,
+        name: payload.name,
+    }),
 
     [getType(companyControlActions.updateContactForm)]: (state, { payload }) => ({
         ...state,

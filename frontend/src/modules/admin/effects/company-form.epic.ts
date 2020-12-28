@@ -63,13 +63,13 @@ export const updateCompany: Epic = (action$, state$, { company }) => action$.pip
             map(({ requisites }) => ({
                 id: state.id,
                 name: state.name,
-                users: state.users,
+                users: ['admin'],
                 contact: state.contact,
                 requisites,
             })),
         )),
     )),
-    switchMap((entity) => company.update$(entity, entity.id)),
+    switchMap((entity) => company.update$(entity)),
     mapTo(systemActions.successNotification('Компания обновлена')),
     catchError((err, caught) => merge(
         caught,

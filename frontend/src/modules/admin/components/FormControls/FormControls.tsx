@@ -41,7 +41,7 @@ const FormControls: React.FC<Props> = (props) => {
                 color="primary"
                 onClick={mode ? onEdit : onAdd}
             >
-                {mode ? 'Редактировать' : 'Добавить'}
+                {mode ? 'Сохранить' : 'Добавить'}
             </Button>
         </div>
     );

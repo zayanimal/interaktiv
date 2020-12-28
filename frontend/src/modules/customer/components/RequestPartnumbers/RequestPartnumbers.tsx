@@ -17,7 +17,7 @@ interface Props {
     onShowList: (value: boolean) => void;
 }
 
-const RequestPartnumbers: React.SFC<Props> = (props) => {
+const RequestPartnumbers: React.FC<Props> = (props) => {
     const {
         value,
         setValue,

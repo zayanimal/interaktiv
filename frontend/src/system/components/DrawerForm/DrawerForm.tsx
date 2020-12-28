@@ -36,7 +36,7 @@ const DrawerForm: React.FC<Props> = (props) => {
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => cond([
-            [(t: HTMLElement) => t.querySelector('button')?.id !== 'close', () => {}],
+            [(t: HTMLElement) => !drawer.current?.contains(t), onClose],
             [(t: HTMLElement) => t.closest('.MuiPopover-root') !== null, onClose],
             [(t: HTMLElement) => !!t.getAttribute('aria-hidden'), () => onClose],
         ])(e.target as HTMLElement);
@@ -63,7 +63,7 @@ const DrawerForm: React.FC<Props> = (props) => {
                         className={cn('header')}
                     >
                         {label}
-                        <IconButton id="close" size="small" onClick={onClose}>
+                        <IconButton size="small" onClick={onClose}>
                             <Close />
                         </IconButton>
                     </div>

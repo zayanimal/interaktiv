@@ -21,8 +21,8 @@ export class CompanyService implements IListableService {
         return this.api.get$(`company/search-name/${name}`);
     }
 
-    public update$(dto: CompanyEntity, id: string) {
-        return this.api.put$(`company/${id}`, dto);
+    public update$(dto: CompanyEntity) {
+        return this.api.put$(`company/update/`, dto);
     }
 
     public delete$(name: string) {

@@ -29,6 +29,7 @@ const CompanyRequisites: React.FC<CompanyControlProps> = (props) => {
                 <Chip
                     key={req.id}
                     className={cn('chip')}
+                    color="secondary"
                     label={req.name}
                     onClick={onClick(req.id)}
                     onDelete={onDelete(req.id)}

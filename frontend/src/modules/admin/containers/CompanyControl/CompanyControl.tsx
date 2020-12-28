@@ -7,6 +7,7 @@ import { CompanyFields } from '@admin/components/CompanyFields';
 import { FormControls } from '@admin/components/FormControls';
 import { CompanyRequisites } from '@admin/components/CompanyRequisites';
 import { RequisitesDrawer } from '@admin/components/RequisitesDrawer';
+import { SearchMultiSelect } from '@shared/components/SearchMultiSelect';
 import { systemActions } from '@system/store/actions';
 import { companiesActions, companyControlActions } from '@admin/store/actions';
 import { companySelectors, companyControlSelectors } from '@admin/store/selectors';
@@ -76,6 +77,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                 </div>
                 <div className={grid('col-6')}>
                     <h3>Пользователи</h3>
+                    <SearchMultiSelect {...props} />
                     <h3>Реквизиты</h3>
                     <CompanyRequisites {...props} />
                 </div>
