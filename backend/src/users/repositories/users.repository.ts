@@ -54,7 +54,7 @@ export class UsersRepository extends Repository<Users> {
     search(username: string) {
         return from(this.find({
             username: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${username}:*')`)
-        }));
+        })).pipe(map((users) => users.map(({ username }) => username)));
     }
 
     searchRaw(username: string) {
