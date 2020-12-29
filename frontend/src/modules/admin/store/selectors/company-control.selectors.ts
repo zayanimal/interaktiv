@@ -46,4 +46,6 @@ export const bankRequisites = (state: RootStateTypes) => _.pipe(
         [_.isArray, _.map((id: string) => bankRequisitesItem(state)[id])],
         [_.T, _.identity],
     ]),
-)(state)
+)(state);
+
+export const foundUsers = (state: RootStateTypes) => companyControlState(state).foundUsers;

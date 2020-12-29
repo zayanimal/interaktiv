@@ -1,4 +1,4 @@
-import { of, merge } from 'rxjs';
+import { of, merge, throwError } from 'rxjs';
 import {
     filter,
     map,
@@ -63,12 +63,15 @@ export const updateCompany: Epic = (action$, state$, { company }) => action$.pip
             map(({ requisites }) => ({
                 id: state.id,
                 name: state.name,
-                users: ['admin'],
+                users: state.users,
                 contact: state.contact,
                 requisites,
             })),
         )),
     )),
+    mergeMap((payload) => (payload.users.length
+        ? of(payload)
+        : throwError({ message: 'Должен быть указан, хотя бы один пользователь' }))),
     switchMap((entity) => company.update$(entity)),
     mapTo(systemActions.successNotification('Компания обновлена')),
     catchError((err, caught) => merge(

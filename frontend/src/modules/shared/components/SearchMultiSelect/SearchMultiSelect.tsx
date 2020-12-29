@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, useEffect, useRef, ChangeEvent, MouseEvent } from 'react';
 import { TextField, InputLabel, Chip, ListItem } from '@material-ui/core';
 import { List, ListRowRenderer } from 'react-virtualized';
 import { bem } from '@utils/formatters';
@@ -7,11 +7,12 @@ import './SearchMultiSelect.scss';
 const cn = bem('SearchMultiSelect');
 
 interface Props {
-    found: object[];
+    found: string[];
     selected: string[];
     onChange: (value: string) => void;
     onSelect: (value: string) => void;
     onDelete: (value: string) => void;
+    onClear: (value: any[]) => void;
 }
 
 const SearchMultiSelect: React.FC<Props> = (props) => {
@@ -21,6 +22,7 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
         onChange = () => {},
         onSelect = () => {},
         onDelete = () => {},
+        onClear = () => {},
     } = props;
 
     const [input, setInput] = useState('');

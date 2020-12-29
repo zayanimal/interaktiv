@@ -9,7 +9,7 @@ import { CompanyRequisites } from '@admin/components/CompanyRequisites';
 import { RequisitesDrawer } from '@admin/components/RequisitesDrawer';
 import { SearchMultiSelect } from '@shared/components/SearchMultiSelect';
 import { systemActions } from '@system/store/actions';
-import { companiesActions, companyControlActions } from '@admin/store/actions';
+import { companiesActions, companyControlActions, searchUserActions } from '@admin/store/actions';
 import { companySelectors, companyControlSelectors } from '@admin/store/selectors';
 import { bem } from '@utils/formatters';
 
@@ -24,6 +24,8 @@ const mapStateToProps = (state: RootStateTypes) => ({
     requisites: companyControlSelectors.requisitesArr(state),
     requisitesById: companyControlSelectors.requisitesById(state),
     bankRequisites: companyControlSelectors.bankRequisites(state),
+    users: companyControlSelectors.users(state),
+    foundUsers: companyControlSelectors.foundUsers(state),
 });
 
 const mapDispatchToProps = {
@@ -41,6 +43,10 @@ const mapDispatchToProps = {
     updateBankForm: companyControlActions.updateBankForm,
     deleteBankForm: companyControlActions.deleteBankForm,
     createBankForm: companyControlActions.createBankForm,
+    searchUser: searchUserActions.searchUser,
+    selectUser: searchUserActions.select,
+    deleteUser: searchUserActions.deleteSelected,
+    setFoundUser: searchUserActions.setFound,
 };
 
 export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -53,6 +59,12 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         setCompanyEditMode,
         getCompany,
         updateCompany,
+        users,
+        searchUser,
+        foundUsers,
+        selectUser,
+        deleteUser,
+        setFoundUser,
     } = props;
 
     const { path, params } = useRouteMatch<{ id: string }>();
@@ -78,11 +90,12 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                 <div className={grid('col-6')}>
                     <h3>Пользователи</h3>
                     <SearchMultiSelect
-                        found={[]}
-                        selected={[]}
-                        onChange={() => {}}
-                        onSelect={() => {}}
-                        onDelete={() => {}}
+                        found={foundUsers}
+                        selected={users}
+                        onChange={searchUser}
+                        onSelect={selectUser}
+                        onDelete={deleteUser}
+                        onClear={setFoundUser}
                     />
                     <h3>Реквизиты</h3>
                     <CompanyRequisites {...props} />

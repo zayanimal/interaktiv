@@ -1,5 +1,5 @@
 import { createReducer, getType } from 'typesafe-actions';
-import { companyControlActions } from '@admin/store/actions';
+import { companyControlActions, searchUserActions } from '@admin/store/actions';
 import { RequisitesEntity, BankRequisitesEntity } from '@admin/entities';
 import { Normalised } from '@utils/generics';
 
@@ -12,6 +12,7 @@ const initialState = {
     users: [] as string[],
     contact: { phone: '', email: '', website: '' },
     requisites: [] as string[],
+    foundUsers: [] as string[],
     entities: {
         requisites: {} as Normalised<RequisitesEntity>,
         bank: {} as Normalised<BankRequisitesEntity>,
@@ -126,5 +127,21 @@ export const companyControl = createReducer<typeof initialState>(initialState, {
                 },
             },
         },
+    }),
+
+    [getType(searchUserActions.setFound)]: (state, { payload }) => ({
+        ...state,
+        foundUsers: payload,
+    }),
+
+    [getType(searchUserActions.select)]: (state, { payload }) => ({
+        ...state,
+        foundUsers: state.foundUsers.filter(((user) => user !== payload)),
+        users: (state.users.some((usr) => usr === payload) ? state.users : [...state.users, payload]),
+    }),
+
+    [getType(searchUserActions.deleteSelected)]: (state, { payload }) => ({
+        ...state,
+        users: state.users.filter((item) => item !== payload),
     }),
 });
