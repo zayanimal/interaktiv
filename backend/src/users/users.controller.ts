@@ -19,6 +19,13 @@ import { CreateUserDto } from '@users/dto/create-user.dto';
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
+    @Get('search/:username')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('admin')
+    search(@Param('username') username: string) {
+        return this.usersService.search(username);
+    }
+
     /**
      * Поиск юзера
      * Пример запроса: /users/username

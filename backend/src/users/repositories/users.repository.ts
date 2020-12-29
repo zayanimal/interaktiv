@@ -1,6 +1,6 @@
-import { of, from } from 'rxjs';
+import { from } from 'rxjs';
 import { map, mapTo, mergeMap, switchMapTo, switchMap, mergeMapTo } from 'rxjs/operators';
-import { Repository, EntityRepository } from 'typeorm';
+import { Repository, EntityRepository, Raw } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { Users } from '@users/entities/users.entity';
 import { checkEntity } from '@shared/utils';
@@ -49,6 +49,12 @@ export class UsersRepository extends Repository<Users> {
                 mergeMap(checkEntity(this.errorMessage)),
                 map((user) => this.transform(user, EDIT_GROUP))
             )
+    }
+
+    search(username: string) {
+        return from(this.find({
+            username: Raw((col) => `to_tsvector(${col}) @@ to_tsquery('${username}:*')`)
+        }));
     }
 
     searchRaw(username: string) {

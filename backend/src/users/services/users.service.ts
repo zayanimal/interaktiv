@@ -21,6 +21,10 @@ export class UsersService {
         private authService: AuthService
     ) {}
 
+    search(username: string) {
+        return this.usersRepository.search(username);
+    }
+
     /**
      * Поиск пользователя по id
      * @param id
