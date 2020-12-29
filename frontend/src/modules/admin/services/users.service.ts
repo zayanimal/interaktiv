@@ -23,4 +23,8 @@ export class UsersService implements IListableService {
     public delete$(username: string) {
         return this.api.delete$(`users/${username}`);
     }
+
+    public search$(name: string) {
+
+    }
 }

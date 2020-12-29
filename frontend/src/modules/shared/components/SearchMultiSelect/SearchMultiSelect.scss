@@ -1,7 +1,33 @@
 .SearchMultiSelect {
+    position: relative;
     margin-bottom: 3em;
 
     &__input {
         width: 60%;
+    }
+
+    &__list {
+        width: 100%;
+        background-color: #fff;
+        margin-top: 0.375em;
+        max-height: 60vh;
+        border-radius: 0.25em;
+        box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
+                    0px 1px 1px 0px rgba(0,0,0,0.14),
+                    0px 1px 3px 0px rgba(0,0,0,0.12);
+        overflow-y: auto;
+        z-index: 1;
+    }
+
+    &__selected {
+        width: 80%;
+        margin-top: 0.7em;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+    }
+
+    &__chip {
+        max-width: 14em;
     }
 }

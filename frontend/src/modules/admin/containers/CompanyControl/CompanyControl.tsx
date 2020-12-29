@@ -77,7 +77,13 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                 </div>
                 <div className={grid('col-6')}>
                     <h3>Пользователи</h3>
-                    <SearchMultiSelect {...props} />
+                    <SearchMultiSelect
+                        found={[]}
+                        selected={[]}
+                        onChange={() => {}}
+                        onSelect={() => {}}
+                        onDelete={() => {}}
+                    />
                     <h3>Реквизиты</h3>
                     <CompanyRequisites {...props} />
                 </div>
