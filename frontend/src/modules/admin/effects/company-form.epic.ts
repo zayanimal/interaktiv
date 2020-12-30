@@ -6,7 +6,6 @@ import {
     mergeMap,
     switchMap,
     switchMapTo,
-    delay,
     first,
     catchError,
 } from 'rxjs/operators';
@@ -35,7 +34,6 @@ const companySchema = { requisites: [requisitesSchema] };
 export const getCompany: Epic = (action$, _, { company }) => action$.pipe(
     filter(isActionOf(companyControlActions.getCompany.request)),
     mergeMap(({ payload }) => company.findId(payload)),
-    delay(100),
     map(({ response }) => companyControlActions.getCompany.success(
         normalize(response, companySchema),
     )),

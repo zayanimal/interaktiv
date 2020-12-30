@@ -8,7 +8,7 @@ import {
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
 import { systemActions } from '@system/store/actions';
-import { companiesActions } from '@admin/store/actions';
+import { companiesActions, companyControlActions } from '@admin/store/actions';
 import { companySelectors } from '@admin/store/selectors';
 import { CompaniesList } from '@admin/components/CompaniesList';
 import { CompanyControl } from '@admin/containers/CompanyControl';
@@ -23,23 +23,25 @@ const mapDispatchToProps = {
     getList: companiesActions.getCompaniesList.request,
     removeCompany: companiesActions.removeCompany,
     setCompanyEditName: companiesActions.setCompanyEditName,
-    setCompanyEditMode: companiesActions.setCompanyEditMode,
+    setFetched: companyControlActions.setFetched,
+    clearForms: companyControlActions.clearForms,
 };
 
 export type CompaniesProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const Companies: React.FC<CompaniesProps> = (props) => {
-    const { setHeaderTitle, getList, meta } = props;
+    const { setHeaderTitle, getList, meta, clearForms } = props;
     const { pathname } = useLocation();
     const { path } = useRouteMatch();
 
     useEffect(() => {
         if (pathname === '/companies') {
             setHeaderTitle('Управление компаниями');
+            clearForms();
 
             if (!meta.currentPage) { getList(1); }
         }
-    }, [getList, setHeaderTitle, pathname, meta]);
+    }, [getList, setHeaderTitle, pathname, meta, clearForms]);
 
     return (
         <Switch>

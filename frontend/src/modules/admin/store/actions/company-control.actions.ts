@@ -12,6 +12,8 @@ export const editCompany = createAsyncAction(
     '[ADMIN] EDIT_COMPANY_FAILURE',
 )<string, any, any>();
 
+export const setFetched = createAction('[ADMIN] SET_FETCHED_COMPANY')<boolean>();
+
 export const updateCompany = createAction('[ADMIN] UPDATE_COMPANY')();
 
 export const createCompany = createAction('[ADMIN] CREATE_COMPANY')();

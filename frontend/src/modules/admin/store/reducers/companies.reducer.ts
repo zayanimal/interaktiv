@@ -27,11 +27,6 @@ export const companies = createReducer<ICompaniesInitialState>(initialState, {
         list: payload,
     }),
 
-    [getType(companiesActions.setCompanyEditMode)]: (state, { payload }) => ({
-        ...state,
-        companyEditMode: payload,
-    }),
-
     [getType(companiesActions.setCompanyEditName)]: (state, { payload }) => ({
         ...state,
         companyEditName: payload,

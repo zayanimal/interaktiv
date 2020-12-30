@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -9,7 +10,7 @@ import { CompanyRequisites } from '@admin/components/CompanyRequisites';
 import { RequisitesDrawer } from '@admin/components/RequisitesDrawer';
 import { SearchMultiSelect } from '@shared/components/SearchMultiSelect';
 import { systemActions } from '@system/store/actions';
-import { companiesActions, companyControlActions, searchUserActions } from '@admin/store/actions';
+import { companyControlActions, searchUserActions } from '@admin/store/actions';
 import { companySelectors, companyControlSelectors } from '@admin/store/selectors';
 import { bem } from '@utils/formatters';
 
@@ -17,6 +18,7 @@ const grid = bem('FlexGrid');
 
 const mapStateToProps = (state: RootStateTypes) => ({
     loading: companyControlSelectors.loading(state),
+    isFetched: companyControlSelectors.isFetched(state),
     companyEditMode: companySelectors.companyEditMode(state),
     companyForm: companyControlSelectors.companyForm(state),
     contactForm: companyControlSelectors.contactForm(state),
@@ -30,7 +32,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
-    setCompanyEditMode: companiesActions.setCompanyEditMode,
+    setFetched: companyControlActions.setFetched,
     getCompany: companyControlActions.getCompany.request,
     updateCompany: companyControlActions.updateCompany,
     createCompany: companyControlActions.createCompany,
@@ -56,9 +58,10 @@ export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof ma
 const CompanyControl: React.FC<CompanyControlProps> = (props) => {
     const {
         loading,
+        isFetched,
         setHeaderTitle,
         companyEditMode,
-        setCompanyEditMode,
+        setFetched,
         getCompany,
         updateCompany,
         createCompany,
@@ -77,14 +80,13 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         if (path.includes('edit')) {
             getCompany(params.id);
             setHeaderTitle('Редактирование компании');
-            setCompanyEditMode(true);
+            setFetched(false);
         } else {
             setHeaderTitle('Добавление компании');
-            setCompanyEditMode(false);
         }
-    }, []); // eslint-disable-line
+    }, []);
 
-    return (companyEditMode && loading ? <Preloader /> : (
+    return (isFetched && !loading ? (
         <>
             <div className={grid('row')}>
                 <div className={grid('col-6')}>
@@ -114,7 +116,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
             />
             <RequisitesDrawer {...props} />
         </>
-    ));
+    ) : <Preloader />);
 };
 
 const CompanyControlConnected = connect(mapStateToProps, mapDispatchToProps)(CompanyControl);

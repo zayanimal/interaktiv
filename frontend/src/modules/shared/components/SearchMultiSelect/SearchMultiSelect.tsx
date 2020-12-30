@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
 import { TextField, InputLabel, Chip, ListItem } from '@material-ui/core';
-import { List, ListRowRenderer } from 'react-virtualized';
 import { bem } from '@utils/formatters';
 import './SearchMultiSelect.scss';
 
@@ -33,17 +32,6 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
     };
     const selectHandler = (e: MouseEvent) => onSelect(e.currentTarget.textContent || '');
     const deleteHandler = (value: string) => () => onDelete(value);
-
-    const rowRenderer: ListRowRenderer = (props2) => (
-        <ListItem
-            button
-            key={props2.key}
-            style={props2.style}
-            onClick={selectHandler}
-        >
-            {found[props2.index]}
-        </ListItem>
-    );
 
     useEffect(() => {
         const clear = () => { setInput(''); onClear([]); }
@@ -80,23 +68,17 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
             {found.length ? (
                 <>
                     <div id="backdrop" className={cn('backdrop')} />
-                    <List
-                        className={cn('list')}
-                        height={120}
-                        width={1}
-                        rowCount={found.length}
-                        rowHeight={40}
-                        rowRenderer={rowRenderer}
-                        containerStyle={{
-                            width: '100%',
-                            maxWidth: '100%',
-                        }}
-                        style={{
-                            width: '60%',
-                            outline: 'none',
-                            position: 'absolute',
-                        }}
-                    />
+                    <div className={cn('list')}>
+                        {found.map((item) => (
+                            <ListItem
+                                button
+                                key={item}
+                                onClick={selectHandler}
+                            >
+                                {item}
+                            </ListItem>
+                        ))}
+                    </div>
                 </>
             ) : null}
             <div className={cn('selected')}>

@@ -18,6 +18,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
         removeCompany,
         getList,
         setCompanyEditName,
+        setFetched,
     } = props;
 
     const { path } = useRouteMatch();
@@ -82,7 +83,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
 
     return (
         <div className={cn()}>
-            <ListHeader />
+            <ListHeader onAction={() => setFetched(true)} />
             <TableVirtual
                 list={list}
                 getList={getList}

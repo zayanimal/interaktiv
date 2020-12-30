@@ -4,7 +4,8 @@ import { RequisitesEntity, BankRequisitesEntity } from '@admin/entities';
 import { Normalised } from '@utils/generics';
 
 const initialState = {
-    loading: true,
+    loading: false,
+    isFetched: false,
     drawer: false,
     id: '',
     currentRequisitesId: '',
@@ -20,9 +21,17 @@ const initialState = {
 };
 
 export const companyControl = createReducer<typeof initialState>(initialState, {
+    [getType(companyControlActions.setFetched)]: (state, { payload }) => ({
+        ...state,
+        isFetched: payload
+    }),
+
+    [getType(companyControlActions.getCompany.request)]: (state) => ({ ...state, loading: true }),
+
     [getType(companyControlActions.getCompany.success)]: (state, { payload }) => ({
         ...state,
         loading: false,
+        isFetched: true,
         ...payload.result,
         entities: {
             ...state.entities,

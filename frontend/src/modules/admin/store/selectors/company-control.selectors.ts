@@ -7,6 +7,8 @@ export const companyControlState = (state: RootStateTypes) => state.admin.compan
 
 export const loading = (state: RootStateTypes) => companyControlState(state).loading;
 
+export const isFetched = (state: RootStateTypes) => companyControlState(state).isFetched;
+
 export const drawer = (state: RootStateTypes) => companyControlState(state).drawer;
 
 export const id = (state: RootStateTypes) => companyControlState(state).id;

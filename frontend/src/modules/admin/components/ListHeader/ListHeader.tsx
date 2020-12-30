@@ -7,11 +7,18 @@ import './ListHeader.scss';
 
 const cn = bem('ListHeader');
 
-const ListHeader: React.FC = () => {
+interface Props {
+    onAction?: () => void;
+}
+
+const ListHeader: React.FC<Props> = (props) => {
+    const { onAction = () => {} } = props;
     const { path } = useRouteMatch();
     const history = useHistory();
 
     const onAdd = () => {
+        onAction();
+
         history.push({ pathname: `${path}/add` });
     };
 

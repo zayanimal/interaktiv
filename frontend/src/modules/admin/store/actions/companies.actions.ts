@@ -10,6 +10,4 @@ export const removeCompany = createAction('[ADMIN] REMOVE_COMPANY')<string>();
 
 export const setFiltredCompaniesList = createAction('[ADMIN] SET_FILTRED_COMPANIES_LIST')<any[]>();
 
-export const setCompanyEditMode = createAction('[ADMIN] SET_COMPANY_EDIT_MODE')<boolean>();
-
 export const setCompanyEditName = createAction('[ADMIN] SET_COMPANY_EDIT_NAME')<string>();
