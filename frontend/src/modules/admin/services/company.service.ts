@@ -1,5 +1,5 @@
 import { RestService } from '@system/services/rest.service';
-import { IListableService, INewUser } from '@admin/interfaces';
+import { IListableService } from '@admin/interfaces';
 import { CompanyEntity } from '@admin/entities';
 
 export class CompanyService implements IListableService {
@@ -9,8 +9,12 @@ export class CompanyService implements IListableService {
         return this.api.get$(`company?page=${page}&limit=30`);
     }
 
-    public create$(dto: INewUser) {
+    public create$(dto: CompanyEntity) {
         return this.api.put$('company/', dto);
+    }
+
+    public update$(dto: CompanyEntity) {
+        return this.api.put$(`company/update/`, dto);
     }
 
     public findId(id: string) {
@@ -19,10 +23,6 @@ export class CompanyService implements IListableService {
 
     public find$(name: string) {
         return this.api.get$(`company/search-name/${name}`);
-    }
-
-    public update$(dto: CompanyEntity) {
-        return this.api.put$(`company/update/`, dto);
     }
 
     public delete$(name: string) {

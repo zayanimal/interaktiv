@@ -4,7 +4,7 @@ import {
 } from '@admin/entities';
 
 export class CompanyEntity {
-    id!: string;
+    id?: string;
 
     name!: string;
 

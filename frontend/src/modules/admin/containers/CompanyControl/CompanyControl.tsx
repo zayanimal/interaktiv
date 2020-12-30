@@ -33,6 +33,7 @@ const mapDispatchToProps = {
     setCompanyEditMode: companiesActions.setCompanyEditMode,
     getCompany: companyControlActions.getCompany.request,
     updateCompany: companyControlActions.updateCompany,
+    createCompany: companyControlActions.createCompany,
     setDrawer: companyControlActions.setDrawerState,
     updateCurrentRequisites: companyControlActions.updateCurrentRequisites,
     updateCompanyForm: companyControlActions.updateCompanyForm,
@@ -47,6 +48,7 @@ const mapDispatchToProps = {
     selectUser: searchUserActions.select,
     deleteUser: searchUserActions.deleteSelected,
     setFoundUser: searchUserActions.setFound,
+    clearForms: companyControlActions.clearForms,
 };
 
 export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -59,12 +61,14 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         setCompanyEditMode,
         getCompany,
         updateCompany,
+        createCompany,
         users,
         searchUser,
         foundUsers,
         selectUser,
         deleteUser,
         setFoundUser,
+        clearForms,
     } = props;
 
     const { path, params } = useRouteMatch<{ id: string }>();
@@ -105,7 +109,8 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                 mode={companyEditMode}
                 backward="/companies"
                 onEdit={updateCompany}
-                onAdd={() => {}}
+                onAdd={createCompany}
+                onClean={clearForms}
             />
             <RequisitesDrawer {...props} />
         </>

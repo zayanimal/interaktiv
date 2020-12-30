@@ -5,6 +5,7 @@ import { getCompaniesList } from '@admin/effects/companies.epic';
 import {
     getCompany,
     updateCompany,
+    createCompany,
     createRequisites,
     createBankRequisites,
 } from '@admin/effects/company-form.epic';
@@ -19,6 +20,7 @@ export const adminEpic: Epic = combineEpics(
     getCompaniesList,
     getCompany,
     updateCompany,
+    createCompany,
     createRequisites,
     createBankRequisites,
     searchUser,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react';
 import { TextField, InputLabel, Chip, ListItem } from '@material-ui/core';
 import { List, ListRowRenderer } from 'react-virtualized';
 import { bem } from '@utils/formatters';
@@ -45,34 +45,60 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
         </ListItem>
     );
 
+    useEffect(() => {
+        const clear = () => { setInput(''); onClear([]); }
+
+        const handlerClick = ({ target }: Event) => {
+            if ((target as HTMLElement).closest('#backdrop')) { clear(); }
+        };
+
+        const handlerKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') { clear(); }
+        };
+
+        document.addEventListener('keydown', handlerKey, false);
+        document.addEventListener('click', handlerClick, false);
+
+        return () => {
+            document.removeEventListener('click', handlerClick, false);
+            document.removeEventListener('keydown', handlerKey, false);
+        }
+    }, [onChange, setInput, onClear]);
+
     return (
         <div className={cn()}>
             <div className={cn('input')}>
                 <InputLabel>Поиск пользователя</InputLabel>
                 <TextField
                     fullWidth
+                    className={cn('input-field')}
                     type="text"
                     value={input}
                     onChange={changeHandler}
                 />
             </div>
-            {found.length ? <List
-                className={cn('list')}
-                height={120}
-                width={1}
-                rowCount={found.length}
-                rowHeight={40}
-                rowRenderer={rowRenderer}
-                containerStyle={{
-                    width: '100%',
-                    maxWidth: '100%',
-                }}
-                style={{
-                    width: '60%',
-                    outline: 'none',
-                    position: 'absolute',
-                }}
-            /> : null}
+            {found.length ? (
+                <>
+                    <div id="backdrop" className={cn('backdrop')} />
+                    <List
+                        className={cn('list')}
+                        height={120}
+                        width={1}
+                        rowCount={found.length}
+                        rowHeight={40}
+                        rowRenderer={rowRenderer}
+                        containerStyle={{
+                            width: '100%',
+                            maxWidth: '100%',
+                        }}
+                        style={{
+                            width: '60%',
+                            outline: 'none',
+                            position: 'absolute',
+                        }}
+                    />
+                </>
+            ) : null}
             <div className={cn('selected')}>
                 {selected.map((item) => (
                     <Chip

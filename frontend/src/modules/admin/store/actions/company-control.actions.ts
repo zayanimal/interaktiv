@@ -4,7 +4,7 @@ export const getCompany = createAsyncAction(
     '[ADMIN] GET_COMPANY_REQUEST',
     '[ADMIN] GET_COMPANY_SUCCESS',
     '[ADMIN] GET_COMPANY_FAILURE',
-)<string, unknown, unknown>();
+)<string, object, unknown>();
 
 export const editCompany = createAsyncAction(
     '[ADMIN] EDIT_COMPANY_REQUEST',
@@ -13,6 +13,8 @@ export const editCompany = createAsyncAction(
 )<string, any, any>();
 
 export const updateCompany = createAction('[ADMIN] UPDATE_COMPANY')();
+
+export const createCompany = createAction('[ADMIN] CREATE_COMPANY')();
 
 export const setDrawerState = createAction('[ADMIN] SET_DRAWER_STATE')<boolean>();
 
@@ -40,6 +42,4 @@ export const putBankForm = createAction('[ADMIN] PUT_BANK_FORM')<object>();
 
 export const updateUsers = createAction('[ADMIN] COMPANY_UPDATE_USERS')<string[]>();
 
-export const updateValidationErrors = createAction('[ADMIN] UPDATE_COMPANY_VALIDATION_ERRORS')<object>();
-
-export const clearValidationErrors = createAction('[ADMIN] CLEAR_COMPANY_VALIDATION_ERRORS')();
+export const clearForms = createAction('[ADMIN] COMPANY_CLEAR')();

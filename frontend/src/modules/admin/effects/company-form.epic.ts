@@ -6,6 +6,7 @@ import {
     mergeMap,
     switchMap,
     switchMapTo,
+    delay,
     first,
     catchError,
 } from 'rxjs/operators';
@@ -34,12 +35,13 @@ const companySchema = { requisites: [requisitesSchema] };
 export const getCompany: Epic = (action$, _, { company }) => action$.pipe(
     filter(isActionOf(companyControlActions.getCompany.request)),
     mergeMap(({ payload }) => company.findId(payload)),
+    delay(100),
     map(({ response }) => companyControlActions.getCompany.success(
         normalize(response, companySchema),
     )),
     catchError((err, caught) => merge(
         caught,
-        of(systemActions.errorNotification(err.message)),
+        of(systemActions.errorNotification(err?.response?.message)),
     )),
 );
 
@@ -77,6 +79,36 @@ export const updateCompany: Epic = (action$, state$, { company }) => action$.pip
     catchError((err, caught) => merge(
         caught,
         of(systemActions.errorNotification(err.message)),
+    )),
+);
+
+export const createCompany: Epic = (action$, state$, { company }) => action$.pipe(
+    filter(isActionOf(companyControlActions.createCompany)),
+    switchMapTo(state$.pipe(
+        first(),
+        map(companyControlSelectors.companyControlState),
+        mergeMap((state) => of(state).pipe(
+            map(({ requisites, entities }) => denormalize(
+                { requisites },
+                companySchema,
+                entities,
+            )),
+            map(({ requisites }) => ({
+                name: state.name,
+                users: state.users,
+                contact: state.contact,
+                requisites,
+            })),
+        )),
+        mergeMap((payload) => (payload.users.length
+            ? of(payload)
+            : throwError({ message: 'Должен быть указан, хотя бы один пользователь' }))),
+        switchMap((entity) => company.create$(entity)),
+        mapTo(systemActions.successNotification('Компания добавлена')),
+        catchError((err, caught) => merge(
+            caught,
+            of(systemActions.errorNotification(err.message)),
+        )),
     )),
 );
 

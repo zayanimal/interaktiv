@@ -11,7 +11,7 @@ const initialState = {
         totalItems: 0,
         totalPages: 0,
     },
-    companyEditMode: false,
+    companyEditMode: true,
     companyEditName: '',
 };
 
