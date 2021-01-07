@@ -14,6 +14,7 @@ docker run \
 --name react-frontend \
 --rm \
 --network=interaktiv \
+--log-opt max-size=1g \
 -itd \
 -v ${PWD}:/app \
 -v /app/node_modules \

@@ -12,6 +12,7 @@ docker build -t zayanimal/nest-backend:v1 ./backend/.
 # сборка контейнера
 docker run \
 --name nest-backend \
+--log-opt max-size=1g \
 --rm \
 --network=interaktiv \
 -d \

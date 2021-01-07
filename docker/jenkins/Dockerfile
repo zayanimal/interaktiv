@@ -15,6 +15,7 @@
 # https://medium.com/@schogini/running-docker-inside-and-outside-of-a-jenkins-container-along-with-docker-compose-a-tiny-c908c21557aa
 
 # docker run --name jenkins -itd -e JENKINS_USER=$(id -u) \
+# --log-opt max-size=1g \
 # -v /var/run/docker.sock:/var/run/docker.sock \
 # -v /var/jenkins_home:/var/jenkins_home \
 # -v $(which docker):/usr/bin/docker \
