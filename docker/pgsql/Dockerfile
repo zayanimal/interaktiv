@@ -10,8 +10,9 @@ EXPOSE 5432
 # docker run \
 # --name=pgsql \
 # --network=interaktiv \
-# --log-opt max-size=1g \
 # -d -p 5432:5432 \
-# -v /usr/local/pgsql/data:/var/lib/postgresql/data/pgdata zayanimal/pgsql:v1
+# -v /usr/local/pgsql/data:/var/lib/postgresql/data/pgdata \
+# --log-opt max-size=1g \
+# zayanimal/pgsql:v1
 
 # для этого контейнера есть образ в docker hub: zayanimal/pgsql:v1
