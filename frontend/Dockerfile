@@ -1,30 +1,29 @@
-# FROM tiangolo/node-frontend:10 as build-stage
+FROM tiangolo/node-frontend:10 as build-stage
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY package*.json /app/
+COPY package*.json /app/
 
-# RUN npm install
+RUN npm install
 
-# COPY ./ /app/
+COPY ./ /app/
 
-# RUN npm run build
+RUN npm run build
 
 FROM nginx:1.15
 
-# COPY --from=build-stage /app/build/ /usr/share/nginx/html
+COPY --from=build-stage /app/build/ /usr/share/nginx/html
 
 COPY /nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY /.well-known /usr/share/nginx/html/.well-known
-
-# COPY /
+COPY /
 
 # docker run \
 # --name frontend \
 # --log-opt max-size=1g \
+# -v /etc/letsencrypt/live/interaktiv.iskor.ru:/etc/nginx/certs
 # -d \
-# -p 80:80 \
+# -p 80:80 \`
 # -p 443:443 \
 # --rm \
 # --network=interaktiv \
