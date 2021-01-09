@@ -16,7 +16,7 @@ FROM nginx:1.15
 
 COPY /nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY /.well-known /usr/share/nginx/html/
+COPY /.well-known /usr/share/nginx/html/.well-known
 
 # COPY /
 
