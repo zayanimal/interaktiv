@@ -1,4 +1,3 @@
-# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
 FROM tiangolo/node-frontend:10 as build-stage
 
 WORKDIR /app
@@ -11,26 +10,10 @@ COPY ./ /app/
 
 RUN npm run build
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
 FROM nginx:1.15
 
 COPY --from=build-stage /app/build/ /usr/share/nginx/html
 
-# Copy the default nginx.conf provided by tiangolo/node-frontend
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
-
-# FROM node:13.12.0
-
-# WORKDIR /app
-
-# ENV PATH /app/node_modules/.bin:$PATH
-
-# COPY package.json ./
-# COPY package-lock.json ./
-# RUN npm install
-
-# COPY . ./
-
-# CMD ["npm", "run", "start"]
+COPY /nginx.conf /etc/nginx/conf.d/default.conf
 
 # docker run --name react-frontend -d --rm -v ${PWD}:/app -v /app/node_modules -e CHOKIDAR_USEPOLLING=true -p 3000:3000 --network=interaktiv zayanimal/react-frontend:v1
