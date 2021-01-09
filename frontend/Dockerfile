@@ -18,7 +18,7 @@ COPY /nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY ./home/zayanimal/ /usr/share/nginx/html/
 
-COPY /
+# COPY /
 
 # docker run \
 # --name frontend \
