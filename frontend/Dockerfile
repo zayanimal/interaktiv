@@ -19,7 +19,7 @@ COPY /nginx.conf /etc/nginx/conf.d/default.conf
 # docker run \
 # --name frontend \
 # --log-opt max-size=1g \
-# -v /etc/letsencrypt/live/interaktiv.iskor.ru:/etc/nginx/certs \
+# -v /home/zayanimal:/etc/nginx/certs \
 # -d \
 # -p 80:80 \
 # -p 443:443 \
