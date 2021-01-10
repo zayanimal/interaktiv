@@ -35,8 +35,13 @@ node {
         '''
     }
 
-    stage('Удаление образа контейнера') {
-        sh 'docker rmi zayanimal/nest-backend-dev:v1'
+    stage('Удаление образа') {
+        sh '''
+            if [[ -n $(docker images -q zayanimal/nest-backend-dev:v1) ]]
+            then
+                docker rmi zayanimal/nest-backend-dev:v1
+            fi
+        '''
     }
 
     stage('Сборка контейнера') {
