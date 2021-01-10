@@ -26,8 +26,6 @@ properties(
 node {
     checkout scm
 
-    sh 'usermod -aG docker jenkins'
-
     stage('Остановка контейнера') {
         sh '''
             if [[ -n $(docker ps --filter "name=nest-backend-dev" -qa) ]]
@@ -56,6 +54,7 @@ node {
     }
 
     stage('Сборка контейнера') {
+        sh 'usermod -aG docker jenkins'
         sh '''
             docker run \
             --name nest-backend-dev \

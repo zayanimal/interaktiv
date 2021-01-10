@@ -15,8 +15,6 @@ properties(
 node {
     checkout scm
 
-    sh 'usermod -aG docker jenkins'
-
     stage('Остановка контейнера') {
         sh '''
             if [[ -n $(docker ps --filter "name=react-frontend-dev" -qa) ]]
