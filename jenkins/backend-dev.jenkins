@@ -53,6 +53,10 @@ node {
         '''
     }
 
+    stage('Создание нового образа ') {
+        sh 'docker build -t zayanimal/nest-backend-dev:v1 ./backend/.'
+    }
+
     stage('Сборка контейнера') {
         sh '''
             docker run \

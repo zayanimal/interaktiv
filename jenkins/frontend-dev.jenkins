@@ -42,6 +42,10 @@ node {
         '''
     }
 
+    stage('Создание нового образа ') {
+        sh 'docker build -t zayanimal/react-frontend-dev:v1 ./frontend/.'
+    }
+
     stage('Сборка контейнера') {
         sh '''
             docker run \
