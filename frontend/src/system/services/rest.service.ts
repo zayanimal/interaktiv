@@ -3,7 +3,7 @@ import { TokenService } from '@system/services/token.service';
 import { IRestService, IHeader } from '@system/interfaces';
 import { ApiUrl } from '@system/decorators';
 
-@ApiUrl('api/')
+@ApiUrl('https://http://interaktiv.iskor.ru/api/')
 export class RestService implements IRestService {
     constructor(private tokenService: TokenService) {}
 
