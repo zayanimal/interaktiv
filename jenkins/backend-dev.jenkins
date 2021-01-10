@@ -54,7 +54,7 @@ node {
     }
 
     stage('Сборка контейнера') {
-        sh 'usermod -aG docker jenkins'
+        sh 'groupadd docker && usermod -aG docker jenkins'
         sh '''
             docker run \
             --name nest-backend-dev \
