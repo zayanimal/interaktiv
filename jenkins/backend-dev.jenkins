@@ -1,0 +1,58 @@
+#!groovy
+
+// утилиты
+def checkDirectoryChanges(path) {
+    try {
+        sh "git diff --quiet --exit-code HEAD~1..HEAD ${path}/"
+        echo ' === Без сборки, в директории нет изменений === '
+        return false
+    } catch (err) {
+        return true
+    }
+}
+
+properties(
+    [
+        disableConcurrentBuilds(),
+        buildDiscarder(
+            logRotator(
+                numToKeepStr: '5',
+                artifactNumToKeepStr: '5'
+            )
+        )
+    ]
+)
+
+node {
+    checkout scm
+
+    stage('Остановка контейнера') {
+        sh '''
+            if [[ -n $(docker ps --filter "name=nest-backend-dev" -qa) ]]
+            then
+                docker stop nest-backend-dev
+            fi
+        '''
+    }
+
+    stage('Удаление образа контейнера') {
+        sh 'docker rmi zayanimal/nest-backend-dev:v1'
+    }
+
+    stage('Сборка контейнера') {
+        sh '''
+            docker run \
+            --name nest-backend-dev \
+            --rm \
+            --network=interaktiv \
+            -d \
+            -p 8000:8000 \
+            --log-opt max-size=1g \
+            zayanimal/nest-backend-dev:v1
+        '''
+    }
+
+    stage('Очистка временных образов') {
+        sh 'docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi'
+    }
+}

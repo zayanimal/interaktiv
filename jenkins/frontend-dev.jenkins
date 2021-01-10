@@ -1,0 +1,49 @@
+#!groovy
+
+properties(
+    [
+        disableConcurrentBuilds(),
+        buildDiscarder(
+            logRotator(
+                numToKeepStr: '5',
+                artifactNumToKeepStr: '5'
+            )
+        )
+    ]
+)
+
+node {
+    checkout scm
+
+    stage('Остановка контейнера') {
+        sh '''
+            if [[ -n $(docker ps --filter "name=react-frontend-dev" -qa) ]]
+            then
+                docker stop react-frontend-dev
+            fi
+        '''
+    }
+
+    stage('Удаление образа контейнера') {
+        sh 'docker rmi zayanimal/react-frontend-dev:v1'
+    }
+
+    stage('Сборка контейнера') {
+        sh '''
+            docker run \
+            --name react-frontend-dev \
+            --log-opt max-size=1g \
+            -v /home/zayanimal:/etc/nginx/certs \
+            -d \
+            -p 80:80 \
+            -p 443:443 \
+            --rm \
+            --network=interaktiv \
+            zayanimal/react-frontend-dev:v1
+        '''
+    }
+
+    stage('Очистка временных образов') {
+        sh 'docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi'
+    }
+}
