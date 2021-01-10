@@ -54,7 +54,6 @@ node {
     }
 
     stage('Сборка контейнера') {
-        sh 'chown jenkins: -R $PWD /'
         sh '''
             docker run \
             --name nest-backend-dev \
