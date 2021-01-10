@@ -24,6 +24,15 @@ node {
         '''
     }
 
+    stage('Удаление контейнера') {
+        sh '''
+            if [[ -n $(docker ps --filter "name=react-frontend-dev" -qa) ]]
+            then
+                docker rm react-frontend-dev
+            fi
+        '''
+    }
+
     stage('Удаление образа') {
         sh '''
             if [[ -n $(docker images -q zayanimal/react-frontend-dev:v1) ]]
@@ -42,7 +51,6 @@ node {
             -d \
             -p 80:80 \
             -p 443:443 \
-            --rm \
             --network=interaktiv \
             zayanimal/react-frontend-dev:v1
         '''

@@ -35,6 +35,15 @@ node {
         '''
     }
 
+    stage('Удаление контейнера') {
+        sh '''
+            if [[ -n $(docker ps --filter "name=nest-backend-dev" -qa) ]]
+            then
+                docker rm nest-backend-dev
+            fi
+        '''
+    }
+
     stage('Удаление образа') {
         sh '''
             if [[ -n $(docker images -q zayanimal/nest-backend-dev:v1) ]]
@@ -48,7 +57,6 @@ node {
         sh '''
             docker run \
             --name nest-backend-dev \
-            --rm \
             --network=interaktiv \
             -d \
             -p 8000:8000 \
