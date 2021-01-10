@@ -27,7 +27,7 @@ node {
     checkout scm
 
     stage('Остановка контейнера') {
-        sh '''
+        sh '''#!/bin/bash
             if [[ -n $(docker ps --filter "name=nest-backend-dev" -qa) ]]
             then
                 docker stop nest-backend-dev
@@ -36,7 +36,7 @@ node {
     }
 
     stage('Удаление контейнера') {
-        sh '''
+        sh '''#!/bin/bash
             if [[ -n $(docker ps --filter "name=nest-backend-dev" -qa) ]]
             then
                 docker rm nest-backend-dev
@@ -45,7 +45,7 @@ node {
     }
 
     stage('Удаление образа') {
-        sh '''
+        sh '''#!/bin/bash
             if [[ -n $(docker images -q zayanimal/nest-backend-dev:v1) ]]
             then
                 docker rmi zayanimal/nest-backend-dev:v1

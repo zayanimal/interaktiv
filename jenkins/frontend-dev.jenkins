@@ -16,7 +16,7 @@ node {
     checkout scm
 
     stage('Остановка контейнера') {
-        sh '''
+        sh '''#!/bin/bash
             if [[ -n $(docker ps --filter "name=react-frontend-dev" -qa) ]]
             then
                 docker stop react-frontend-dev
@@ -25,7 +25,7 @@ node {
     }
 
     stage('Удаление контейнера') {
-        sh '''
+        sh '''#!/bin/bash
             if [[ -n $(docker ps --filter "name=react-frontend-dev" -qa) ]]
             then
                 docker rm react-frontend-dev
@@ -34,7 +34,7 @@ node {
     }
 
     stage('Удаление образа') {
-        sh '''
+        sh '''#!/bin/bash
             if [[ -n $(docker images -q zayanimal/react-frontend-dev:v1) ]]
             then
                 docker rmi zayanimal/react-frontend-dev:v1
