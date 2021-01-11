@@ -3,7 +3,7 @@ import { TokenService } from '@system/services/token.service';
 import { IRestService, IHeader } from '@system/interfaces';
 import { ApiUrl } from '@system/decorators';
 
-@ApiUrl('https://interaktiv.iskor.ru/api/')
+@ApiUrl(process.env.REACT_APP_SERVER_URL!)
 export class RestService implements IRestService {
     constructor(private tokenService: TokenService) {}
 

@@ -10,7 +10,7 @@ import { CompanyRequisites } from '@admin/components/CompanyRequisites';
 import { RequisitesDrawer } from '@admin/components/RequisitesDrawer';
 import { SearchMultiSelect } from '@shared/components/SearchMultiSelect';
 import { systemActions } from '@system/store/actions';
-import { companyControlActions, searchUserActions } from '@admin/store/actions';
+import { companiesActions, companyControlActions, searchUserActions } from '@admin/store/actions';
 import { companySelectors, companyControlSelectors } from '@admin/store/selectors';
 import { bem } from '@utils/formatters';
 
@@ -32,6 +32,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
+    setCompanyEditMode: companiesActions.setCompanyEditMode,
     setFetched: companyControlActions.setFetched,
     getCompany: companyControlActions.getCompany.request,
     updateCompany: companyControlActions.updateCompany,
@@ -61,6 +62,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         isFetched,
         setHeaderTitle,
         companyEditMode,
+        setCompanyEditMode,
         setFetched,
         getCompany,
         updateCompany,
@@ -80,9 +82,11 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         if (path.includes('edit')) {
             getCompany(params.id);
             setHeaderTitle('Редактирование компании');
+            setCompanyEditMode(true);
             setFetched(false);
         } else {
             setHeaderTitle('Добавление компании');
+            setCompanyEditMode(false);
         }
     }, []);
 

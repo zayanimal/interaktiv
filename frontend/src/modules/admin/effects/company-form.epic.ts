@@ -14,7 +14,7 @@ import uuid from 'uuid-random';
 import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
-import { companyControlActions } from '@admin/store/actions';
+import { companiesActions, companyControlActions } from '@admin/store/actions';
 import { companyControlSelectors } from '@admin/store/selectors';
 import { RequisitesEntity, BankRequisitesEntity } from '@admin/entities';
 
@@ -107,6 +107,26 @@ export const createCompany: Epic = (action$, state$, { company }) => action$.pip
             caught,
             of(systemActions.errorNotification(err.message)),
         )),
+    )),
+);
+
+/**
+ * Удаление компании
+ * @param action$
+ * @param state$
+ * @param services
+ */
+export const deleteCompany: Epic = (action$, _, { company }) => action$.pipe(
+    filter(isActionOf(companyControlActions.deleteCompany)),
+    mergeMap(({ payload }) => company.delete$(payload).pipe(
+        mergeMap(() => merge(
+            of(companiesActions.setFiltredCompaniesList(payload)),
+            of(systemActions.successNotification('Компания удалена')),
+        ))
+    )),
+    catchError((err, caught) => merge(
+        caught,
+        of(systemActions.errorNotification(err.message)),
     )),
 );
 

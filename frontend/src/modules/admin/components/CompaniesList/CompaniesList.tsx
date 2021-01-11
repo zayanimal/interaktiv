@@ -15,7 +15,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
     const {
         list,
         meta,
-        removeCompany,
+        deleteCompany,
         getList,
         setCompanyEditName,
         setFetched,
@@ -31,7 +31,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
         };
 
         const onRemove = (rowData: any) => () => {
-            removeCompany(rowData.id);
+            deleteCompany(rowData.id);
         };
 
         return [
@@ -75,7 +75,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
             },
         ];
     }, [
-        removeCompany,
+        deleteCompany,
         path,
         history,
         setCompanyEditName,

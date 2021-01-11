@@ -21,7 +21,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
     getList: companiesActions.getCompaniesList.request,
-    removeCompany: companiesActions.removeCompany,
+    deleteCompany: companyControlActions.deleteCompany,
     setCompanyEditName: companiesActions.setCompanyEditName,
     setFetched: companyControlActions.setFetched,
     clearForms: companyControlActions.clearForms,

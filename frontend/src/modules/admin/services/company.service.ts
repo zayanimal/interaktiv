@@ -25,7 +25,7 @@ export class CompanyService implements IListableService {
         return this.api.get$(`company/search-name/${name}`);
     }
 
-    public delete$(name: string) {
-        return this.api.delete$(`company/${name}`);
+    public delete$(id: string) {
+        return this.api.delete$(`company/${id}`);
     }
 }

@@ -24,7 +24,12 @@ export const companies = createReducer<ICompaniesInitialState>(initialState, {
 
     [getType(companiesActions.setFiltredCompaniesList)]: (state, { payload }) => ({
         ...state,
-        list: payload,
+        list: state.list.filter((item) => item?.id !== payload),
+    }),
+
+    [getType(companiesActions.setCompanyEditMode)]: (state, { payload }) => ({
+        ...state,
+        companyEditMode: payload,
     }),
 
     [getType(companiesActions.setCompanyEditName)]: (state, { payload }) => ({

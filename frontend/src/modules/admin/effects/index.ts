@@ -6,6 +6,7 @@ import {
     getCompany,
     updateCompany,
     createCompany,
+    deleteCompany,
     createRequisites,
     createBankRequisites,
 } from '@admin/effects/company-form.epic';
@@ -21,6 +22,7 @@ export const adminEpic: Epic = combineEpics(
     getCompany,
     updateCompany,
     createCompany,
+    deleteCompany,
     createRequisites,
     createBankRequisites,
     searchUser,

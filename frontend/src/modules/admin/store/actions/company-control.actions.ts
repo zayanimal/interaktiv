@@ -18,6 +18,8 @@ export const updateCompany = createAction('[ADMIN] UPDATE_COMPANY')();
 
 export const createCompany = createAction('[ADMIN] CREATE_COMPANY')();
 
+export const deleteCompany = createAction('[ADMIN] DELETE_COMPANY')<string>();
+
 export const setDrawerState = createAction('[ADMIN] SET_DRAWER_STATE')<boolean>();
 
 export const updateCurrentRequisites = createAction('[ADMIN] UPDATE_CURRENT_REQUISITES')<string>();
