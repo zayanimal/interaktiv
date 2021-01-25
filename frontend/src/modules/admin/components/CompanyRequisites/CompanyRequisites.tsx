@@ -11,8 +11,8 @@ const CompanyRequisites: React.FC<CompanyControlProps> = (props) => {
     const {
         requisites,
         updateCurrentRequisites,
-        deleteRequisitesFrom,
-        createRequisitesFrom,
+        deleteRequisitesForm,
+        createRequisitesForm,
     } = props;
 
     const onClick = (id: string) => () => {
@@ -20,7 +20,7 @@ const CompanyRequisites: React.FC<CompanyControlProps> = (props) => {
     };
 
     const onDelete = (id: string) => () => {
-        deleteRequisitesFrom(id);
+        deleteRequisitesForm(id);
     };
 
     return (
@@ -35,7 +35,7 @@ const CompanyRequisites: React.FC<CompanyControlProps> = (props) => {
                     onDelete={onDelete(req.id)}
                 />
             ))}
-            <IconButton onClick={createRequisitesFrom} size="small">
+            <IconButton onClick={createRequisitesForm} size="small">
                 <Add />
             </IconButton>
         </div>

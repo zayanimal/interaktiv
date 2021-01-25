@@ -1,20 +1,23 @@
 import React from 'react';
 import { CompanyControlProps } from '@admin/containers/CompanyControl';
 import { Fields } from '@shared/components/Fields';
+import { FORM_FIELDS, CONTACT_FIELDS } from '@admin/constants/data-fields.constant';
 
 const CompanyFields: React.FC<CompanyControlProps> = (props) => {
     const { companyForm, updateCompanyForm, contactForm, updateContactForm } = props;
-    const formFields = [{ label: 'Название компании', name: 'name' }];
-    const contactFields = [
-        { label: 'Почта', name: 'email' },
-        { label: 'Телефон', name: 'phone' },
-        { label: 'Сайт', name: 'website' },
-    ];
 
     return (
         <>
-            <Fields fields={formFields} entity={companyForm} handler={updateCompanyForm} />
-            <Fields fields={contactFields} entity={contactForm} handler={updateContactForm} />
+            <Fields
+                fields={FORM_FIELDS}
+                entity={companyForm}
+                handler={updateCompanyForm}
+            />
+            <Fields
+                fields={CONTACT_FIELDS}
+                entity={contactForm}
+                handler={updateContactForm}
+            />
         </>
     );
 };

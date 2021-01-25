@@ -51,3 +51,9 @@ export const bankRequisites = (state: RootStateTypes) => _.pipe(
 )(state);
 
 export const foundUsers = (state: RootStateTypes) => companyControlState(state).foundUsers;
+
+export const companyFields = (state: ReturnType<typeof companyControlState>) => _.pick([
+    'id',
+    'name',
+    'users',
+], state);

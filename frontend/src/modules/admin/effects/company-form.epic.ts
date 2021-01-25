@@ -10,13 +10,19 @@ import {
     catchError,
 } from 'rxjs/operators';
 import { normalize, denormalize, schema } from 'normalizr';
+import { plainToClass } from 'class-transformer';
 import uuid from 'uuid-random';
 import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
 import { companiesActions, companyControlActions } from '@admin/store/actions';
 import { companyControlSelectors } from '@admin/store/selectors';
-import { RequisitesEntity, BankRequisitesEntity } from '@admin/entities';
+import {
+    CompanyEntity,
+    CompanyContactEntity,
+    RequisitesEntity,
+    BankRequisitesEntity
+} from '@admin/entities';
 
 
 const bankSchema = new schema.Entity('bank');
@@ -49,7 +55,7 @@ export const getCompany: Epic = (action$, _, { company }) => action$.pipe(
  * @param state$
  * @param param2
  */
-export const updateCompany: Epic = (action$, state$, { company }) => action$.pipe(
+export const updateCompany: Epic = (action$, state$, { company, validation }) => action$.pipe(
     filter(isActionOf(companyControlActions.updateCompany)),
     switchMapTo(state$.pipe(
         first(),
@@ -60,19 +66,27 @@ export const updateCompany: Epic = (action$, state$, { company }) => action$.pip
                 companySchema,
                 entities,
             )),
-            map(({ requisites }) => ({
-                id: state.id,
-                name: state.name,
-                users: state.users,
-                contact: state.contact,
-                requisites,
-            })),
+            map(({ requisites }) => plainToClass(
+                CompanyEntity,
+                {
+                    ...companyControlSelectors.companyFields(state),
+                    contact: plainToClass(CompanyContactEntity, state.contact),
+                    requisites: plainToClass(
+                        RequisitesEntity,
+                        requisites.map((req: RequisitesEntity) => ({
+                            ...req,
+                            bank: plainToClass(BankRequisitesEntity, req.bank)
+                        }))
+                    ),
+                }
+            )),
         )),
     )),
-    mergeMap((payload) => (payload.users.length
-        ? of(payload)
-        : throwError({ message: 'Должен быть указан, хотя бы один пользователь' }))),
-    switchMap((entity) => company.update$(entity)),
+    mergeMap((fields) => validation.check$(fields)),
+    // mergeMap((payload) => (payload.users.length
+    //     ? of(payload)
+    //     : throwError({ message: 'Должен быть указан, хотя бы один пользователь' }))),
+    // switchMap((entity) => company.update$(entity)),
     mapTo(systemActions.successNotification('Компания обновлена')),
     catchError((err, caught) => merge(
         caught,
