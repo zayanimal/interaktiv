@@ -9,6 +9,7 @@ import {
     first,
     catchError,
 } from 'rxjs/operators';
+import { pick } from 'lodash';
 import { normalize, denormalize, schema } from 'normalizr';
 import { plainToClass } from 'class-transformer';
 import uuid from 'uuid-random';
@@ -83,14 +84,25 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
         )),
     )),
     mergeMap((fields) => validation.check$(fields)),
-    // mergeMap((payload) => (payload.users.length
-    //     ? of(payload)
-    //     : throwError({ message: 'Должен быть указан, хотя бы один пользователь' }))),
-    // switchMap((entity) => company.update$(entity)),
-    mapTo(systemActions.successNotification('Компания обновлена')),
+    // switchMap((entity) => company.update$(entity).pipe(
+    //     catchError((err, caught) => merge(
+    //         caught,
+    //         of(systemActions.errorNotification(err.message)),
+    //     )),
+    // )),
+    switchMapTo(merge(
+        of(companyControlActions.clearValidationErrors()),
+        of(companyControlActions.setDrawerState(false)),
+        of(systemActions.successNotification('Компания обновлена')),
+    )),
     catchError((err, caught) => merge(
         caught,
-        of(systemActions.errorNotification(err.message)),
+        of(companyControlActions.setValidationErrors(pick(err, [
+            'errorName',
+            'errorEmail',
+            'errorPhone',
+            'errorUsers'
+        ])))
     )),
 );
 

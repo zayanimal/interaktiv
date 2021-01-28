@@ -11,13 +11,15 @@ const initialState = {
     currentRequisitesId: '',
     name: '',
     users: [] as string[],
-    contact: { phone: '', email: '', website: '' },
+    contact: { phone: '', email: '', website: '', errorEmail: '', errorPhone: '' },
     requisites: [] as string[],
     foundUsers: [] as string[],
     entities: {
         requisites: {} as Normalised<RequisitesEntity>,
         bank: {} as Normalised<BankRequisitesEntity>,
     },
+    errorName: '',
+    errorUsers: '',
 };
 
 export const companyControl = createReducer<typeof initialState>(initialState, {
@@ -134,6 +136,21 @@ export const companyControl = createReducer<typeof initialState>(initialState, {
                 },
             },
         },
+    }),
+
+
+    [getType(companyControlActions.setValidationErrors)]: (state, { payload }) => ({
+        ...state,
+        contact: { ...state.contact, errorEmail: payload.errorEmail, errorPhone: payload.errorPhone },
+        errorName: payload.errorName,
+        errorUsers: payload.errorUsers,
+    }),
+
+    [getType(companyControlActions.clearValidationErrors)]: (state) => ({
+        ...state,
+        contact: { ...state.contact, errorEmail: '', errorPhone: '' },
+        errorName: '',
+        errorUsers: '',
     }),
 
     [getType(searchUserActions.setFound)]: (state, { payload }) => ({

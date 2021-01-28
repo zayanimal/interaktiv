@@ -8,6 +8,7 @@ const cn = bem('SearchMultiSelect');
 interface Props {
     found: string[];
     selected: string[];
+    error?: string;
     onChange: (value: string) => void;
     onSelect: (value: string) => void;
     onDelete: (value: string) => void;
@@ -18,6 +19,7 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
     const {
         found = [],
         selected = [],
+        error = '',
         onChange = () => {},
         onSelect = () => {},
         onDelete = () => {},
@@ -59,6 +61,8 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
                 <InputLabel>Поиск пользователя</InputLabel>
                 <TextField
                     fullWidth
+                    error={!!error}
+                    helperText={error}
                     className={cn('input-field')}
                     type="text"
                     value={input}

@@ -19,7 +19,7 @@ export const name = (state: RootStateTypes) => companyControlState(state).name;
 
 export const users = (state: RootStateTypes) => companyControlState(state).users;
 
-export const companyForm = (state: RootStateTypes) => _.pick(['name'], companyControlState(state));
+export const companyForm = (state: RootStateTypes) => _.pick(['name', 'errorName'], companyControlState(state));
 
 export const contactForm = (state: RootStateTypes): FormEntity => companyControlState(state).contact;
 
@@ -57,3 +57,10 @@ export const companyFields = (state: ReturnType<typeof companyControlState>) => 
     'name',
     'users',
 ], state);
+
+export const validation = (state: RootStateTypes) => _.pick([
+    'errorName',
+    'errorEmail',
+    'errorPhone',
+    'errorUsers',
+], companyControlState(state));

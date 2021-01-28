@@ -1,6 +1,6 @@
 import React, { memo, ChangeEvent } from 'react';
 import { InputLabel, TextField } from '@material-ui/core';
-import { upperFirst } from 'lodash';
+import { upperFirst, memoize, get } from 'lodash';
 import { bem, classes } from '@utils/formatters';
 import './Fields.scss';
 
@@ -29,7 +29,7 @@ const Fields: React.FC<Props> = memo((props) => {
         handler({ id: entity.id, [name]: value });
     };
 
-    const getError = (field: string) => entity[`error${upperFirst(field)}`] || '';
+    const getError = memoize((field: string) => get(entity, `error${upperFirst(field)}`, ''));
 
     return (
         <>
@@ -41,10 +41,10 @@ const Fields: React.FC<Props> = memo((props) => {
                     <TextField
                         fullWidth
                         name={field.name}
-                        error={!!field?.error}
+                        error={!!getError(field.name)}
                         helperText={getError(field.name)}
                         type={field?.type || 'text'}
-                        value={entity[field.name]}
+                        value={get(entity, field.name)}
                         onChange={onChange}
                     />
                 </div>

@@ -47,3 +47,7 @@ export const putBankForm = createAction('[ADMIN] PUT_BANK_FORM')<object>();
 export const updateUsers = createAction('[ADMIN] COMPANY_UPDATE_USERS')<string[]>();
 
 export const clearForms = createAction('[ADMIN] COMPANY_CLEAR')();
+
+export const setValidationErrors = createAction('[ADMIN] SET_VALIDATION_ERRORS')<object>();
+
+export const clearValidationErrors = createAction('[ADMIN] CLEAR_VALIDATION_ERRORS')();

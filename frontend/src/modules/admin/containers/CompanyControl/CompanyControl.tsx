@@ -28,6 +28,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     bankRequisites: companyControlSelectors.bankRequisites(state),
     users: companyControlSelectors.users(state),
     foundUsers: companyControlSelectors.foundUsers(state),
+    validation: companyControlSelectors.validation(state),
 });
 
 const mapDispatchToProps = {
@@ -74,6 +75,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         deleteUser,
         setFoundUser,
         clearForms,
+        validation,
     } = props;
 
     const { path, params } = useRouteMatch<{ id: string }>();
@@ -102,6 +104,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                     <SearchMultiSelect
                         found={foundUsers}
                         selected={users}
+                        error={validation.errorUsers}
                         onChange={searchUser}
                         onSelect={selectUser}
                         onDelete={deleteUser}

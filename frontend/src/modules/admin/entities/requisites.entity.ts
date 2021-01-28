@@ -1,3 +1,4 @@
+import { IsNotEmpty } from 'class-validator';
 import { BankRequisitesEntity } from '@admin/entities';
 
 export class RequisitesEntity {
@@ -5,8 +6,10 @@ export class RequisitesEntity {
 
     id = '';
 
+    @IsNotEmpty({ message: 'Укажите название реквизитов'})
     name = '';
 
+    @IsNotEmpty({ message: 'Заполните ИНН'})
     inn = '';
 
     kpp = '';
