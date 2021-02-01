@@ -104,7 +104,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
                     <SearchMultiSelect
                         found={foundUsers}
                         selected={users}
-                        error={validation.errorUsers}
+                        error={validation.users}
                         onChange={searchUser}
                         onSelect={selectUser}
                         onDelete={deleteUser}

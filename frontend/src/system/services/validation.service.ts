@@ -1,6 +1,6 @@
 import { transform, set, get, isObject, isArray, upperFirst, merge } from 'lodash';
 import { Observable, of, from, throwError } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
 import { validate, ValidationError } from 'class-validator';
 import { IValidationService, ValidationErrors } from '@system/interfaces';
 
@@ -19,6 +19,16 @@ export class ValidationService implements IValidationService {
                 ? throwError(this.wrapKeys(this.parse(msgs)))
                 : of(entity)
             )),
+        );
+    }
+
+    /**
+     * Проверить сущности на ошибки валидации
+     * @param entity
+     */
+    public checkEntities$<T>(entity: T) {
+        return from(validate(entity, { validationError: { value: false } })).pipe(
+            tap(console.log)
         );
     }
 

@@ -1,8 +1,6 @@
 import _ from 'lodash/fp';
 import { RootStateTypes } from '@config/roots';
 
-interface FormEntity { [key: string]: string; }
-
 export const companyControlState = (state: RootStateTypes) => state.admin.companyControl;
 
 export const loading = (state: RootStateTypes) => companyControlState(state).loading;
@@ -19,9 +17,9 @@ export const name = (state: RootStateTypes) => companyControlState(state).name;
 
 export const users = (state: RootStateTypes) => companyControlState(state).users;
 
-export const companyForm = (state: RootStateTypes) => _.pick(['name', 'errorName'], companyControlState(state));
+export const companyForm = (state: RootStateTypes) => _.pick(['name', 'validation'], companyControlState(state));
 
-export const contactForm = (state: RootStateTypes): FormEntity => companyControlState(state).contact;
+export const contactForm = (state: RootStateTypes) => companyControlState(state).contact;
 
 const entities = (state: RootStateTypes) => companyControlState(state).entities;
 
@@ -38,7 +36,7 @@ export const requisitesArr = (state: RootStateTypes) => _.pipe(
 
 export const requisitesById = (state: RootStateTypes) => entities(state).requisites[requisitesId(state)];
 
-const bankRequisitesIds = (state: RootStateTypes): string[] | undefined => requisitesById(state)?.bank;
+const bankRequisitesIds = (state: RootStateTypes) => requisitesById(state)?.bank || [];
 
 const bankRequisitesItem = (state: RootStateTypes) => entities(state).bank;
 
@@ -58,9 +56,4 @@ export const companyFields = (state: ReturnType<typeof companyControlState>) => 
     'users',
 ], state);
 
-export const validation = (state: RootStateTypes) => _.pick([
-    'errorName',
-    'errorEmail',
-    'errorPhone',
-    'errorUsers',
-], companyControlState(state));
+export const validation = (state: RootStateTypes) => companyControlState(state).validation;

@@ -5,5 +5,5 @@ export type FilterFlags<B, C> = {
 
 /** Привести обычную сущность к нормализованному типу */
 export type Normalised<T> = { [key: string]: {
-    [K in keyof T]: T[K] extends string ? K : string[];
+    [K in keyof T]: T[K] extends string ? string : string[];
 } }

@@ -1,23 +1,24 @@
 import React, { memo, ChangeEvent } from 'react';
 import { InputLabel, TextField } from '@material-ui/core';
-import { upperFirst, memoize, get } from 'lodash';
+import { memoize, get } from 'lodash';
 import { bem, classes } from '@utils/formatters';
+import { ValidationErrors } from '@system/interfaces';
 import './Fields.scss';
 
 const cn = bem('Fields');
-
 export interface Field {
     label: string;
     name: string;
     type?: string;
     class?: string;
     labelClass?: string;
-    error?: string;
 }
+
+type EntityProp = string | string[] | ValidationErrors;
 
 interface Props {
     fields: Field[];
-    entity: { [key: string]: string | string[]; };
+    entity: { [key: string]: EntityProp; };
     handler: (obj: object) => void;
 }
 
@@ -26,10 +27,11 @@ const Fields: React.FC<Props> = memo((props) => {
 
     const onChange = (event: ChangeEvent) => {
         const { name, value } = event.target as HTMLInputElement;
+
         handler({ id: entity.id, [name]: value });
     };
 
-    const getError = memoize((field: string) => get(entity, `error${upperFirst(field)}`, ''));
+    const getError = memoize((field: string) => get(entity, `validation.${field}`, ''));
 
     return (
         <>

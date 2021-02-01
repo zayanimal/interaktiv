@@ -1,4 +1,4 @@
-import { of, merge, throwError } from 'rxjs';
+import { of, merge } from 'rxjs';
 import {
     filter,
     map,
@@ -41,7 +41,8 @@ const companySchema = { requisites: [requisitesSchema] };
 export const getCompany: Epic = (action$, _, { company }) => action$.pipe(
     filter(isActionOf(companyControlActions.getCompany.request)),
     mergeMap(({ payload }) => company.findId(payload)),
-    map(({ response }) => companyControlActions.getCompany.success(
+    map(({ response }) => plainToClass(CompanyEntity, response)),
+    map((response) => companyControlActions.getCompany.success(
         normalize(response, companySchema),
     )),
     catchError((err, caught) => merge(
@@ -102,11 +103,11 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
             'errorEmail',
             'errorPhone',
             'errorUsers'
-        ])))
+        ]))),
     )),
 );
 
-export const createCompany: Epic = (action$, state$, { company }) => action$.pipe(
+export const createCompany: Epic = (action$, state$, { company, validation }) => action$.pipe(
     filter(isActionOf(companyControlActions.createCompany)),
     switchMapTo(state$.pipe(
         first(),
@@ -117,16 +118,14 @@ export const createCompany: Epic = (action$, state$, { company }) => action$.pip
                 companySchema,
                 entities,
             )),
-            map(({ requisites }) => ({
+            map(({ requisites }) => plainToClass(CompanyEntity, {
                 name: state.name,
                 users: state.users,
                 contact: state.contact,
                 requisites,
             })),
+            mergeMap((entity) => validation.check$(entity)),
         )),
-        mergeMap((payload) => (payload.users.length
-            ? of(payload)
-            : throwError({ message: 'Должен быть указан, хотя бы один пользователь' }))),
         switchMap((entity) => company.create$(entity)),
         mapTo(systemActions.successNotification('Компания добавлена')),
         catchError((err, caught) => merge(

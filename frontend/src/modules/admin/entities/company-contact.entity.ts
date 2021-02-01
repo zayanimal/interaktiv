@@ -1,5 +1,6 @@
 import { IsEmail, IsPhoneNumber, IsOptional } from 'class-validator';
-export class CompanyContactEntity {
+import { ValidationEntity } from '@system/entities';
+export class CompanyContactEntity extends ValidationEntity {
     @IsEmail({}, { message: 'Здесь должна быть почта' })
     email!: string;
 
