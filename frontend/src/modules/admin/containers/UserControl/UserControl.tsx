@@ -31,7 +31,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     phone: userControlSelectors.phone(state),
     position: userControlSelectors.position(state),
     isActive: userControlSelectors.isActive(state),
-    ...userControlSelectors.validation(state)
+    validation: userControlSelectors.validation(state),
 });
 
 const mapDispatchToProps = {

@@ -24,16 +24,15 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
         setRole,
         permissions,
         setPermissions,
-        errorUsername,
-        errorPassword,
+        validation,
     } = props;
 
     return (
         <>
             <InputLabel>Имя пользователя</InputLabel>
             <TextField
-                error={!!errorUsername}
-                helperText={errorUsername}
+                error={!!validation.username}
+                helperText={validation.username}
                 className={grid('input')}
                 type="text"
                 value={username}
@@ -41,8 +40,8 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
             />
             <InputLabel>Пароль</InputLabel>
             <TextField
-                error={!!errorPassword}
-                helperText={errorPassword}
+                error={!!validation.password}
+                helperText={validation.password}
                 className={grid('input')}
                 type="password"
                 value={password}

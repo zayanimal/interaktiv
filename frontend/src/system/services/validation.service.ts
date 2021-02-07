@@ -1,8 +1,9 @@
-import { transform, set, get, isObject, isArray, upperFirst, merge } from 'lodash';
-import { Observable, of, from, throwError } from 'rxjs';
-import { mergeMap, tap } from 'rxjs/operators';
+import { transform, set, isObject, isArray, merge } from 'lodash';
+import { of, from, throwError } from 'rxjs';
+import { mergeMap, map } from 'rxjs/operators';
 import { validate, ValidationError } from 'class-validator';
-import { IValidationService, ValidationErrors } from '@system/interfaces';
+import { IValidationService } from '@system/interfaces';
+import { ValidationEntity } from '@system/entities';
 
 export class ValidationService implements IValidationService {
     private entity = {};
@@ -11,12 +12,12 @@ export class ValidationService implements IValidationService {
      * Проверить сущность на ошибки валидации
      * @param entity
      */
-    public check$<T>(entity: T): Observable<T> {
+    public check$<T>(entity: T) {
         this.entity = this.flatEntity(entity);
 
         return from(validate(entity)).pipe(
             mergeMap((msgs) => (msgs.length
-                ? throwError(this.wrapKeys(this.parse(msgs)))
+                ? throwError(this.parse(msgs))
                 : of(entity)
             )),
         );
@@ -24,12 +25,33 @@ export class ValidationService implements IValidationService {
 
     /**
      * Проверить сущности на ошибки валидации
-     * @param entity
+     *
+     * TODO: сделать whitelist для свойства validation
+     * для случая если нет ошибок валидации
+     *
+     * @param entities
      */
-    public checkEntities$<T>(entity: T) {
-        return from(validate(entity, { validationError: { value: false } })).pipe(
-            tap(console.log)
+    public checkEntities$<T>(entities: T) {
+        return from(validate(entities, { validationError: { value: false } })).pipe(
+            map((errors) => this.transformError(errors)),
+            map(() => entities),
         );
+    }
+
+    /**
+     * Сохранение ошибок валидации в сущностях
+     * @param errors ошибки валидации
+     */
+    private transformError(errors: ValidationError[]) {
+        errors.forEach((err) => {
+            if (err.constraints && err.target instanceof ValidationEntity) {
+                err.target.setErrors({
+                    [err.property]: this.buildMessage(err.constraints),
+                });
+            } else {
+                return this.transformError(err.children);
+            }
+        });
     }
 
     /**
@@ -53,18 +75,6 @@ export class ValidationService implements IValidationService {
             .values(constraints)
             .reduce((msg, value) => msg.concat(value, '. '), '')
             .trim();
-    }
-
-    /**
-     * Обернуть имена ключей в ошибочные
-     * @param fields
-     */
-    private wrapKeys(errors: object): ValidationErrors {
-        return transform(this.entity, (acc, _, key) => set(
-            acc,
-            `error${upperFirst(key)}`,
-            get(errors, key, '')
-        ), {});
     }
 
     /**

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 import { ValidationEntity } from '@system/entities';
 export class BankRequisitesEntity extends ValidationEntity {
     constructor(id?: string) {
@@ -6,9 +6,6 @@ export class BankRequisitesEntity extends ValidationEntity {
 
         if (id) { this.id = id; }
     }
-
-    @IsOptional()
-    id = '';
 
     @IsNotEmpty({ message: 'Необходимо указать название банка' })
     name = '';

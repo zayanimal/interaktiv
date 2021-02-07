@@ -35,10 +35,4 @@ export const newContacts = (state: RootStateTypes) => pick(userControlState(stat
     'position',
 ]);
 
-export const validation = (state: RootStateTypes) => pick(userControlState(state), [
-    'errorUsername',
-    'errorPassword',
-    'errorEmail',
-    'errorPhone',
-    'errorPosition'
-]);
+export const validation = (state: RootStateTypes) => userControlState(state).validation;

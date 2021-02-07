@@ -14,17 +14,15 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
         setPhone,
         position,
         setPosition,
-        errorEmail,
-        errorPhone,
-        errorPosition,
+        validation,
     } = props;
 
     return (
         <>
             <InputLabel>Почта</InputLabel>
             <TextField
-                error={!!errorEmail}
-                helperText={errorEmail}
+                error={!!validation.email}
+                helperText={validation.email}
                 className={grid('input')}
                 type="email"
                 value={email}
@@ -32,8 +30,8 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
             />
             <InputLabel>Телефон</InputLabel>
             <TextField
-                error={!!errorPhone}
-                helperText={errorPhone}
+                error={!!validation.phone}
+                helperText={validation.phone}
                 className={grid('input')}
                 type="text"
                 value={phone}
@@ -41,8 +39,8 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
             />
             <InputLabel>Должность</InputLabel>
             <TextField
-                error={!!errorPosition}
-                helperText={errorPosition}
+                error={!!validation.position}
+                helperText={validation.position}
                 className={grid('input')}
                 type="text"
                 value={position}

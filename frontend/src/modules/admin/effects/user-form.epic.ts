@@ -46,7 +46,7 @@ export const editUser: Epic = (action$, state$, { validation, users }) => action
         mergeMap((user) => users.update$(user, payload)),
     )),
     switchMap(() => merge(
-        of(userControlActions.setValidationErrors({})),
+        of(userControlActions.clearValidationErrors()),
         of(systemActions.successNotification('Пользователь изменён'))
     )),
     catchError((err, caught) => merge(

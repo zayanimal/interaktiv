@@ -1,4 +1,5 @@
 import { createReducer, getType } from 'typesafe-actions';
+import uuid from 'uuid-random';
 import { companyControlActions, searchUserActions } from '@admin/store/actions';
 import { RequisitesEntity, BankRequisitesEntity } from '@admin/entities';
 import { Normalised } from '@utils/generics';
@@ -12,6 +13,7 @@ const initialState = {
     name: '',
     users: [] as string[],
     contact: {
+        id: uuid(),
         phone: '',
         email: '',
         website: '',
@@ -147,9 +149,9 @@ export const companyControl = createReducer<typeof initialState>(initialState, {
         ...state,
         contact: {
             ...state.contact,
-            validation: { email: payload.errorEmail, phone: payload.errorPhone },
+            validation: { email: payload.email, phone: payload.phone },
         },
-        validation: { name: payload.errorName, users: payload.errorUsers },
+        validation: { name: payload.name, users: payload.users },
     }),
 
     [getType(companyControlActions.clearValidationErrors)]: (state) => ({

@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { ValidationEntity } from '@system/entities';
 import { BankRequisitesEntity } from '@admin/entities';
 
@@ -10,9 +10,6 @@ export class RequisitesEntity extends ValidationEntity {
 
         if (id) { this.id = id; }
     }
-
-    @IsOptional()
-    id = '';
 
     @IsNotEmpty({ message: 'Укажите название реквизитов' })
     name = '';

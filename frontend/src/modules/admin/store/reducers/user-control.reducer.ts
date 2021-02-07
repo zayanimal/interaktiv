@@ -1,6 +1,14 @@
 import { createReducer, getType } from 'typesafe-actions';
 import { userControlActions } from '@admin/store/actions';
 
+interface Validation {
+    username: string;
+    password: string;
+    email: string;
+    phone: string;
+    position: string;
+}
+
 interface IInitialState {
     loading: boolean;
     username: string;
@@ -11,11 +19,7 @@ interface IInitialState {
     email: string;
     phone: string;
     position: string;
-    errorUsername: string;
-    errorPassword: string;
-    errorEmail: string;
-    errorPhone: string;
-    errorPosition: string;
+    validation: Partial<Validation>;
 }
 
 const initialState = {
@@ -28,11 +32,13 @@ const initialState = {
     email: '',
     phone: '',
     position: '',
-    errorUsername: '',
-    errorPassword: '',
-    errorEmail: '',
-    errorPhone: '',
-    errorPosition: ''
+    validation: {
+        username: '',
+        password: '',
+        email: '',
+        phone: '',
+        position: '',
+    },
 };
 
 export const userControl = createReducer<IInitialState>(initialState, {
@@ -92,11 +98,12 @@ export const userControl = createReducer<IInitialState>(initialState, {
 
     [getType(userControlActions.setValidationErrors)]: (state, { payload }) => ({
         ...state,
-        errorUsername: payload.errorUsername,
-        errorPassword: payload.errorPassword,
-        errorEmail: payload.errorEmail,
-        errorPhone: payload.errorPhone,
-        errorPosition: payload.errorPosition,
+        validation: { ...state.validation, ...payload },
+    }),
+
+    [getType(userControlActions.clearValidationErrors)]: (state) => ({
+        ...state,
+        validation: {}
     }),
 
     [getType(userControlActions.clearUserData)]: () => ({ ...initialState }),

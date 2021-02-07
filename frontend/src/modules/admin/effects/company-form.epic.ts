@@ -99,10 +99,10 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
     catchError((err, caught) => merge(
         caught,
         of(companyControlActions.setValidationErrors(pick(err, [
-            'errorName',
-            'errorEmail',
-            'errorPhone',
-            'errorUsers'
+            'name',
+            'email',
+            'phone',
+            'users',
         ]))),
     )),
 );
