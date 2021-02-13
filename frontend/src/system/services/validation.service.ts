@@ -2,6 +2,7 @@ import { transform, set, isObject, isArray, merge } from 'lodash';
 import { of, from, throwError } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 import { validate, ValidationError } from 'class-validator';
+import { classToPlain } from 'class-transformer';
 import { IValidationService } from '@system/interfaces';
 import { ValidationEntity } from '@system/entities';
 
@@ -34,8 +35,16 @@ export class ValidationService implements IValidationService {
         return from(
             validate(entities, { validationError: { value: false } })
         ).pipe(
-            map((errors) => this.transformError(errors)),
-            map(() => entities)
+            mergeMap((errors) => {
+                if (errors.length) {
+                    return of(errors).pipe(
+                        map((errs) => this.transformError(errs)),
+                        mergeMap(() => throwError(entities))
+                    );
+                }
+
+                return of(classToPlain(entities, {}));
+            })
         );
     }
 

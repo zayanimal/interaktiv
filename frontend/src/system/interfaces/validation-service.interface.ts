@@ -11,5 +11,5 @@ export interface IValidationService {
      * Проверить сущности на ошибки валидации
      * @param entities
      */
-    checkEntities$<T>(entities: T): Observable<T>;
+    checkEntities$<T>(entities: T): Observable<Record<string, unknown>>;
 }

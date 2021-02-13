@@ -9,7 +9,6 @@ import {
     first,
     catchError
 } from 'rxjs/operators';
-import { pick } from 'lodash';
 import { normalize, denormalize, schema } from 'normalizr';
 import { plainToClass } from 'class-transformer';
 import uuid from 'uuid-random';
@@ -32,6 +31,13 @@ const requisitesSchema = new schema.Entity('requisites', {
 const companySchema = { requisites: [requisitesSchema] };
 
 /**
+ * Нормализатор сущности (для сохранения стейта)
+ * @param entity денормализованная сущность
+ */
+const normalization = <T>(entity: T) =>
+    companyControlActions.getCompany.success(normalize(entity, companySchema));
+
+/**
  * Получить список компаний с пагинацией
  * @param action$
  * @param state$
@@ -42,11 +48,7 @@ export const getCompany: Epic = (action$, _, { company }) =>
         filter(isActionOf(companyControlActions.getCompany.request)),
         mergeMap(({ payload }) => company.findId(payload)),
         map(({ response }) => plainToClass(CompanyEntity, response)),
-        map((response) =>
-            companyControlActions.getCompany.success(
-                normalize(response, companySchema)
-            )
-        ),
+        map(normalization),
         catchError((err, caught) =>
             merge(
                 caught,
@@ -96,13 +98,9 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
                 )
             )
         ),
-        mergeMap((fields) => validation.check$(fields)),
-        // switchMap((entity) => company.update$(entity).pipe(
-        //     catchError((err, caught) => merge(
-        //         caught,
-        //         of(systemActions.errorNotification(err.message)),
-        //     )),
-        // )),
+        mergeMap((fields) => validation.checkEntities$(fields)),
+        /** TODO: в сущности contact id не должно вызывать ошибку бэка */
+        switchMap((entity) => company.update$(entity)),
         switchMapTo(
             merge(
                 of(companyControlActions.clearValidationErrors()),
@@ -113,9 +111,10 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
         catchError((err, caught) =>
             merge(
                 caught,
+                of(normalization(err)),
                 of(
-                    companyControlActions.setValidationErrors(
-                        pick(err, ['name', 'email', 'phone', 'users'])
+                    systemActions.infoNotification(
+                        'Проверьте ошибки в реквизитах'
                     )
                 )
             )

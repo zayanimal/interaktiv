@@ -13,7 +13,7 @@ export class CompanyService implements IListableService {
         return this.api.put$('company/', dto);
     }
 
-    public update$(dto: CompanyEntity) {
+    public update$(dto: object) {
         return this.api.put$('company/update/', dto);
     }
 
