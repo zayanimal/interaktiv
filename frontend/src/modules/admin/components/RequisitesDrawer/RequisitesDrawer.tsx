@@ -13,25 +13,25 @@ const cn = bem('RequisitesDrawer');
 const RequisitesDrawer: React.FC<CompanyControlProps> = (props) => {
     const { drawer, setDrawer, createBankForm } = props;
 
-    const onClose = () => { setDrawer(false); };
+    const onClose = () => {
+        setDrawer(false);
+    };
 
     return (
         <DrawerForm
-            label="Добавление реквизитов"
-            width="500"
+            label='Добавление реквизитов'
+            width='500'
             toggle={drawer}
-            onClose={onClose}
-        >
+            onClose={onClose}>
             <div className={cn('body')}>
                 <div className={grid('col-12')}>
                     <RequisitesFields {...props} />
                     <BankRequisitesFields {...props} />
                     <Button
                         className={cn('button')}
-                        variant="outlined"
-                        color="primary"
-                        onClick={createBankForm}
-                    >
+                        variant='outlined'
+                        color='primary'
+                        onClick={createBankForm}>
                         Добавить банк
                     </Button>
                 </div>

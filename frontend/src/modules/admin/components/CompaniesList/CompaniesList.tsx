@@ -18,7 +18,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
         deleteCompany,
         getList,
         setCompanyEditName,
-        setFetched,
+        setFetched
     } = props;
 
     const { path } = useRouteMatch();
@@ -44,42 +44,36 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
                         <MenuItem onClick={onEdit(rowData)}>
                             Редактировать
                         </MenuItem>
-                        <MenuItem onClick={onRemove(rowData)}>
-                            Удалить
-                        </MenuItem>
+                        <MenuItem onClick={onRemove(rowData)}>Удалить</MenuItem>
                     </TableRowButton>
-                ),
+                )
             },
             {
                 dataKey: 'name',
                 label: 'Название компании',
-                width: 300,
+                width: 300
             },
             {
                 dataKey: 'contact',
                 label: 'Телефон',
                 width: 300,
-                cellRenderer: ({ cellData }) => cellData?.phone,
+                cellRenderer: ({ cellData }) => cellData?.phone
             },
             {
                 dataKey: 'contact',
                 label: 'Сайт',
                 width: 300,
-                cellRenderer: ({ cellData }) => cellData?.website,
+                cellRenderer: ({ cellData }) => cellData?.website
             },
             {
                 dataKey: 'time',
                 label: 'Дата создания',
                 width: 300,
-                cellRenderer: ({ cellData }) => new Date(cellData).toLocaleDateString('ru'),
-            },
+                cellRenderer: ({ cellData }) =>
+                    new Date(cellData).toLocaleDateString('ru')
+            }
         ];
-    }, [
-        deleteCompany,
-        path,
-        history,
-        setCompanyEditName,
-    ]);
+    }, [deleteCompany, path, history, setCompanyEditName]);
 
     return (
         <div className={cn()}>

@@ -7,14 +7,13 @@ import './RequisitesFields.scss';
 const RequisitesFields: React.FC<CompanyControlProps> = (props) => {
     const { requisitesById, updateRequisitesForm } = props;
 
-    return (requisitesById
-        ? (
-            <Fields
-                fields={REQUISITES_FIELDS}
-                entity={requisitesById}
-                handler={updateRequisitesForm}
-            />
-        ) : null);
+    return requisitesById ? (
+        <Fields
+            fields={REQUISITES_FIELDS}
+            entity={requisitesById}
+            handler={updateRequisitesForm}
+        />
+    ) : null;
 };
 
 export { RequisitesFields };

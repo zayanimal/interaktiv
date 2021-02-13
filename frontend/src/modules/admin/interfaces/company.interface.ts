@@ -19,7 +19,7 @@ export interface ICompanyListItem {
 }
 
 export interface ICompaniesInitialState {
-    list: ICompanyListItem[],
+    list: ICompanyListItem[];
     meta: IPaginationMeta;
     companyEditMode: boolean;
     companyEditName: string;

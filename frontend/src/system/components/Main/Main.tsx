@@ -5,5 +5,5 @@ import { LayoutProps } from '@system/containers/Layout';
 export const Main: React.FC<LayoutProps> = (props) => {
     const { authFetched } = props;
 
-    return (authFetched ? MainScreen(props) : null);
+    return authFetched ? MainScreen(props) : null;
 };

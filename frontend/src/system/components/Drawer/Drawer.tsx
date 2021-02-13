@@ -9,12 +9,7 @@ import './Drawer.scss';
 const cn = bem('Drawer');
 
 const Drawer: React.FC<LayoutProps> = (props) => {
-    const {
-        drawerState,
-        authFetched,
-        routerItems,
-        getRouterItems,
-    } = props;
+    const { drawerState, authFetched, routerItems, getRouterItems } = props;
 
     const [hide, setHide] = useState(drawerState);
 
@@ -26,19 +21,16 @@ const Drawer: React.FC<LayoutProps> = (props) => {
         if (drawerState) {
             setHide(drawerState);
         } else {
-            setTimeout(() => { setHide(drawerState); }, 200);
+            setTimeout(() => {
+                setHide(drawerState);
+            }, 200);
         }
-    }, [
-        drawerState,
-        authFetched,
-        routerItems,
-        getRouterItems,
-    ]);
+    }, [drawerState, authFetched, routerItems, getRouterItems]);
 
     return (
         <aside className={drawerState ? cn('', 'close') : cn()}>
             <div className={cn('header')}>
-                <img src={logo} alt="Iskor" hidden={hide} />
+                <img src={logo} alt='Iskor' hidden={hide} />
             </div>
             <ul className={cn('list')}>
                 {routerItems.map((menuItem) => (
@@ -46,10 +38,11 @@ const Drawer: React.FC<LayoutProps> = (props) => {
                         <NavLink
                             to={menuItem.path}
                             className={cn('item')}
-                            activeClassName={cn('item_focus')}
-                        >
+                            activeClassName={cn('item_focus')}>
                             {DrawerIcon(menuItem.icon)}
-                            <span className={cn('item-text')} hidden={hide}>{menuItem.name}</span>
+                            <span className={cn('item-text')} hidden={hide}>
+                                {menuItem.name}
+                            </span>
                         </NavLink>
                     </li>
                 ))}

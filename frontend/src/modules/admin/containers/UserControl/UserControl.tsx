@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
-import { userControlActions } from '@admin/store/actions';
-import { usersActions } from '@admin/store/actions';
+import { userControlActions, usersActions } from '@admin/store/actions';
 import { userSelectors, userControlSelectors } from '@admin/store/selectors';
 import { systemActions, dictionaryActions } from '@system/store/actions';
 import { dictionarySelectors } from '@system/store/selectors';
@@ -31,7 +30,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     phone: userControlSelectors.phone(state),
     position: userControlSelectors.position(state),
     isActive: userControlSelectors.isActive(state),
-    validation: userControlSelectors.validation(state),
+    validation: userControlSelectors.validation(state)
 });
 
 const mapDispatchToProps = {
@@ -50,10 +49,11 @@ const mapDispatchToProps = {
     setIsActive: userControlActions.setIsActive,
     addNewUser: userControlActions.addNewUser,
     editUser: userControlActions.editUser.request,
-    clearUserData: userControlActions.clearUserData,
+    clearUserData: userControlActions.clearUserData
 };
 
-export type UserControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+export type UserControlProps = ReturnType<typeof mapStateToProps> &
+    typeof mapDispatchToProps;
 
 const UserControl: React.FC<UserControlProps> = (props) => {
     const {
@@ -68,7 +68,7 @@ const UserControl: React.FC<UserControlProps> = (props) => {
         clearDictionary,
         addNewUser,
         editUser,
-        clearUserData,
+        clearUserData
     } = props;
 
     const { path, params } = useRouteMatch<{ user: string }>();
@@ -85,12 +85,18 @@ const UserControl: React.FC<UserControlProps> = (props) => {
             setUserEditMode(false);
         }
 
-        return () => { clearDictionary(); };
-    }, []); // eslint-disable-line
+        return () => {
+            clearDictionary();
+        };
+  }, []); // eslint-disable-line
 
-    const onEdit = () => { editUser(params.user); }
+    const onEdit = () => {
+        editUser(params.user);
+    };
 
-    return (userEditMode && loading ? <Preloader /> : (
+    return userEditMode && loading ? (
+        <Preloader />
+    ) : (
         <>
             <div className={classes(grid('row'))}>
                 <div className={grid('col-6')}>
@@ -104,8 +110,10 @@ const UserControl: React.FC<UserControlProps> = (props) => {
                     <div className={cn('status')}>
                         <Checkbox
                             checked={isActive}
-                            onChange={({ target }) => setIsActive(target.checked)}
-                            color="primary"
+                            onChange={({ target }) =>
+                                setIsActive(target.checked)
+                            }
+                            color='primary'
                         />
                         <InputLabel>Статус пользователя</InputLabel>
                     </div>
@@ -113,15 +121,18 @@ const UserControl: React.FC<UserControlProps> = (props) => {
             </div>
             <FormControls
                 mode={userEditMode}
-                backward="/users"
+                backward='/users'
                 onEdit={onEdit}
                 onAdd={addNewUser}
                 onClean={clearUserData}
             />
         </>
-    ));
+    );
 };
 
-const UserControlConnected = connect(mapStateToProps, mapDispatchToProps)(UserControl);
+const UserControlConnected = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserControl);
 
 export { UserControlConnected as UserControl };

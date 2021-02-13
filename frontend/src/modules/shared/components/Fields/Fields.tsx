@@ -18,7 +18,8 @@ type EntityProp = string | string[] | ValidationErrors;
 
 interface Props {
     fields: Field[];
-    entity: { [key: string]: EntityProp; };
+    entity: { [key: string]: EntityProp };
+    // eslint-disable-next-line @typescript-eslint/ban-types
     handler: (obj: object) => void;
 }
 
@@ -31,7 +32,9 @@ const Fields: React.FC<Props> = memo((props) => {
         handler({ id: entity.id, [name]: value });
     };
 
-    const getError = memoize((field: string) => get(entity, `validation.${field}`, ''));
+    const getError = memoize((field: string) =>
+        get(entity, `validation.${field}`, '')
+    );
 
     return (
         <>

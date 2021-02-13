@@ -21,7 +21,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     typeNotification: systemSelectors.typeNotification(state),
     messageNotification: systemSelectors.messageNotification(state),
     openNotification: systemSelectors.openNotification(state),
-    username: systemSelectors.username(state),
+    username: systemSelectors.username(state)
 });
 
 const mapDispatchToProps = {
@@ -30,10 +30,11 @@ const mapDispatchToProps = {
     getRouterItems: systemActions.getRouterItems,
     closeNotification: systemActions.closeNotification,
     checkAuth: systemActions.checkAuth,
-    onLogOut: systemActions.logOut,
+    onLogOut: systemActions.logOut
 };
 
-export type LayoutProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+export type LayoutProps = ReturnType<typeof mapStateToProps> &
+    typeof mapDispatchToProps;
 
 const Layout: React.FC<LayoutProps> = (props) => {
     const { checkAuth, getDrawerState } = props;
@@ -46,7 +47,7 @@ const Layout: React.FC<LayoutProps> = (props) => {
     return (
         <div className={cn('container')}>
             <Switch>
-                <Route path="/auth" component={Auth} />
+                <Route path='/auth' component={Auth} />
                 <Route render={() => <Main {...props} />} />
             </Switch>
 

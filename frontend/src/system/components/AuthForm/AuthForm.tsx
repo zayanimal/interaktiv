@@ -7,17 +7,13 @@ import './AuthForm.scss';
 const cn = bem('AuthForm');
 
 const AuthForm: React.FC<AuthProps> = (props) => {
-    const {
-        username,
-        password,
-        setLogin,
-        setPassword,
-        getCredentials,
-    } = props;
+    const { username, password, setLogin, setPassword, getCredentials } = props;
 
     useEffect(() => {
         const keyHandler = (e: KeyboardEvent) => {
-            if (e.code === 'Enter') { getCredentials(); }
+            if (e.code === 'Enter') {
+                getCredentials();
+            }
         };
 
         document.addEventListener('keydown', keyHandler, false);
@@ -42,23 +38,22 @@ const AuthForm: React.FC<AuthProps> = (props) => {
                 <TextField
                     value={username}
                     onChange={onChangeLogin}
-                    label="Логин"
-                    size="small"
-                    variant="outlined"
+                    label='Логин'
+                    size='small'
+                    variant='outlined'
                 />
                 <TextField
                     value={password}
                     onChange={onChangePassword}
-                    label="Пароль"
-                    size="small"
-                    variant="outlined"
-                    type="password"
+                    label='Пароль'
+                    size='small'
+                    variant='outlined'
+                    type='password'
                 />
                 <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={getCredentials}
-                >
+                    variant='outlined'
+                    color='primary'
+                    onClick={getCredentials}>
                     Войти
                 </Button>
             </form>

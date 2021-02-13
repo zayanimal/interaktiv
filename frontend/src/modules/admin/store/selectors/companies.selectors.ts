@@ -6,6 +6,8 @@ export const list = (state: RootStateTypes) => companiesState(state).list;
 
 export const meta = (state: RootStateTypes) => companiesState(state).meta;
 
-export const companyEditMode = (state: RootStateTypes) => companiesState(state).companyEditMode;
+export const companyEditMode = (state: RootStateTypes) =>
+    companiesState(state).companyEditMode;
 
-export const companyEditName = (state: RootStateTypes) => companiesState(state).companyEditName;
+export const companyEditName = (state: RootStateTypes) =>
+    companiesState(state).companyEditName;

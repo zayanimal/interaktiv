@@ -11,18 +11,21 @@ export interface Requests {
 }
 
 interface State {
-    requests: Requests[]
+    requests: Requests[];
 }
 
 const initialState = {
-    requests: [],
+    requests: []
 };
 
 const requestsList = createReducer<State>(initialState, {
-    [getType(requestsListActions.getRequestsList.success)]: (state, { payload }) => ({
+    [getType(requestsListActions.getRequestsList.success)]: (
+        state,
+        { payload }
+    ) => ({
         ...state,
-        requests: payload,
-    }),
+        requests: payload
+    })
 });
 
 export { requestsList };

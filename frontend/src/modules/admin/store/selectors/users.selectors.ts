@@ -6,6 +6,8 @@ export const list = (state: RootStateTypes) => usersState(state).list;
 
 export const meta = (state: RootStateTypes) => usersState(state).meta;
 
-export const userEditMode = (state: RootStateTypes) => usersState(state).userEditMode;
+export const userEditMode = (state: RootStateTypes) =>
+    usersState(state).userEditMode;
 
-export const userEditName = (state: RootStateTypes) => usersState(state).userEditName;
+export const userEditName = (state: RootStateTypes) =>
+    usersState(state).userEditName;

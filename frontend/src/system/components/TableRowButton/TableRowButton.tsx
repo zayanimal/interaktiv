@@ -11,7 +11,9 @@ const TableRowButton: React.FC = (props) => {
     const [open, setOpen] = useState(false);
 
     const paper = useRef<HTMLDivElement>(null);
-    const onOpen = () => { setOpen(!open); };
+    const onOpen = () => {
+        setOpen(!open);
+    };
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
@@ -31,17 +33,10 @@ const TableRowButton: React.FC = (props) => {
 
     return (
         <div ref={paper}>
-            <IconButton
-                size="medium"
-                onClick={onOpen}
-            >
-                <MoreVertIcon fontSize="inherit" />
+            <IconButton size='medium' onClick={onOpen}>
+                <MoreVertIcon fontSize='inherit' />
             </IconButton>
-            {open && (
-                <div className={cn('paper')}>
-                    {children}
-                </div>
-            )}
+            {open && <div className={cn('paper')}>{children}</div>}
         </div>
     );
 };

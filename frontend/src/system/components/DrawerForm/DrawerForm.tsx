@@ -13,7 +13,7 @@ const transitionStyles = {
     entered: { transform: 'translateX(0)' },
     exiting: { transform: 'translateX(100%)' },
     exited: { transform: 'translateX(100%)' },
-    unmounted: { transform: 'translateX(100%)' },
+    unmounted: { transform: 'translateX(100%)' }
 };
 
 interface Props {
@@ -29,17 +29,24 @@ const DrawerForm: React.FC<Props> = (props) => {
         width = '450',
         toggle,
         onClose = () => {},
-        children,
+        children
     } = props;
 
     const drawer = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
-        const handleClick = (e: MouseEvent) => cond([
-            [(t: HTMLElement) => !drawer.current?.contains(t), onClose],
-            [(t: HTMLElement) => t.closest('.MuiPopover-root') !== null, onClose],
-            [(t: HTMLElement) => !!t.getAttribute('aria-hidden'), () => onClose],
-        ])(e.target as HTMLElement);
+        const handleClick = (e: MouseEvent) =>
+            cond([
+                [(t: HTMLElement) => !drawer.current?.contains(t), onClose],
+                [
+                    (t: HTMLElement) => t.closest('.MuiPopover-root') !== null,
+                    onClose
+                ],
+                [
+                    (t: HTMLElement) => !!t.getAttribute('aria-hidden'),
+                    () => onClose
+                ]
+            ])(e.target as HTMLElement);
 
         document.addEventListener('click', handleClick, false);
 
@@ -49,21 +56,15 @@ const DrawerForm: React.FC<Props> = (props) => {
     });
 
     return (
-        <Transition
-            in={toggle}
-            timeout={200}
-        >
+        <Transition in={toggle} timeout={200}>
             {(state) => (
                 <div
                     ref={drawer}
                     style={{ ...transitionStyles[state], width: `${width}px` }}
-                    className={cn()}
-                >
-                    <div
-                        className={cn('header')}
-                    >
+                    className={cn()}>
+                    <div className={cn('header')}>
                         {label}
-                        <IconButton size="small" onClick={onClose}>
+                        <IconButton size='small' onClick={onClose}>
                             <Close />
                         </IconButton>
                     </div>

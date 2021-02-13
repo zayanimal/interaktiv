@@ -8,6 +8,6 @@ export const validation = {
     },
 
     translit(value: string) {
-        return /[a-z]/gmi.test(value);
-    },
+        return /[a-z]/gim.test(value);
+    }
 };

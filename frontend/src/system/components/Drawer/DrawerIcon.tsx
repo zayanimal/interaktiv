@@ -16,10 +16,8 @@ const icons = new Map([
     ['AddBox', AddBox],
     ['AccountBox', AccountBox],
     ['People', People],
-    ['Business', Business],
+    ['Business', Business]
 ]);
 
-export const DrawerIcon = (icon: string) => createElement(
-    (icons.get(icon) || 'div'),
-    { className: cn('icon') },
-);
+export const DrawerIcon = (icon: string) =>
+    createElement(icons.get(icon) || 'div', { className: cn('icon') });

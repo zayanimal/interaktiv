@@ -14,7 +14,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
         setPhone,
         position,
         setPosition,
-        validation,
+        validation
     } = props;
 
     return (
@@ -24,7 +24,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
                 error={!!validation.email}
                 helperText={validation.email}
                 className={grid('input')}
-                type="email"
+                type='email'
                 value={email}
                 onChange={handleInput(setEmail)}
             />
@@ -33,7 +33,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
                 error={!!validation.phone}
                 helperText={validation.phone}
                 className={grid('input')}
-                type="text"
+                type='text'
                 value={phone}
                 onChange={handleInput(setPhone)}
             />
@@ -42,7 +42,7 @@ const UserContactsFields: React.FC<UserControlProps> = (props) => {
                 error={!!validation.position}
                 helperText={validation.position}
                 className={grid('input')}
-                type="text"
+                type='text'
                 value={position}
                 onChange={handleInput(setPosition)}
             />

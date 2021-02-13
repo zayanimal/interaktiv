@@ -8,5 +8,5 @@ export const adminReducer = combineReducers({
     users,
     userControl,
     companies,
-    companyControl,
+    companyControl
 });

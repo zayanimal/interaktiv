@@ -5,10 +5,12 @@ import { CompanyContactEntity, RequisitesEntity } from '@admin/entities';
 import { ValidationEntity } from '@system/entities';
 
 export class CompanyEntity extends ValidationEntity {
-    @IsNotEmpty({ message: 'Поле не должно быть пустым', })
+    @IsNotEmpty({ message: 'Поле не должно быть пустым' })
     name!: string;
 
-    @ArrayNotEmpty({ message: 'Введите в поисковой строке имя пользователя и выберите его', })
+    @ArrayNotEmpty({
+        message: 'Введите в поисковой строке имя пользователя и выберите его'
+    })
     users!: string[];
 
     @ValidateNested()

@@ -2,7 +2,10 @@ import { RequestPartnumbers } from '@customer/components/RequestPartnumbers';
 import { RequestTable } from '@customer/components/RequestTable';
 import { RequestDrawer } from '@customer/containers/RequestDrawer';
 import { requestActions, requestDrawerActions } from '@customer/store/actions';
-import { requestDrawerSelectors, requestSelectors } from '@customer/store/selectors';
+import {
+    requestDrawerSelectors,
+    requestSelectors
+} from '@customer/store/selectors';
 import { Button } from '@material-ui/core';
 import { systemActions } from '@system/store/actions';
 import { RootStateTypes } from '@config/roots';
@@ -20,7 +23,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     modelsDataInOrder: requestSelectors.modelsDataInOrder(state),
     modelsSelected: requestSelectors.modelsSelected(state),
     listState: requestSelectors.listState(state),
-    validation: requestDrawerSelectors.validation(state),
+    validation: requestDrawerSelectors.validation(state)
 });
 
 const mapDispatchToProps = {
@@ -34,7 +37,7 @@ const mapDispatchToProps = {
     updateModelInOrder: requestActions.updateModelInOrder,
     setHeaderTitle: systemActions.setHeaderTitle,
     showList: requestActions.showList,
-    showDrawer: requestDrawerActions.open,
+    showDrawer: requestDrawerActions.open
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -58,14 +61,16 @@ const Request: React.FC<Props> = (props) => {
         listState,
         showList,
         showDrawer,
-        validation,
+        validation
     } = props;
 
     useEffect(() => {
         fetchPrice();
         setHeaderTitle('Новый проект');
 
-        return () => { cleanPrice(); };
+        return () => {
+            cleanPrice();
+        };
     }, [fetchPrice, cleanPrice, setHeaderTitle]);
 
     const orderHandler = (value: string | null): void => {
@@ -73,13 +78,18 @@ const Request: React.FC<Props> = (props) => {
 
         putModelInOrder({
             // eslint-disable-next-line prefer-object-spread
-            ...Object.assign({}, modelsData.find(({ model }) => model === value)),
-            count: 1,
+            ...Object.assign(
+                {},
+                modelsData.find(({ model }) => model === value)
+            ),
+            count: 1
         });
     };
 
     const deleteHandler = (value: string) => {
-        deleteModelInOrder(modelsDataInOrder.filter(({ model }) => model !== value));
+        deleteModelInOrder(
+            modelsDataInOrder.filter(({ model }) => model !== value)
+        );
     };
 
     return (
@@ -87,11 +97,10 @@ const Request: React.FC<Props> = (props) => {
             <div className={cn()}>
                 <div className={cn('col1')}>
                     <Button
-                        color="secondary"
-                        variant="outlined"
+                        color='secondary'
+                        variant='outlined'
                         style={{ width: '100%' }}
-                        onClick={showDrawer}
-                    >
+                        onClick={showDrawer}>
                         Заказчик
                     </Button>
                     <RequestPartnumbers
@@ -111,13 +120,14 @@ const Request: React.FC<Props> = (props) => {
                         onUpdate={updateModelInOrder}
                         onDelete={deleteHandler}
                     />
-                    <div className={cn('controls')} hidden={modelsDataInOrder.length === 0}>
+                    <div
+                        className={cn('controls')}
+                        hidden={modelsDataInOrder.length === 0}>
                         <Button
-                            variant="outlined"
-                            color="primary"
+                            variant='outlined'
+                            color='primary'
                             disabled={!validation}
-                            onClick={sendNewProject}
-                        >
+                            onClick={sendNewProject}>
                             Отправить запрос
                         </Button>
                     </div>

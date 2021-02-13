@@ -37,12 +37,15 @@ const initialState = {
         password: '',
         email: '',
         phone: '',
-        position: '',
-    },
+        position: ''
+    }
 };
 
 export const userControl = createReducer<IInitialState>(initialState, {
-    [getType(userControlActions.getUser.request)]: (state) => ({ ...state, loading: true }),
+    [getType(userControlActions.getUser.request)]: (state) => ({
+        ...state,
+        loading: true
+    }),
 
     [getType(userControlActions.getUser.success)]: (state, { payload }) => ({
         ...state,
@@ -53,52 +56,55 @@ export const userControl = createReducer<IInitialState>(initialState, {
         permissions: payload.permissions,
         email: payload.contacts.email,
         phone: payload.contacts.phone,
-        position: payload.contacts.position,
+        position: payload.contacts.position
     }),
 
     [getType(userControlActions.setUsername)]: (state, { payload }) => ({
         ...state,
-        username: payload,
+        username: payload
     }),
 
     [getType(userControlActions.setPassword)]: (state, { payload }) => ({
         ...state,
-        password: payload,
+        password: payload
     }),
 
     [getType(userControlActions.setRole)]: (state, { payload }) => ({
         ...state,
-        role: payload,
+        role: payload
     }),
 
     [getType(userControlActions.setPermissions)]: (state, { payload }) => ({
         ...state,
-        permissions: payload,
+        permissions: payload
     }),
 
     [getType(userControlActions.setEmail)]: (state, { payload }) => ({
         ...state,
-        email: payload,
+        email: payload
     }),
 
     [getType(userControlActions.setPhone)]: (state, { payload }) => ({
         ...state,
-        phone: payload,
+        phone: payload
     }),
 
     [getType(userControlActions.setPosition)]: (state, { payload }) => ({
         ...state,
-        position: payload,
+        position: payload
     }),
 
     [getType(userControlActions.setIsActive)]: (state, { payload }) => ({
         ...state,
-        isActive: payload,
+        isActive: payload
     }),
 
-    [getType(userControlActions.setValidationErrors)]: (state, { payload }) => ({
+    [getType(userControlActions.setValidationErrors)]: (
+        state,
+        { payload }
+    ) => ({
         ...state,
-        validation: { ...state.validation, ...payload },
+        validation: { ...state.validation, ...payload }
     }),
 
     [getType(userControlActions.clearValidationErrors)]: (state) => ({
@@ -106,5 +112,5 @@ export const userControl = createReducer<IInitialState>(initialState, {
         validation: {}
     }),
 
-    [getType(userControlActions.clearUserData)]: () => ({ ...initialState }),
+    [getType(userControlActions.clearUserData)]: () => ({ ...initialState })
 });

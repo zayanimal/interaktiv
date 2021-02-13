@@ -5,7 +5,7 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    Chip,
+    Chip
 } from '@material-ui/core';
 import { handleInput, handleSelect } from '@utils/handlers';
 import { UserControlProps } from '@admin/containers/UserControl';
@@ -24,7 +24,7 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
         setRole,
         permissions,
         setPermissions,
-        validation,
+        validation
     } = props;
 
     return (
@@ -34,7 +34,7 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
                 error={!!validation.username}
                 helperText={validation.username}
                 className={grid('input')}
-                type="text"
+                type='text'
                 value={username}
                 onChange={handleInput(setUsername)}
             />
@@ -43,7 +43,7 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
                 error={!!validation.password}
                 helperText={validation.password}
                 className={grid('input')}
-                type="password"
+                type='password'
                 value={password}
                 onChange={handleInput(setPassword)}
             />
@@ -51,13 +51,9 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
             <Select
                 className={grid('select')}
                 value={role}
-                onChange={handleSelect(setRole)}
-            >
+                onChange={handleSelect(setRole)}>
                 {dicts.roles.map(({ id, name }) => (
-                    <MenuItem
-                        key={id}
-                        value={name}
-                    >
+                    <MenuItem key={id} value={name}>
                         {name}
                     </MenuItem>
                 ))}
@@ -65,24 +61,20 @@ const UserAuthFields: React.FC<UserControlProps> = (props) => {
             <InputLabel>Права пользователя</InputLabel>
             <Select
                 className={grid('select')}
-                placeholder="Права"
+                placeholder='Права'
                 value={permissions}
                 multiple
                 onChange={handleSelect(setPermissions)}
-                input={<Input id="select-multiple-chip" />}
+                input={<Input id='select-multiple-chip' />}
                 renderValue={(selected) => (
                     <div className={grid('select-multiple')}>
                         {(selected as string[]).map((value) => (
-                            <Chip key={value} label={value} size="small" />
+                            <Chip key={value} label={value} size='small' />
                         ))}
                     </div>
-                )}
-            >
+                )}>
                 {dicts.permissions.map(({ id, name }) => (
-                    <MenuItem
-                        key={id}
-                        value={name}
-                    >
+                    <MenuItem key={id} value={name}>
                         {name}
                     </MenuItem>
                 ))}

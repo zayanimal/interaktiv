@@ -9,31 +9,37 @@ const initialState = {
         itemCount: 0,
         itemsPerPage: 0,
         totalItems: 0,
-        totalPages: 0,
+        totalPages: 0
     },
     companyEditMode: true,
-    companyEditName: '',
+    companyEditName: ''
 };
 
 export const companies = createReducer<ICompaniesInitialState>(initialState, {
-    [getType(companiesActions.getCompaniesList.success)]: (state, { payload }) => ({
+    [getType(companiesActions.getCompaniesList.success)]: (
+        state,
+        { payload }
+    ) => ({
         ...state,
         list: [...state.list, ...payload.items],
-        meta: payload.meta,
+        meta: payload.meta
     }),
 
-    [getType(companiesActions.setFiltredCompaniesList)]: (state, { payload }) => ({
+    [getType(companiesActions.setFiltredCompaniesList)]: (
+        state,
+        { payload }
+    ) => ({
         ...state,
-        list: state.list.filter((item) => item?.id !== payload),
+        list: state.list.filter((item) => item?.id !== payload)
     }),
 
     [getType(companiesActions.setCompanyEditMode)]: (state, { payload }) => ({
         ...state,
-        companyEditMode: payload,
+        companyEditMode: payload
     }),
 
     [getType(companiesActions.setCompanyEditName)]: (state, { payload }) => ({
         ...state,
-        companyEditName: payload,
-    }),
+        companyEditName: payload
+    })
 });

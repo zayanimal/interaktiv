@@ -7,7 +7,7 @@ import {
     switchMap,
     switchMapTo,
     first,
-    catchError,
+    catchError
 } from 'rxjs/operators';
 import { pick } from 'lodash';
 import { normalize, denormalize, schema } from 'normalizr';
@@ -25,7 +25,6 @@ import {
     BankRequisitesEntity
 } from '@admin/entities';
 
-
 const bankSchema = new schema.Entity('bank');
 const requisitesSchema = new schema.Entity('requisites', {
     bank: [bankSchema]
@@ -38,18 +37,23 @@ const companySchema = { requisites: [requisitesSchema] };
  * @param state$
  * @param services
  */
-export const getCompany: Epic = (action$, _, { company }) => action$.pipe(
-    filter(isActionOf(companyControlActions.getCompany.request)),
-    mergeMap(({ payload }) => company.findId(payload)),
-    map(({ response }) => plainToClass(CompanyEntity, response)),
-    map((response) => companyControlActions.getCompany.success(
-        normalize(response, companySchema),
-    )),
-    catchError((err, caught) => merge(
-        caught,
-        of(systemActions.errorNotification(err?.response?.message)),
-    )),
-);
+export const getCompany: Epic = (action$, _, { company }) =>
+    action$.pipe(
+        filter(isActionOf(companyControlActions.getCompany.request)),
+        mergeMap(({ payload }) => company.findId(payload)),
+        map(({ response }) => plainToClass(CompanyEntity, response)),
+        map((response) =>
+            companyControlActions.getCompany.success(
+                normalize(response, companySchema)
+            )
+        ),
+        catchError((err, caught) =>
+            merge(
+                caught,
+                of(systemActions.errorNotification(err?.response?.message))
+            )
+        )
+    );
 
 /**
  * Обновить данные компании
@@ -57,83 +61,101 @@ export const getCompany: Epic = (action$, _, { company }) => action$.pipe(
  * @param state$
  * @param param2
  */
-export const updateCompany: Epic = (action$, state$, { company, validation }) => action$.pipe(
-    filter(isActionOf(companyControlActions.updateCompany)),
-    switchMapTo(state$.pipe(
-        first(),
-        map(companyControlSelectors.companyControlState),
-        mergeMap((state) => of(state).pipe(
-            map(({ requisites, entities }) => denormalize(
-                { requisites },
-                companySchema,
-                entities,
-            )),
-            map(({ requisites }) => plainToClass(
-                CompanyEntity,
-                {
-                    ...companyControlSelectors.companyFields(state),
-                    contact: plainToClass(CompanyContactEntity, state.contact),
-                    requisites: plainToClass(
-                        RequisitesEntity,
-                        requisites.map((req: RequisitesEntity) => ({
-                            ...req,
-                            bank: plainToClass(BankRequisitesEntity, req.bank)
-                        }))
-                    ),
-                }
-            )),
-        )),
-    )),
-    mergeMap((fields) => validation.check$(fields)),
-    // switchMap((entity) => company.update$(entity).pipe(
-    //     catchError((err, caught) => merge(
-    //         caught,
-    //         of(systemActions.errorNotification(err.message)),
-    //     )),
-    // )),
-    switchMapTo(merge(
-        of(companyControlActions.clearValidationErrors()),
-        of(companyControlActions.setDrawerState(false)),
-        of(systemActions.successNotification('Компания обновлена')),
-    )),
-    catchError((err, caught) => merge(
-        caught,
-        of(companyControlActions.setValidationErrors(pick(err, [
-            'name',
-            'email',
-            'phone',
-            'users',
-        ]))),
-    )),
-);
+export const updateCompany: Epic = (action$, state$, { company, validation }) =>
+    action$.pipe(
+        filter(isActionOf(companyControlActions.updateCompany)),
+        switchMapTo(
+            state$.pipe(
+                first(),
+                map(companyControlSelectors.companyControlState),
+                mergeMap((state) =>
+                    of(state).pipe(
+                        map(({ requisites, entities }) =>
+                            denormalize({ requisites }, companySchema, entities)
+                        ),
+                        map(({ requisites }) =>
+                            plainToClass(CompanyEntity, {
+                                ...companyControlSelectors.companyFields(state),
+                                contact: plainToClass(
+                                    CompanyContactEntity,
+                                    state.contact
+                                ),
+                                requisites: plainToClass(
+                                    RequisitesEntity,
+                                    requisites.map((req: RequisitesEntity) => ({
+                                        ...req,
+                                        bank: plainToClass(
+                                            BankRequisitesEntity,
+                                            req.bank
+                                        )
+                                    }))
+                                )
+                            })
+                        )
+                    )
+                )
+            )
+        ),
+        mergeMap((fields) => validation.check$(fields)),
+        // switchMap((entity) => company.update$(entity).pipe(
+        //     catchError((err, caught) => merge(
+        //         caught,
+        //         of(systemActions.errorNotification(err.message)),
+        //     )),
+        // )),
+        switchMapTo(
+            merge(
+                of(companyControlActions.clearValidationErrors()),
+                of(companyControlActions.setDrawerState(false)),
+                of(systemActions.successNotification('Компания обновлена'))
+            )
+        ),
+        catchError((err, caught) =>
+            merge(
+                caught,
+                of(
+                    companyControlActions.setValidationErrors(
+                        pick(err, ['name', 'email', 'phone', 'users'])
+                    )
+                )
+            )
+        )
+    );
 
-export const createCompany: Epic = (action$, state$, { company, validation }) => action$.pipe(
-    filter(isActionOf(companyControlActions.createCompany)),
-    switchMapTo(state$.pipe(
-        first(),
-        map(companyControlSelectors.companyControlState),
-        mergeMap((state) => of(state).pipe(
-            map(({ requisites, entities }) => denormalize(
-                { requisites },
-                companySchema,
-                entities,
-            )),
-            map(({ requisites }) => plainToClass(CompanyEntity, {
-                name: state.name,
-                users: state.users,
-                contact: state.contact,
-                requisites,
-            })),
-            mergeMap((entity) => validation.check$(entity)),
-        )),
-        switchMap((entity) => company.create$(entity)),
-        mapTo(systemActions.successNotification('Компания добавлена')),
-        catchError((err, caught) => merge(
-            caught,
-            of(systemActions.errorNotification(err.message)),
-        )),
-    )),
-);
+export const createCompany: Epic = (action$, state$, { company, validation }) =>
+    action$.pipe(
+        filter(isActionOf(companyControlActions.createCompany)),
+        switchMapTo(
+            state$.pipe(
+                first(),
+                map(companyControlSelectors.companyControlState),
+                mergeMap((state) =>
+                    of(state).pipe(
+                        map(({ requisites, entities }) =>
+                            denormalize({ requisites }, companySchema, entities)
+                        ),
+                        map(({ requisites }) =>
+                            plainToClass(CompanyEntity, {
+                                name: state.name,
+                                users: state.users,
+                                contact: state.contact,
+                                requisites
+                            })
+                        ),
+                        mergeMap((entity) => validation.check$(entity))
+                    )
+                ),
+                switchMap((entity) => company.create$(entity)),
+                mapTo(systemActions.successNotification('Компания добавлена')),
+                catchError((err, caught) =>
+                    merge(
+                        caught,
+                        of(systemActions.errorNotification(err.message))
+                    )
+                )
+            )
+        )
+    );
 
 /**
  * Удаление компании
@@ -141,39 +163,63 @@ export const createCompany: Epic = (action$, state$, { company, validation }) =>
  * @param state$
  * @param services
  */
-export const deleteCompany: Epic = (action$, _, { company }) => action$.pipe(
-    filter(isActionOf(companyControlActions.deleteCompany)),
-    mergeMap(({ payload }) => company.delete$(payload).pipe(
-        mergeMap(() => merge(
-            of(companiesActions.setFiltredCompaniesList(payload)),
-            of(systemActions.successNotification('Компания удалена')),
-        ))
-    )),
-    catchError((err, caught) => merge(
-        caught,
-        of(systemActions.errorNotification(err.message)),
-    )),
-);
+export const deleteCompany: Epic = (action$, _, { company }) =>
+    action$.pipe(
+        filter(isActionOf(companyControlActions.deleteCompany)),
+        mergeMap(({ payload }) =>
+            company
+                .delete$(payload)
+                .pipe(
+                    mergeMap(() =>
+                        merge(
+                            of(
+                                companiesActions.setFiltredCompaniesList(
+                                    payload
+                                )
+                            ),
+                            of(
+                                systemActions.successNotification(
+                                    'Компания удалена'
+                                )
+                            )
+                        )
+                    )
+                )
+        ),
+        catchError((err, caught) =>
+            merge(caught, of(systemActions.errorNotification(err.message)))
+        )
+    );
 
 /**
  * Создать новые реквизиты
  * @param action$
  */
-export const createRequisites: Epic = (action$) => action$.pipe(
-    filter(isActionOf(companyControlActions.createRequsitesForm)),
-    map(uuid),
-    mergeMap((id) => merge(
-        of(companyControlActions.putRequsitesForm(new RequisitesEntity(id))),
-        of(companyControlActions.updateCurrentRequisites(id)),
-    )),
-);
+export const createRequisites: Epic = (action$) =>
+    action$.pipe(
+        filter(isActionOf(companyControlActions.createRequsitesForm)),
+        map(uuid),
+        mergeMap((id) =>
+            merge(
+                of(
+                    companyControlActions.putRequsitesForm(
+                        new RequisitesEntity(id)
+                    )
+                ),
+                of(companyControlActions.updateCurrentRequisites(id))
+            )
+        )
+    );
 
 /**
  * Создать новые банковские реквизиты
  * @param action$
  */
-export const createBankRequisites: Epic = (action$) => action$.pipe(
-    filter(isActionOf(companyControlActions.createBankForm)),
-    map(uuid),
-    map((id) => companyControlActions.putBankForm(new BankRequisitesEntity(id))),
-);
+export const createBankRequisites: Epic = (action$) =>
+    action$.pipe(
+        filter(isActionOf(companyControlActions.createBankForm)),
+        map(uuid),
+        map((id) =>
+            companyControlActions.putBankForm(new BankRequisitesEntity(id))
+        )
+    );

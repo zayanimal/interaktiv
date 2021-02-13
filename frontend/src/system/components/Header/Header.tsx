@@ -16,31 +16,29 @@ const Header: React.FC<LayoutProps> = (props) => {
         headerTitle = '',
         username = '',
         setDrawerState = () => {},
-        onLogOut = () => {},
+        onLogOut = () => {}
     } = props;
 
     return (
         <header className={cn()}>
             <div>
                 <IconButton
-                    size="medium"
-                    onClick={() => { setDrawerState(!drawerState); }}
-                >
-                    <MoreVertIcon fontSize="inherit" />
+                    size='medium'
+                    onClick={() => {
+                        setDrawerState(!drawerState);
+                    }}>
+                    <MoreVertIcon fontSize='inherit' />
                 </IconButton>
                 <h4>{headerTitle}</h4>
             </div>
             <div className={cn('user')}>
                 <Chip
-                    variant="outlined"
-                    size="medium"
+                    variant='outlined'
+                    size='medium'
                     icon={<FaceIcon />}
                     label={username}
                 />
-                <IconButton
-                    size="medium"
-                    onClick={onLogOut}
-                >
+                <IconButton size='medium' onClick={onLogOut}>
                     <ExitToAppIcon className={cn('icon')} />
                 </IconButton>
             </div>

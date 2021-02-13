@@ -4,7 +4,7 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { LayoutProps } from '@system/containers/Layout';
 
 const Alert = (props: AlertProps) => (
-    <MuiAlert elevation={6} variant="filled" {...props} />
+    <MuiAlert elevation={6} variant='filled' {...props} />
 );
 
 const Notification: React.FC<LayoutProps> = (props) => {
@@ -12,7 +12,7 @@ const Notification: React.FC<LayoutProps> = (props) => {
         typeNotification,
         messageNotification,
         openNotification,
-        closeNotification = () => {},
+        closeNotification = () => {}
     } = props;
 
     const handleClose = (event?: SyntheticEvent, reason?: string) => {
@@ -24,9 +24,12 @@ const Notification: React.FC<LayoutProps> = (props) => {
     };
 
     return (
-        <Snackbar open={openNotification} autoHideDuration={5000} onClose={handleClose}>
+        <Snackbar
+            open={openNotification}
+            autoHideDuration={5000}
+            onClose={handleClose}>
             <Alert onClose={handleClose} severity={typeNotification}>
-                { messageNotification }
+                {messageNotification}
             </Alert>
         </Snackbar>
     );

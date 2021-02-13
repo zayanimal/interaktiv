@@ -9,5 +9,5 @@ export {
     userControlActions,
     companiesActions,
     companyControlActions,
-    searchUserActions,
+    searchUserActions
 };

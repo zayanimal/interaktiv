@@ -24,7 +24,7 @@ const ListHeader: React.FC<Props> = (props) => {
 
     return (
         <div className={cn()}>
-            <IconButton size="medium" onClick={onAdd}>
+            <IconButton size='medium' onClick={onAdd}>
                 <AddIcon />
             </IconButton>
         </div>

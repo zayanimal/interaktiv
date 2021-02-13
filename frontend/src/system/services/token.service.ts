@@ -10,11 +10,13 @@ export class TokenService implements ITokenService {
         const jwt = JSON.parse(atob(this.token.split('.')[1]));
         const exp = jwt && jwt.exp && jwt.exp * 1000;
 
-        return (exp ? Date.now() > exp : false);
+        return exp ? Date.now() > exp : false;
     }
 
     public getToken() {
-        if (!this.token) { return ''; }
+        if (!this.token) {
+            return '';
+        }
 
         return this.token;
     }

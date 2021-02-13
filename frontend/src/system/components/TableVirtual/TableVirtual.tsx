@@ -4,9 +4,10 @@ import {
     Column,
     AutoSizer,
     InfiniteLoader,
-    ColumnProps,
+    ColumnProps
 } from 'react-virtualized';
 import { range, set, transform } from 'lodash';
+import uuid from 'uuid-random';
 import { bem } from '@utils/formatters';
 import { IPaginationMeta } from '@shared/interfaces';
 import 'react-virtualized/styles.css';
@@ -14,15 +15,23 @@ import './TableVirtual.scss';
 
 const cn = bem('TableVirtual');
 
-const getSkeleton = (columns: ColumnProps[]): [ColumnProps[], object[]] => {
-    const cols = columns.map((column, idx) => transform(column, (acc, value, key) => {
-        set(acc, key, value);
-        set(acc, 'cellRenderer', () => (
-            <div key={idx} className={cn('mock')} />
-        ));
+const getSkeleton = (
+    columns: ColumnProps[]
+): [ColumnProps[], Record<string, unknown>[]] => {
+    const cols = columns.map((column) =>
+        transform(
+            column,
+            (acc, value, key) => {
+                set(acc, key, value);
+                set(acc, 'cellRenderer', () => (
+                    <div key={uuid()} className={cn('mock')} />
+                ));
 
-        return acc;
-    }, {} as ColumnProps));
+                return acc;
+            },
+            {} as ColumnProps
+        )
+    );
 
     const row = columns.reduce((acc, item) => set(acc, item.dataKey, ''), {});
 
@@ -41,7 +50,7 @@ const TableVirtual: React.FC<Props> = (props) => {
         list,
         getList,
         columns,
-        meta: { currentPage, totalItems, totalPages },
+        meta: { currentPage, totalItems, totalPages }
     } = props;
 
     const [mockCols, mockList] = useMemo(() => getSkeleton(columns), [columns]);
@@ -71,8 +80,7 @@ const TableVirtual: React.FC<Props> = (props) => {
             <InfiniteLoader
                 isRowLoaded={({ index }) => !!filledList[index]}
                 loadMoreRows={loadMoreRows}
-                rowCount={totalItems}
-            >
+                rowCount={totalItems}>
                 {({ onRowsRendered, registerChild }) => (
                     <AutoSizer>
                         {({ width, height }) => (
@@ -86,8 +94,7 @@ const TableVirtual: React.FC<Props> = (props) => {
                                 rowClassName={cn('row')}
                                 rowHeight={60}
                                 rowCount={filledList.length}
-                                rowGetter={({ index }) => filledList[index]}
-                            >
+                                rowGetter={({ index }) => filledList[index]}>
                                 {cols.map((col) => (
                                     <Column
                                         key={col.dataKey}

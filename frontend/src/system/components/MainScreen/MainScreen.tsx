@@ -1,10 +1,5 @@
 import React, { Suspense } from 'react';
-import {
-    Switch,
-    Route,
-    Redirect,
-    useLocation,
-} from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { Drawer } from '@system/components/Drawer';
 import { Header } from '@system/components/Header';
 import { Preloader } from '@system/components/Preloader';
@@ -32,7 +27,9 @@ const MainScreen: React.FC<LayoutProps> = (props) => {
                                     <Route
                                         key={route.key}
                                         path={route.path}
-                                        component={routeComponent.create(route.component)}
+                                        component={routeComponent.create(
+                                            route.component
+                                        )}
                                     />
                                 ))}
                             </Switch>

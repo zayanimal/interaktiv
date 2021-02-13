@@ -13,13 +13,7 @@ import './UsersList.scss';
 const cn = bem('UsersList');
 
 const UsersList: React.FC<UsersProps> = (props) => {
-    const {
-        list,
-        meta,
-        removeUser,
-        getList,
-        setUserEditName,
-    } = props;
+    const { list, meta, removeUser, getList, setUserEditName } = props;
 
     const { path } = useRouteMatch();
     const history = useHistory();
@@ -44,45 +38,40 @@ const UsersList: React.FC<UsersProps> = (props) => {
                         <MenuItem onClick={onEdit(rowData)}>
                             Редактировать
                         </MenuItem>
-                        <MenuItem onClick={onRemove(rowData)}>
-                            Удалить
-                        </MenuItem>
+                        <MenuItem onClick={onRemove(rowData)}>Удалить</MenuItem>
                     </TableRowButton>
-                ),
+                )
             },
             {
                 dataKey: 'username',
                 label: 'Имя пользователя',
-                width: 300,
+                width: 300
             },
             {
                 dataKey: 'role',
                 label: 'Роль',
-                width: 250,
+                width: 250
             },
             {
                 dataKey: 'time',
                 label: 'Дата создания',
                 width: 300,
-                cellRenderer: ({ cellData }) => new Date(cellData).toLocaleDateString('ru'),
+                cellRenderer: ({ cellData }) =>
+                    new Date(cellData).toLocaleDateString('ru')
             },
             {
                 dataKey: 'isActive',
                 label: 'Статус',
                 width: 250,
-                cellRenderer: ({ cellData }) => (cellData ? (
-                    <Chip label="Активен" size="small" color="primary" />
-                ) : (
-                    <Chip label="Не активен" size="small" />
-                )),
-            },
+                cellRenderer: ({ cellData }) =>
+                    cellData ? (
+                        <Chip label='Активен' size='small' color='primary' />
+                    ) : (
+                        <Chip label='Не активен' size='small' />
+                    )
+            }
         ];
-    }, [
-        removeUser,
-        path,
-        history,
-        setUserEditName,
-    ]);
+    }, [removeUser, path, history, setUserEditName]);
 
     return (
         <div className={cn()}>

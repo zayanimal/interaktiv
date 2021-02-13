@@ -23,7 +23,7 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
         onChange = () => {},
         onSelect = () => {},
         onDelete = () => {},
-        onClear = () => {},
+        onClear = () => {}
     } = props;
 
     const [input, setInput] = useState('');
@@ -32,18 +32,26 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
         setInput(e.target.value);
         onChange(e.target.value);
     };
-    const selectHandler = (e: MouseEvent) => onSelect(e.currentTarget.textContent || '');
+    const selectHandler = (e: MouseEvent) =>
+        onSelect(e.currentTarget.textContent || '');
     const deleteHandler = (value: string) => () => onDelete(value);
 
     useEffect(() => {
-        const clear = () => { setInput(''); onClear([]); }
+        const clear = () => {
+            setInput('');
+            onClear([]);
+        };
 
         const handlerClick = ({ target }: Event) => {
-            if ((target as HTMLElement).closest('#backdrop')) { clear(); }
+            if ((target as HTMLElement).closest('#backdrop')) {
+                clear();
+            }
         };
 
         const handlerKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') { clear(); }
+            if (e.key === 'Escape') {
+                clear();
+            }
         };
 
         document.addEventListener('keydown', handlerKey, false);
@@ -52,7 +60,7 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
         return () => {
             document.removeEventListener('click', handlerClick, false);
             document.removeEventListener('keydown', handlerKey, false);
-        }
+        };
     }, [onChange, setInput, onClear]);
 
     return (
@@ -64,21 +72,17 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
                     error={!!error}
                     helperText={error}
                     className={cn('input-field')}
-                    type="text"
+                    type='text'
                     value={input}
                     onChange={changeHandler}
                 />
             </div>
             {found.length ? (
                 <>
-                    <div id="backdrop" className={cn('backdrop')} />
+                    <div id='backdrop' className={cn('backdrop')} />
                     <div className={cn('list')}>
                         {found.map((item) => (
-                            <ListItem
-                                button
-                                key={item}
-                                onClick={selectHandler}
-                            >
+                            <ListItem button key={item} onClick={selectHandler}>
                                 {item}
                             </ListItem>
                         ))}
@@ -91,7 +95,7 @@ const SearchMultiSelect: React.FC<Props> = (props) => {
                         key={item}
                         label={item}
                         className={cn('chip')}
-                        color="primary"
+                        color='primary'
                         onDelete={deleteHandler(item)}
                     />
                 ))}

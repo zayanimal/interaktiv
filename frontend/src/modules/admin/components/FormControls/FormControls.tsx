@@ -15,32 +15,24 @@ interface Props {
 }
 
 const FormControls: React.FC<Props> = (props) => {
-    const {
-        mode,
-        backward,
-        onEdit,
-        onAdd,
-        onClean = () => {},
-    } = props;
+    const { mode, backward, onEdit, onAdd, onClean = () => {} } = props;
 
     const history = useHistory();
 
-    const onCancel = () => { onClean(); history.push(backward); }
+    const onCancel = () => {
+        onClean();
+        history.push(backward);
+    };
 
     return (
         <div className={cn()}>
-            <Button
-                variant="text"
-                color="primary"
-                onClick={onCancel}
-            >
+            <Button variant='text' color='primary' onClick={onCancel}>
                 Назад
             </Button>
             <Button
-                variant="text"
-                color="primary"
-                onClick={mode ? onEdit : onAdd}
-            >
+                variant='text'
+                color='primary'
+                onClick={mode ? onEdit : onAdd}>
                 {mode ? 'Сохранить' : 'Добавить'}
             </Button>
         </div>

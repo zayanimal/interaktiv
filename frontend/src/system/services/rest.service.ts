@@ -3,6 +3,7 @@ import { TokenService } from '@system/services/token.service';
 import { IRestService, IHeader } from '@system/interfaces';
 import { ApiUrl } from '@system/decorators';
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 @ApiUrl(process.env.REACT_APP_SERVER_URL!)
 export class RestService implements IRestService {
     constructor(private tokenService: TokenService) {}
@@ -14,10 +15,10 @@ export class RestService implements IRestService {
             url: this.url + params.url,
             headers: {
                 Authorization: `Bearer ${this.tokenService.getToken()}`,
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             method: params.method,
-            body: params?.body || {},
+            body: params?.body || {}
         };
     }
 

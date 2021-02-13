@@ -1,5 +1,9 @@
 import { combineEpics, Epic } from 'redux-observable';
-import { getUsersList, sendNewUser, removeUser } from '@admin/effects/users.epic';
+import {
+    getUsersList,
+    sendNewUser,
+    removeUser
+} from '@admin/effects/users.epic';
 import { getUser, editUser } from '@admin/effects/user-form.epic';
 import { getCompaniesList } from '@admin/effects/companies.epic';
 import {
@@ -8,7 +12,7 @@ import {
     createCompany,
     deleteCompany,
     createRequisites,
-    createBankRequisites,
+    createBankRequisites
 } from '@admin/effects/company-form.epic';
 import { searchUser } from '@admin/effects/search-user.epic';
 
@@ -25,5 +29,5 @@ export const adminEpic: Epic = combineEpics(
     deleteCompany,
     createRequisites,
     createBankRequisites,
-    searchUser,
+    searchUser
 );

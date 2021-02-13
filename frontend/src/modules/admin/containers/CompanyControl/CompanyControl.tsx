@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -10,8 +9,15 @@ import { CompanyRequisites } from '@admin/components/CompanyRequisites';
 import { RequisitesDrawer } from '@admin/components/RequisitesDrawer';
 import { SearchMultiSelect } from '@shared/components/SearchMultiSelect';
 import { systemActions } from '@system/store/actions';
-import { companiesActions, companyControlActions, searchUserActions } from '@admin/store/actions';
-import { companySelectors, companyControlSelectors } from '@admin/store/selectors';
+import {
+    companiesActions,
+    companyControlActions,
+    searchUserActions
+} from '@admin/store/actions';
+import {
+    companySelectors,
+    companyControlSelectors
+} from '@admin/store/selectors';
 import { bem } from '@utils/formatters';
 
 const grid = bem('FlexGrid');
@@ -28,7 +34,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     bankRequisites: companyControlSelectors.bankRequisites(state),
     users: companyControlSelectors.users(state),
     foundUsers: companyControlSelectors.foundUsers(state),
-    validation: companyControlSelectors.validation(state),
+    validation: companyControlSelectors.validation(state)
 });
 
 const mapDispatchToProps = {
@@ -52,10 +58,11 @@ const mapDispatchToProps = {
     selectUser: searchUserActions.select,
     deleteUser: searchUserActions.deleteSelected,
     setFoundUser: searchUserActions.setFound,
-    clearForms: companyControlActions.clearForms,
+    clearForms: companyControlActions.clearForms
 };
 
-export type CompanyControlProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+export type CompanyControlProps = ReturnType<typeof mapStateToProps> &
+    typeof mapDispatchToProps;
 
 const CompanyControl: React.FC<CompanyControlProps> = (props) => {
     const {
@@ -75,7 +82,7 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
         deleteUser,
         setFoundUser,
         clearForms,
-        validation,
+        validation
     } = props;
 
     const { path, params } = useRouteMatch<{ id: string }>();
@@ -90,9 +97,16 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
             setHeaderTitle('Добавление компании');
             setCompanyEditMode(false);
         }
-    }, []);
+    }, [
+        getCompany,
+        params.id,
+        path,
+        setCompanyEditMode,
+        setFetched,
+        setHeaderTitle
+    ]);
 
-    return (isFetched && !loading ? (
+    return isFetched && !loading ? (
         <>
             <div className={grid('row')}>
                 <div className={grid('col-6')}>
@@ -116,16 +130,21 @@ const CompanyControl: React.FC<CompanyControlProps> = (props) => {
             </div>
             <FormControls
                 mode={companyEditMode}
-                backward="/companies"
+                backward='/companies'
                 onEdit={updateCompany}
                 onAdd={createCompany}
                 onClean={clearForms}
             />
             <RequisitesDrawer {...props} />
         </>
-    ) : <Preloader />);
+    ) : (
+        <Preloader />
+    );
 };
 
-const CompanyControlConnected = connect(mapStateToProps, mapDispatchToProps)(CompanyControl);
+const CompanyControlConnected = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CompanyControl);
 
 export { CompanyControlConnected as CompanyControl };

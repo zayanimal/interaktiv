@@ -12,25 +12,28 @@ const cn = bem('BankRequisitesFields');
 const BankRequisitesFields: React.FC<CompanyControlProps> = (props) => {
     const { bankRequisites, updateBankForm, deleteBankForm } = props;
 
-    const onDelete = (id: string) => () => setTimeout(() => deleteBankForm(id), 10);
+    const onDelete = (id: string) => () =>
+        setTimeout(() => deleteBankForm(id), 10);
 
-    return (bankRequisites
-        ? (
-            <>
-                {bankRequisites.map((req) => (
-                    <div key={req.id} className={cn()}>
-                        <IconButton
-                            size="small"
-                            className={cn('button')}
-                            onClick={onDelete(req.id)}
-                        >
-                            <Clear className={cn('icon')} />
-                        </IconButton>
-                        <Fields fields={BANK_FIELDS} entity={req} handler={updateBankForm} />
-                    </div>
-                ))}
-            </>
-        ) : null);
+    return bankRequisites ? (
+        <>
+            {bankRequisites.map((req) => (
+                <div key={req.id} className={cn()}>
+                    <IconButton
+                        size='small'
+                        className={cn('button')}
+                        onClick={onDelete(req.id)}>
+                        <Clear className={cn('icon')} />
+                    </IconButton>
+                    <Fields
+                        fields={BANK_FIELDS}
+                        entity={req}
+                        handler={updateBankForm}
+                    />
+                </div>
+            ))}
+        </>
+    ) : null;
 };
 
 export { BankRequisitesFields };

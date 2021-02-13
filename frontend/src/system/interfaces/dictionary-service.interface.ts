@@ -7,5 +7,5 @@ export interface IDictionaryService {
      * Получить словарь по заданным параметрам
      * @param params
      */
-    get$(params: DictionaryPayload): Observable<AjaxResponse>
+    get$(params: DictionaryPayload): Observable<AjaxResponse>;
 }

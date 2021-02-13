@@ -9,22 +9,25 @@ const mapStateToProps = (state: RootStateTypes) => ({
     username: systemSelectors.username(state),
     password: systemSelectors.password(state),
     isLoggedIn: systemSelectors.isLoggedIn(state),
-    authFetched: systemSelectors.authFetched(state),
+    authFetched: systemSelectors.authFetched(state)
 });
 
 const mapDispatchToProps = {
     setLogin: systemActions.setLogin,
     setPassword: systemActions.setPassword,
     getCredentials: systemActions.getCredentials,
-    checkAuth: systemActions.checkAuth,
+    checkAuth: systemActions.checkAuth
 };
 
-export type AuthProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+export type AuthProps = ReturnType<typeof mapStateToProps> &
+    typeof mapDispatchToProps;
 
 const Auth: React.FC<AuthProps> = (props) => {
     const { authFetched } = props;
 
-    if (!authFetched) { return null; }
+    if (!authFetched) {
+        return null;
+    }
 
     return AuthScreen(props);
 };

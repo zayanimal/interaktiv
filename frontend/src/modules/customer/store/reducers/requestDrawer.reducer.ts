@@ -7,66 +7,66 @@ const initialState = {
     customerError: true,
     city: '',
     cityError: false,
-    date: new Date((new Date()).getTime() + 604800000),
+    date: new Date(new Date().getTime() + 604800000),
     comment: '',
     commentError: false,
-    validation: false,
+    validation: false
 };
 
 const requestDrawer = createReducer<typeof initialState>(initialState, {
     [getType(requestDrawerActions.open)]: (state) => ({
         ...state,
-        openDrawer: true,
+        openDrawer: true
     }),
 
     [getType(requestDrawerActions.close)]: (state) => ({
         ...state,
-        openDrawer: false,
+        openDrawer: false
     }),
 
     [getType(requestDrawerActions.setCustomer)]: (state, { payload }) => ({
         ...state,
-        customer: payload,
+        customer: payload
     }),
 
     [getType(requestDrawerActions.setCustomerError)]: (state, { payload }) => ({
         ...state,
-        customerError: payload,
+        customerError: payload
     }),
 
     [getType(requestDrawerActions.setCity)]: (state, { payload }) => ({
         ...state,
-        city: payload,
+        city: payload
     }),
 
     [getType(requestDrawerActions.setCityError)]: (state, { payload }) => ({
         ...state,
-        cityError: payload,
+        cityError: payload
     }),
 
     [getType(requestDrawerActions.setDate)]: (state, { payload }) => ({
         ...state,
-        date: payload,
+        date: payload
     }),
 
     [getType(requestDrawerActions.setComment)]: (state, { payload }) => ({
         ...state,
-        comment: payload,
+        comment: payload
     }),
 
     [getType(requestDrawerActions.setCommentError)]: (state, { payload }) => ({
         ...state,
-        commentError: payload,
+        commentError: payload
     }),
 
     [getType(requestDrawerActions.setValid)]: (state, { payload }) => ({
         ...state,
-        validation: payload,
+        validation: payload
     }),
 
     [getType(requestDrawerActions.clearDrawer)]: () => ({
-        ...initialState,
-    }),
+        ...initialState
+    })
 });
 
 export { requestDrawer };

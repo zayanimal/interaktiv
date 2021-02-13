@@ -10,9 +10,9 @@ const epicMiddleware = createEpicMiddleware({ dependencies });
 export const configureStore = () => {
     const store = createStore(
         rootReducer,
-        (processType('development')
+        processType('development')
             ? composeWithDevTools(applyMiddleware(epicMiddleware))
-            : applyMiddleware(epicMiddleware)),
+            : applyMiddleware(epicMiddleware)
     );
 
     epicMiddleware.run(rootEpic);

@@ -1,10 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-    Switch,
-    Route,
-    useLocation,
-    useRouteMatch,
-} from 'react-router-dom';
+import { Switch, Route, useLocation, useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
 import { systemActions } from '@system/store/actions';
@@ -15,7 +10,7 @@ import { CompanyControl } from '@admin/containers/CompanyControl';
 
 const mapStateToProps = (state: RootStateTypes) => ({
     list: companySelectors.list(state),
-    meta: companySelectors.meta(state),
+    meta: companySelectors.meta(state)
 });
 
 const mapDispatchToProps = {
@@ -24,10 +19,11 @@ const mapDispatchToProps = {
     deleteCompany: companyControlActions.deleteCompany,
     setCompanyEditName: companiesActions.setCompanyEditName,
     setFetched: companyControlActions.setFetched,
-    clearForms: companyControlActions.clearForms,
+    clearForms: companyControlActions.clearForms
 };
 
-export type CompaniesProps = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+export type CompaniesProps = ReturnType<typeof mapStateToProps> &
+    typeof mapDispatchToProps;
 
 const Companies: React.FC<CompaniesProps> = (props) => {
     const { setHeaderTitle, getList, meta, clearForms } = props;
@@ -39,7 +35,9 @@ const Companies: React.FC<CompaniesProps> = (props) => {
             setHeaderTitle('Управление компаниями');
             clearForms();
 
-            if (!meta.currentPage) { getList(1); }
+            if (!meta.currentPage) {
+                getList(1);
+            }
         }
     }, [getList, setHeaderTitle, pathname, meta, clearForms]);
 
@@ -50,12 +48,15 @@ const Companies: React.FC<CompaniesProps> = (props) => {
             <Route
                 exact
                 path={path}
-                render={() => (<CompaniesList {...props} />)}
+                render={() => <CompaniesList {...props} />}
             />
         </Switch>
     );
 };
 
-const CompaniesConnected = connect(mapStateToProps, mapDispatchToProps)(Companies);
+const CompaniesConnected = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Companies);
 
 export { CompaniesConnected as Companies };

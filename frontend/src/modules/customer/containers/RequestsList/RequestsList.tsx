@@ -8,22 +8,18 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: RootStateTypes) => ({
-    requests: requestsListSelectors.requests(state),
+    requests: requestsListSelectors.requests(state)
 });
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
-    getRequestsList: requestsListActions.getRequestsList.request,
+    getRequestsList: requestsListActions.getRequestsList.request
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const RequestsList: React.FC<Props> = (props) => {
-    const {
-        setHeaderTitle,
-        getRequestsList,
-        requests,
-    } = props;
+    const { setHeaderTitle, getRequestsList, requests } = props;
 
     useEffect(() => {
         setHeaderTitle('Мои проекты');
@@ -38,6 +34,9 @@ const RequestsList: React.FC<Props> = (props) => {
     );
 };
 
-const RequestsListConnected = connect(mapStateToProps, mapDispatchToProps)(RequestsList);
+const RequestsListConnected = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RequestsList);
 
 export default RequestsListConnected;

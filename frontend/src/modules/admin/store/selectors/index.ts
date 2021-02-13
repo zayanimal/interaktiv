@@ -7,5 +7,5 @@ export {
     userSelectors,
     userControlSelectors,
     companySelectors,
-    companyControlSelectors,
+    companyControlSelectors
 };

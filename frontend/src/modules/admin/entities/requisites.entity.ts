@@ -8,7 +8,9 @@ export class RequisitesEntity extends ValidationEntity {
     constructor(id?: string) {
         super();
 
-        if (id) { this.id = id; }
+        if (id) {
+            this.id = id;
+        }
     }
 
     @IsNotEmpty({ message: 'Укажите название реквизитов' })

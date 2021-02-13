@@ -20,7 +20,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
     cityError: requestDrawerSelectors.cityError(state),
     date: requestDrawerSelectors.date(state),
     comment: requestDrawerSelectors.comment(state),
-    commentError: requestDrawerSelectors.commentError(state),
+    commentError: requestDrawerSelectors.commentError(state)
 });
 
 const mapDispatchToProps = {
@@ -32,7 +32,7 @@ const mapDispatchToProps = {
     setDate: requestDrawerActions.setDate,
     setComment: requestDrawerActions.setComment,
     setCommentError: requestDrawerActions.setCommentError,
-    setValid: requestDrawerActions.setValid,
+    setValid: requestDrawerActions.setValid
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -60,12 +60,16 @@ const RequestDrawer: React.FC<Props> = (props) => {
         commentError,
         setCommentError,
 
-        setValid,
+        setValid
     } = props;
 
     const [custHelpText, setCustHelpText] = useState('Обязательное поле');
-    const [cityHelpText, setCityHelpText] = useState('Местонахождение заказчика');
-    const [commentHelpText, setCommentHelpText] = useState('Прочие сведения о заказчике, пожелания');
+    const [cityHelpText, setCityHelpText] = useState(
+        'Местонахождение заказчика'
+    );
+    const [commentHelpText, setCommentHelpText] = useState(
+        'Прочие сведения о заказчике, пожелания'
+    );
 
     useEffect(() => {
         if (!customerError && !cityError && !commentError) {
@@ -73,12 +77,7 @@ const RequestDrawer: React.FC<Props> = (props) => {
         } else {
             setValid(false);
         }
-    }, [
-        customerError,
-        cityError,
-        commentError,
-        setValid,
-    ]);
+    }, [customerError, cityError, commentError, setValid]);
 
     const customerHandler = (e: ChangeEvent) => {
         const target = e.target as HTMLInputElement;
@@ -141,19 +140,18 @@ const RequestDrawer: React.FC<Props> = (props) => {
 
     return (
         <DrawerForm
-            label="Данные о заказчике"
-            width="350"
+            label='Данные о заказчике'
+            width='350'
             toggle={open}
-            onClose={close}
-        >
+            onClose={close}>
             <div className={cn()}>
                 <div className={cn('row')}>
                     <TextField
-                        label="Название заказчика"
+                        label='Название заказчика'
                         onChange={customerHandler}
                         value={customer}
                         error={customerError}
-                        size="small"
+                        size='small'
                         fullWidth
                         multiline
                         helperText={custHelpText}
@@ -161,11 +159,11 @@ const RequestDrawer: React.FC<Props> = (props) => {
                 </div>
                 <div className={cn('row')}>
                     <TextField
-                        label="Город"
+                        label='Город'
                         onChange={cityHandler}
                         value={city}
                         error={cityError}
-                        size="small"
+                        size='small'
                         helperText={cityHelpText}
                     />
                 </div>
@@ -184,11 +182,11 @@ const RequestDrawer: React.FC<Props> = (props) => {
                 </div> */}
                 <div className={cn('row')}>
                     <TextField
-                        label="Дополнительная информация"
+                        label='Дополнительная информация'
                         onChange={commentHandler}
                         value={comment}
                         error={commentError}
-                        size="small"
+                        size='small'
                         fullWidth
                         multiline
                         helperText={commentHelpText}
@@ -199,6 +197,9 @@ const RequestDrawer: React.FC<Props> = (props) => {
     );
 };
 
-const RequestDrawerConnected = connect(mapStateToProps, mapDispatchToProps)(RequestDrawer);
+const RequestDrawerConnected = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RequestDrawer);
 
 export { RequestDrawerConnected as RequestDrawer };

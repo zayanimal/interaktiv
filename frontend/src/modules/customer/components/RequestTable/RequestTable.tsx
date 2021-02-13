@@ -17,62 +17,64 @@ interface Props {
 }
 
 const RequestTable: React.SFC<Props> = (props) => {
-    const {
-        data, rate, onDelete, onUpdate,
-    } = props;
+    const { data, rate, onDelete, onUpdate } = props;
     /** Material-table мутирует объекты расширяя их полем dataTable */
     const immutableData = useMemo(() => clone(data), [data]);
 
     const columns = useMemo(() => {
-        const countHandler = ({ e, id }: { e: ChangeEvent, id: number; }) => {
+        const countHandler = ({ e, id }: { e: ChangeEvent; id: number }) => {
             const target = e.target as HTMLInputElement;
 
-            onUpdate(data.map((row) => (row.id === id ? { ...row, count: +target.value } : row)));
+            onUpdate(
+                data.map((row) =>
+                    row.id === id ? { ...row, count: +target.value } : row
+                )
+            );
         };
 
         return [
             {
                 field: 'model',
-                title: 'Модель',
+                title: 'Модель'
             },
             {
                 field: 'count',
                 title: 'Кол-во',
-                render: ({ id, count }: { id: number; count: number; }) => (
+                render: ({ id, count }: { id: number; count: number }) => (
                     <Input
                         style={{ width: '40%' }}
-                        type="number"
+                        type='number'
                         value={count}
-                        onChange={(e) => { countHandler({ e, id }); }}
+                        onChange={(e) => {
+                            countHandler({ e, id });
+                        }}
                     />
-                ),
+                )
             },
             {
                 field: 'price',
                 title: 'Цена $',
-                render: ({ price }: { price: number; }) => numToUsd(price),
+                render: ({ price }: { price: number }) => numToUsd(price)
             },
             {
                 field: 'price',
                 title: 'Цена р.',
-                render: ({ price }: { price: number; }) => numToRub(price * rate),
+                render: ({ price }: { price: number }) => numToRub(price * rate)
             },
             {
                 title: 'Действие',
-                render: ({ model }: { model: string; }) => (
+                render: ({ model }: { model: string }) => (
                     <Button
                         onClick={() => onDelete(model)}
-                        variant="contained"
-                        color="secondary"
-                        size="small"
-                    >
+                        variant='contained'
+                        color='secondary'
+                        size='small'>
                         <DeleteOutline />
                     </Button>
-                ),
-            },
+                )
+            }
         ];
-    },
-    [rate, onDelete, onUpdate, data]);
+    }, [rate, onDelete, onUpdate, data]);
 
     return (
         <div className={cn()}>
@@ -86,12 +88,12 @@ const RequestTable: React.SFC<Props> = (props) => {
                     showFirstLastPageButtons: false,
                     showTitle: false,
                     toolbar: false,
-                    paging: false,
+                    paging: false
                 }}
                 localization={{
                     body: {
-                        emptyDataSourceMessage: 'нет выбранных моделей',
-                    },
+                        emptyDataSourceMessage: 'нет выбранных моделей'
+                    }
                 }}
             />
         </div>

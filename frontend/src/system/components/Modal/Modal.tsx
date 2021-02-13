@@ -16,46 +16,39 @@ interface Props {
     action: Action;
     actionName?: string;
     title?: string;
-    footer?: ReactNode
+    footer?: ReactNode;
 }
 
 const Modal: React.FC<Props> = (props) => {
     const {
         open,
         close = () => {},
-        action: {
-            actionName = 'Сохранить',
-            actionCall = () => {},
-        },
+        action: { actionName = 'Сохранить', actionCall = () => {} },
         title = '',
         children,
-        footer,
+        footer
     } = props;
 
-    return (open ? (
+    return open ? (
         <>
             <div className={cn('backdrop')} />
             <div className={cn()}>
-                <div className={cn('header')}>
-                    {title}
-                </div>
+                <div className={cn('header')}>{title}</div>
                 {children}
                 <div className={cn('footer')}>
                     {footer || (
                         <>
                             <Button
-                                variant="text"
-                                color="primary"
-                                onClick={close}
-                            >
+                                variant='text'
+                                color='primary'
+                                onClick={close}>
                                 Отменить
                             </Button>
                             <Button
                                 disabled
-                                variant="text"
-                                color="primary"
-                                onClick={actionCall}
-                            >
+                                variant='text'
+                                color='primary'
+                                onClick={actionCall}>
                                 {actionName}
                             </Button>
                         </>
@@ -63,7 +56,7 @@ const Modal: React.FC<Props> = (props) => {
                 </div>
             </div>
         </>
-    ) : null);
+    ) : null;
 };
 
 export { Modal };

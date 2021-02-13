@@ -8,10 +8,10 @@ import './RequestPartnumbers.scss';
 const cn = bem('RequestPartnumbers');
 
 interface Props {
-    value: string,
+    value: string;
     selected: IPriceTypes[];
     listState: boolean;
-    setValue: (value: string) => void,
+    setValue: (value: string) => void;
     filterModels: (value: string) => void;
     onPick: (value: string | null) => void;
     onShowList: (value: boolean) => void;
@@ -25,7 +25,7 @@ const RequestPartnumbers: React.FC<Props> = (props) => {
         onShowList,
         onPick,
         selected,
-        filterModels,
+        filterModels
     } = props;
 
     useEffect(() => {
@@ -44,11 +44,7 @@ const RequestPartnumbers: React.FC<Props> = (props) => {
         return () => {
             document.removeEventListener('keydown', keyHandler, false);
         };
-    }, [
-        selected,
-        onShowList,
-        filterModels,
-    ]);
+    }, [selected, onShowList, filterModels]);
 
     const listHandler = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
@@ -56,19 +52,14 @@ const RequestPartnumbers: React.FC<Props> = (props) => {
     };
 
     const rowRenderer: ListRowRenderer = (props2) => {
-        const {
-            key,
-            index,
-            style,
-        } = props2;
+        const { key, index, style } = props2;
 
         return (
             <option
                 key={key}
                 style={style}
                 onClick={listHandler}
-                className={cn('item')}
-            >
+                className={cn('item')}>
                 {selected[index].model}
             </option>
         );
@@ -78,9 +69,9 @@ const RequestPartnumbers: React.FC<Props> = (props) => {
         <>
             <TextField
                 className={cn('input')}
-                size="small"
-                label="Найти модель"
-                variant="outlined"
+                size='small'
+                label='Найти модель'
+                variant='outlined'
                 value={value}
                 onChange={(e: ChangeEvent) => {
                     const target = e.target as HTMLInputElement;
@@ -89,25 +80,24 @@ const RequestPartnumbers: React.FC<Props> = (props) => {
                     filterModels(target.value);
                 }}
             />
-            {listState
-                && (
-                    <List
-                        className={cn('paper')}
-                        height={400}
-                        width={1}
-                        rowCount={selected.length}
-                        rowHeight={40}
-                        rowRenderer={rowRenderer}
-                        containerStyle={{
-                            width: '100%',
-                            maxWidth: '100%',
-                        }}
-                        style={{
-                            width: '100%',
-                            outline: 'none',
-                        }}
-                    />
-                )}
+            {listState && (
+                <List
+                    className={cn('paper')}
+                    height={400}
+                    width={1}
+                    rowCount={selected.length}
+                    rowHeight={40}
+                    rowRenderer={rowRenderer}
+                    containerStyle={{
+                        width: '100%',
+                        maxWidth: '100%'
+                    }}
+                    style={{
+                        width: '100%',
+                        outline: 'none'
+                    }}
+                />
+            )}
         </>
     );
 };
