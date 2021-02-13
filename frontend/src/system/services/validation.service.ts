@@ -25,10 +25,6 @@ export class ValidationService implements IValidationService {
 
     /**
      * Проверить сущности на ошибки валидации
-     *
-     * TODO: сделать whitelist для свойства validation
-     * для случая если нет ошибок валидации
-     *
      * @param entities
      */
     public checkEntities$<T>(entities: T) {
