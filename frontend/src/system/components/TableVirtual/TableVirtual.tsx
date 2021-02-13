@@ -39,6 +39,7 @@ const getSkeleton = (
 };
 
 interface Props {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     list: any[];
     getList: (limit: number) => void;
     columns: ColumnProps[];
