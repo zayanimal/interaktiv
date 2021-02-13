@@ -44,7 +44,6 @@
         "test": "react-app-rewired test",
         "lint": "eslint --max-warnings=0 src/**/*.ts{,x}",
         "format": "eslint --fix src/**/*.ts{,x}",
-        "precommit": "lint-staged",
         "debug": "./debug.sh",
         "storybook": "start-storybook -p 6006 -s public",
         "build-storybook": "build-storybook -s public"
@@ -104,12 +103,9 @@
         "react-is": "^16.13.1",
         "typescript": "^4.1.5"
     },
-    "gitHooks": {
-        "pre-commit": "lint-staged"
-    },
     "lint-staged": {
         "*.ts{,x}": [
-            "eslint --max-warnings=0 src/**/*.ts{,x}",
+            "eslint",
             "git add"
         ]
     }
