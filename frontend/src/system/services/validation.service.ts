@@ -39,7 +39,7 @@ export class ValidationService implements IValidationService {
                     );
                 }
 
-                return of(classToPlain(entities, {}));
+                return of(classToPlain(entities));
             })
         );
     }

@@ -1,9 +1,13 @@
 import { RestService } from '@system/services/rest.service';
+import { CompanyNormalize } from '@admin/services/company-normalize.service';
 import { IListableService } from '@admin/interfaces';
 import { CompanyEntity } from '@admin/entities';
 
 export class CompanyService implements IListableService {
-    constructor(private readonly api: RestService) {}
+    constructor(
+        private readonly api: RestService,
+        private readonly companyNormalize: CompanyNormalize
+    ) {}
 
     public getList$(page: number) {
         return this.api.get$(`company?page=${page}&limit=30`);
@@ -27,5 +31,13 @@ export class CompanyService implements IListableService {
 
     public delete$(id: string) {
         return this.api.delete$(`company/${id}`);
+    }
+
+    public normalize<T>(entity: T) {
+        return this.companyNormalize.normalize(entity);
+    }
+
+    public denormalize<T, E>(requisites: T, entities: E) {
+        return this.companyNormalize.denormalize(requisites, entities);
     }
 }

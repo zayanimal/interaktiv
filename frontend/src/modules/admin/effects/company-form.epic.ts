@@ -9,7 +9,6 @@ import {
     first,
     catchError
 } from 'rxjs/operators';
-import { normalize, denormalize, schema } from 'normalizr';
 import { plainToClass } from 'class-transformer';
 import uuid from 'uuid-random';
 import { Epic } from '@config/interfaces';
@@ -24,19 +23,6 @@ import {
     BankRequisitesEntity
 } from '@admin/entities';
 
-const bankSchema = new schema.Entity('bank');
-const requisitesSchema = new schema.Entity('requisites', {
-    bank: [bankSchema]
-});
-const companySchema = { requisites: [requisitesSchema] };
-
-/**
- * Нормализатор сущности (для сохранения стейта)
- * @param entity денормализованная сущность
- */
-const normalization = <T>(entity: T) =>
-    companyControlActions.getCompany.success(normalize(entity, companySchema));
-
 /**
  * Получить список компаний с пагинацией
  * @param action$
@@ -48,7 +34,9 @@ export const getCompany: Epic = (action$, _, { company }) =>
         filter(isActionOf(companyControlActions.getCompany.request)),
         mergeMap(({ payload }) => company.findId(payload)),
         map(({ response }) => plainToClass(CompanyEntity, response)),
-        map(normalization),
+        map((entity) =>
+            companyControlActions.getCompany.success(company.normalize(entity))
+        ),
         catchError((err, caught) =>
             merge(
                 caught,
@@ -73,7 +61,7 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
                 mergeMap((state) =>
                     of(state).pipe(
                         map(({ requisites, entities }) =>
-                            denormalize({ requisites }, companySchema, entities)
+                            company.denormalize(requisites, entities)
                         ),
                         map(({ requisites }) =>
                             plainToClass(CompanyEntity, {
@@ -111,7 +99,11 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
         catchError((err, caught) =>
             merge(
                 caught,
-                of(normalization(err)),
+                of(
+                    companyControlActions.getCompany.success(
+                        company.normalize(err)
+                    )
+                ),
                 of(
                     systemActions.infoNotification(
                         'Проверьте ошибки в реквизитах'
@@ -131,7 +123,7 @@ export const createCompany: Epic = (action$, state$, { company, validation }) =>
                 mergeMap((state) =>
                     of(state).pipe(
                         map(({ requisites, entities }) =>
-                            denormalize({ requisites }, companySchema, entities)
+                            company.denormalize(requisites, entities)
                         ),
                         map(({ requisites }) =>
                             plainToClass(CompanyEntity, {
