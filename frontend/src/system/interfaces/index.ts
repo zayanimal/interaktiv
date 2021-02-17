@@ -9,3 +9,4 @@ export * from '@system/interfaces/validation-errors.interface';
 export * from '@system/interfaces/rest-service.interface';
 export * from '@system/interfaces/token-service.interface';
 export * from '@system/interfaces/validation-service.interface';
+export * from '@system/interfaces/normalizator.interface';

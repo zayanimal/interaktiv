@@ -11,7 +11,7 @@ export const dependencies = {
     validation: new System.ValidationService(),
     dictionary: new System.DictionaryService(restService),
     users: new Admin.UsersService(restService),
-    company: new Admin.CompanyService(restService, new Admin.CompanyNormalize())
+    company: new Admin.CompanyService(restService)
 };
 
 export type Dependencies = typeof dependencies;

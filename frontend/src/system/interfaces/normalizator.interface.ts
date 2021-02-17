@@ -2,7 +2,7 @@ import { NormalizedSchema } from 'normalizr';
 
 type Schema<T> = { [key: string]: { [key: string]: T } | undefined };
 
-export interface ICompanyNormalize {
+export interface INormalizator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     normalize<T>(entity: T): NormalizedSchema<Schema<T>, any>;
 

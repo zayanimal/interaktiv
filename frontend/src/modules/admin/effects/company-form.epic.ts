@@ -14,6 +14,7 @@ import uuid from 'uuid-random';
 import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
+import { Normalizator } from '@system/services';
 import { companiesActions, companyControlActions } from '@admin/store/actions';
 import { companyControlSelectors } from '@admin/store/selectors';
 import {
@@ -22,6 +23,8 @@ import {
     RequisitesEntity,
     BankRequisitesEntity
 } from '@admin/entities';
+
+const nrmlztr = new Normalizator('requisites');
 
 /**
  * Получить список компаний с пагинацией
@@ -35,7 +38,7 @@ export const getCompany: Epic = (action$, _, { company }) =>
         mergeMap(({ payload }) => company.findId(payload)),
         map(({ response }) => plainToClass(CompanyEntity, response)),
         map((entity) =>
-            companyControlActions.getCompany.success(company.normalize(entity))
+            companyControlActions.getCompany.success(nrmlztr.normalize(entity))
         ),
         catchError((err, caught) =>
             merge(
@@ -61,7 +64,7 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
                 mergeMap((state) =>
                     of(state).pipe(
                         map(({ requisites, entities }) =>
-                            company.denormalize(requisites, entities)
+                            nrmlztr.denormalize(requisites, entities)
                         ),
                         map(({ requisites }) =>
                             plainToClass(CompanyEntity, {
@@ -101,7 +104,7 @@ export const updateCompany: Epic = (action$, state$, { company, validation }) =>
                 caught,
                 of(
                     companyControlActions.getCompany.success(
-                        company.normalize(err)
+                        nrmlztr.normalize(err)
                     )
                 ),
                 of(
@@ -123,7 +126,7 @@ export const createCompany: Epic = (action$, state$, { company, validation }) =>
                 mergeMap((state) =>
                     of(state).pipe(
                         map(({ requisites, entities }) =>
-                            company.denormalize(requisites, entities)
+                            nrmlztr.denormalize(requisites, entities)
                         ),
                         map(({ requisites }) =>
                             plainToClass(CompanyEntity, {
