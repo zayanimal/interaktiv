@@ -1,13 +1,13 @@
 import { IRouterItem } from '@system/interfaces/router.interface';
 
 export const ROUTE_ITEMS: IRouterItem[] = [
-    // {
-    //     key: 'ALL_ORDERS',
-    //     path: '/all-orders',
-    //     name: 'Все запросы',
-    //     icon: 'AllInbox',
-    //     component: ''
-    // },
+    {
+        key: 'ALL_ORDERS',
+        path: '/all-orders',
+        name: 'Все запросы',
+        icon: 'AllInbox',
+        component: 'Orders'
+    },
     {
         key: 'MY_ORDERS',
         path: '/my-orders',
