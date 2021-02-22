@@ -3,8 +3,8 @@ import { of, from, throwError } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 import { validate, ValidationError } from 'class-validator';
 import { classToPlain } from 'class-transformer';
-import { IValidationService } from '@system/interfaces';
-import { ValidationEntity } from '@system/entities';
+import { IValidationService } from '@shared/interfaces';
+import { ValidationEntity } from '@shared/entities';
 
 export class ValidationService implements IValidationService {
     private entity = {};

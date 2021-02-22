@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootStateTypes } from '@config/roots';
-import { Preloader } from '@system/components/Preloader';
+import { Preloader } from '@shared/components/Preloader';
 import { CompanyFields } from '@admin/components/CompanyFields';
 import { FormControls } from '@admin/components/FormControls';
 import { CompanyRequisites } from '@admin/components/CompanyRequisites';

@@ -1,9 +1,9 @@
 import { IsEmail, IsPhoneNumber, IsOptional } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { ValidationEntity } from '@system/entities';
+import { ValidationEntity } from '@shared/entities';
 
 export class CompanyContactEntity extends ValidationEntity {
-    /** TODO: убрать как будет справлен бэк */
+    /** TODO: убрать как будет исправлен бэк */
     @Exclude()
     id = '';
 

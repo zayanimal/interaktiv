@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { ValidationEntity } from '@system/entities';
+import { ValidationEntity } from '@shared/entities';
 
 export class BankRequisitesEntity extends ValidationEntity {
     constructor(id?: string) {

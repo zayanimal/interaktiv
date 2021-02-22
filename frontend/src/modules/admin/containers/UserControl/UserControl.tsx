@@ -10,7 +10,7 @@ import { Checkbox, InputLabel } from '@material-ui/core';
 import { UserAuthFields } from '@admin/components/UserAuthFields';
 import { UserContactsFields } from '@admin/components/UserContactsFields';
 import { FormControls } from '@admin/components/FormControls';
-import { Preloader } from '@system/components/Preloader';
+import { Preloader } from '@shared/components/Preloader';
 import { bem, classes } from '@utils/formatters';
 import './UserControl.scss';
 

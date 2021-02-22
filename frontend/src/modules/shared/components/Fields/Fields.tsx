@@ -2,7 +2,7 @@ import React, { memo, ChangeEvent } from 'react';
 import { InputLabel, TextField } from '@material-ui/core';
 import { memoize, get } from 'lodash';
 import { bem, classes } from '@utils/formatters';
-import { ValidationErrors } from '@system/interfaces';
+import { ValidationErrors } from '@shared/interfaces';
 import './Fields.scss';
 
 const cn = bem('Fields');

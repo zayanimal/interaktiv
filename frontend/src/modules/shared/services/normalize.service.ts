@@ -1,6 +1,6 @@
 import { normalize, denormalize } from 'normalizr';
-import { schemaFabric, SchemaFabricKeys } from '@system/services';
-import { INormalizator } from '@system/interfaces';
+import { schemaFabric, SchemaFabricKeys } from '@shared/services';
+import { INormalizator } from '@shared/interfaces';
 
 export class Normalizator implements INormalizator {
     schema = {};

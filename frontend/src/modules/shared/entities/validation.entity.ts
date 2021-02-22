@@ -1,7 +1,7 @@
 import uuid from 'uuid-random';
 import { IsString } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { ValidationErrors } from '@system/interfaces';
+import { ValidationErrors } from '@shared/interfaces';
 
 export class ValidationEntity {
     @IsString({ message: 'Id должно быть строкой' })

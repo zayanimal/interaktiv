@@ -3,6 +3,7 @@ backend/dist
 backend/node_modules
 frontend/build
 frontend/node_modules
+frontend/storybook-static
 
 .pnp
 .pnp.js

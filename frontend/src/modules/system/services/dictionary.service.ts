@@ -1,4 +1,4 @@
-import { RestService } from '@system/services/rest.service';
+import { RestService } from 'modules/system/services/rest.service';
 import { IDictionaryService, DictionaryPayload } from '@system/interfaces';
 
 export class DictionaryService implements IDictionaryService {

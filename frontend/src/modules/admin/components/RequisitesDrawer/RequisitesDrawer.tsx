@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import { DrawerForm } from '@system/components/DrawerForm';
+import { DrawerForm } from '@shared/components/DrawerForm';
 import { RequisitesFields } from '@admin/components/RequisitesFields';
 import { BankRequisitesFields } from '@admin/components/BankRequisitesFields';
 import { bem } from '@utils/formatters';

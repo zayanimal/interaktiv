@@ -8,7 +8,7 @@ module.exports = function override(config) {
         '@shared': path.resolve(__dirname, 'src', 'modules/shared'),
         '@admin': path.resolve(__dirname, 'src', 'modules/admin'),
         '@customer': path.resolve(__dirname, 'src', 'modules/customer'),
-        '@system': path.resolve(__dirname, 'src', 'system'),
+        '@system': path.resolve(__dirname, 'src', 'modules/system'),
         '@images': path.resolve(__dirname, 'src', 'assets/images'),
         '@icons': path.resolve(__dirname, 'src', 'assets/icons'),
         '@utils': path.resolve(__dirname, 'src', 'utils'),

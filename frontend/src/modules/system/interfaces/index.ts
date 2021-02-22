@@ -5,8 +5,5 @@ export * from '@system/interfaces/location.interface';
 export * from '@system/interfaces/router.interface';
 export * from '@system/interfaces/router-service.interface';
 export * from '@system/interfaces/user.interface';
-export * from '@system/interfaces/validation-errors.interface';
 export * from '@system/interfaces/rest-service.interface';
 export * from '@system/interfaces/token-service.interface';
-export * from '@system/interfaces/validation-service.interface';
-export * from '@system/interfaces/normalizator.interface';

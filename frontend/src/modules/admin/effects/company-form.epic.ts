@@ -14,7 +14,7 @@ import uuid from 'uuid-random';
 import { Epic } from '@config/interfaces';
 import { isActionOf } from 'typesafe-actions';
 import { systemActions } from '@system/store/actions';
-import { Normalizator } from '@system/services';
+import { Normalizator } from '@shared/services';
 import { companiesActions, companyControlActions } from '@admin/store/actions';
 import { companyControlSelectors } from '@admin/store/selectors';
 import {

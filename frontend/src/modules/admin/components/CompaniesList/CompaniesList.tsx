@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
 import { ColumnProps } from 'react-virtualized';
-import { TableRowButton } from '@system/components/TableRowButton';
-import { TableVirtual } from '@system/components/TableVirtual';
+import { TableRowButton } from '@shared/components/TableRowButton';
+import { TableVirtual } from '@shared/components/TableVirtual';
 import { ListHeader } from '@admin/components/ListHeader';
 import { bem } from '@utils/formatters';
 import { CompaniesProps } from '@admin/containers/Companies';
@@ -16,7 +16,7 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
         list,
         meta,
         deleteCompany,
-        getList,
+        getCompaniesList,
         setCompanyEditName,
         setFetched
     } = props;
@@ -25,12 +25,17 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
     const history = useHistory();
 
     const columns: ColumnProps[] = useMemo(() => {
-        const onEdit = (rowData: any) => () => {
+        interface RowData {
+            id: string;
+            name: string;
+        }
+
+        const onEdit = (rowData: RowData) => () => {
             setCompanyEditName(rowData.name);
             history.push({ pathname: `${path}/edit/${rowData.id}` });
         };
 
-        const onRemove = (rowData: any) => () => {
+        const onRemove = (rowData: RowData) => () => {
             deleteCompany(rowData.id);
         };
 
@@ -73,14 +78,14 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
                     new Date(cellData).toLocaleDateString('ru')
             }
         ];
-    }, [deleteCompany, path, history, setCompanyEditName]);
+    }, [setCompanyEditName, history, path, deleteCompany]);
 
     return (
         <div className={cn()}>
             <ListHeader onAction={() => setFetched(true)} />
             <TableVirtual
                 list={list}
-                getList={getList}
+                getList={getCompaniesList}
                 columns={columns}
                 meta={meta}
             />

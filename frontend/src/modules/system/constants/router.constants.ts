@@ -8,13 +8,13 @@ export const ROUTE_ITEMS: IRouterItem[] = [
         icon: 'AllInbox',
         component: 'Orders'
     },
-    {
-        key: 'MY_ORDERS',
-        path: '/my-orders',
-        name: 'Мои запросы',
-        icon: 'Ballot',
-        component: 'RequestsList'
-    },
+    // {
+    //     key: 'MY_ORDERS',
+    //     path: '/my-orders',
+    //     name: 'Мои запросы',
+    //     icon: 'Ballot',
+    //     component: 'RequestsList'
+    // },
     {
         key: 'NEW_ORDER',
         path: '/new-order',

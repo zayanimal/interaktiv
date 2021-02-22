@@ -9,7 +9,7 @@ interface Validation {
     position: string;
 }
 
-interface IInitialState {
+interface InitialState {
     loading: boolean;
     username: string;
     password: string;
@@ -41,7 +41,7 @@ const initialState = {
     }
 };
 
-export const userControl = createReducer<IInitialState>(initialState, {
+export const userControl = createReducer<InitialState>(initialState, {
     [getType(userControlActions.getUser.request)]: (state) => ({
         ...state,
         loading: true

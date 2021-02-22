@@ -7,7 +7,7 @@
       "@shared/*": ["modules/shared/*"],
       "@admin/*": ["modules/admin/*"],
       "@customer/*": ["modules/customer/*"],
-      "@system/*": ["system/*"],
+      "@system/*": ["modules/system/*"],
       "@images/*": ["assets/images/*"],
       "@icons/*": ["assets/icons/*"],
       "@utils/*": ["utils/*"],

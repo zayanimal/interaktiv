@@ -15,7 +15,7 @@ const mapStateToProps = (state: RootStateTypes) => ({
 
 const mapDispatchToProps = {
     setHeaderTitle: systemActions.setHeaderTitle,
-    getList: companiesActions.getCompaniesList.request,
+    getCompaniesList: companiesActions.getCompaniesList.request,
     deleteCompany: companyControlActions.deleteCompany,
     setCompanyEditName: companiesActions.setCompanyEditName,
     setFetched: companyControlActions.setFetched,
@@ -26,7 +26,7 @@ export type CompaniesProps = ReturnType<typeof mapStateToProps> &
     typeof mapDispatchToProps;
 
 const Companies: React.FC<CompaniesProps> = (props) => {
-    const { setHeaderTitle, getList, meta, clearForms } = props;
+    const { setHeaderTitle, getCompaniesList, meta, clearForms } = props;
     const { pathname } = useLocation();
     const { path } = useRouteMatch();
 
@@ -36,10 +36,10 @@ const Companies: React.FC<CompaniesProps> = (props) => {
             clearForms();
 
             if (!meta.currentPage) {
-                getList(1);
+                getCompaniesList(1);
             }
         }
-    }, [getList, setHeaderTitle, pathname, meta, clearForms]);
+    }, [getCompaniesList, setHeaderTitle, pathname, meta, clearForms]);
 
     return (
         <Switch>

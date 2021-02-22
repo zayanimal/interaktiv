@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ArrayNotEmpty, ValidateNested } from 'class-validator';
 import { CompanyContactEntity, RequisitesEntity } from '@admin/entities';
-import { ValidationEntity } from '@system/entities';
+import { ValidationEntity } from '@shared/entities';
 
 export class CompanyEntity extends ValidationEntity {
     @IsNotEmpty({ message: 'Поле не должно быть пустым' })

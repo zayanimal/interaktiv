@@ -14,7 +14,6 @@ import {
     map,
     mergeMap,
     switchMap
-    // tap,
 } from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
 
@@ -28,10 +27,7 @@ export const sendRequestNewProject: Epic = (action$, state$) =>
                     first(),
                     map(requestDrawerSelectors.endUserData)
                 )
-            }).pipe(
-                first()
-                // tap(console.log),
-            )
+            }).pipe(first())
         ),
         mergeMap(() => [
             requestActions.clearOrder(),

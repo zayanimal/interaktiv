@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
-import { ValidationEntity } from '@system/entities';
+import { ValidationEntity } from '@shared/entities';
 import { BankRequisitesEntity } from '@admin/entities';
 
 export class RequisitesEntity extends ValidationEntity {
