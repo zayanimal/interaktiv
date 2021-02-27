@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
+import { Switch, Route, useLocation, useRouteMatch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { RootStateTypes } from '@config/roots';
+import { systemActions } from '@system/store/actions';
 import { ordersActions } from '@admin/store/actions';
 import { ordersSelectors } from '@admin/store/selectors';
-import { RootStateTypes } from '@config/roots';
-import { bem } from '@utils/formatters';
-import './Orders.scss';
-
-const cn = bem('Orders');
+import { OrdersList } from '@admin/components/OrdersList';
 
 const mapStateToProps = (state: RootStateTypes) => ({
     list: ordersSelectors.list(state),
@@ -14,20 +13,28 @@ const mapStateToProps = (state: RootStateTypes) => ({
 });
 
 const mapDispatchToProps = {
+    setHeaderTitle: systemActions.setHeaderTitle,
     getOrdersList: ordersActions.getOrdersList.request
 };
 
-type OrdersProps = ReturnType<typeof mapStateToProps> &
+export type OrdersProps = ReturnType<typeof mapStateToProps> &
     typeof mapDispatchToProps;
 
 const Orders: React.FC<OrdersProps> = (props) => {
-    const { getOrdersList } = props;
+    const { setHeaderTitle, getOrdersList } = props;
+    const { pathname } = useLocation();
+    const { path } = useRouteMatch();
 
     useEffect(() => {
+        setHeaderTitle('Управление заказами');
         getOrdersList(1);
-    }, [getOrdersList]);
+    }, [setHeaderTitle, getOrdersList]);
 
-    return <div className={cn()}>Hello</div>;
+    return (
+        <Switch>
+            <Route exact path={path} render={() => <OrdersList {...props} />} />
+        </Switch>
+    );
 };
 
 const OrdersConnected = connect(mapStateToProps, mapDispatchToProps)(Orders);

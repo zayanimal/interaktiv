@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import IconButton from '@material-ui/core/IconButton';
+import { IconButton, MenuItem } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { bem } from '@utils/formatters';
 import './TableRowButton.scss';
 
 const cn = bem('TableRowButton');
 
-const TableRowButton: React.FC = (props) => {
-    const { children } = props;
+interface TableRowButtonProps {
+    onEdit?: () => void;
+    onRemove?: () => void;
+}
+
+const TableRowButton: React.FC<TableRowButtonProps> = (props) => {
+    const { children, onEdit = () => {}, onRemove = () => {} } = props;
     const [open, setOpen] = useState(false);
 
     const paper = useRef<HTMLDivElement>(null);
@@ -36,7 +41,13 @@ const TableRowButton: React.FC = (props) => {
             <IconButton size='medium' onClick={onOpen}>
                 <MoreVertIcon fontSize='inherit' />
             </IconButton>
-            {open && <div className={cn('paper')}>{children}</div>}
+            {open && (
+                <div className={cn('paper')}>
+                    <MenuItem onClick={onEdit}>Редактировать</MenuItem>
+                    <MenuItem onClick={onRemove}>Удалить</MenuItem>
+                    {children}
+                </div>
+            )}
         </div>
     );
 };

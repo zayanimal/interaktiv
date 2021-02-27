@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
-import MenuItem from '@material-ui/core/MenuItem';
 import { ColumnProps } from 'react-virtualized';
 import { TableRowButton } from '@shared/components/TableRowButton';
 import { TableVirtual } from '@shared/components/TableVirtual';
@@ -45,12 +44,10 @@ const CompaniesList: React.FC<CompaniesProps> = (props) => {
                 label: '',
                 width: 90,
                 cellRenderer: ({ rowData }) => (
-                    <TableRowButton>
-                        <MenuItem onClick={onEdit(rowData)}>
-                            Редактировать
-                        </MenuItem>
-                        <MenuItem onClick={onRemove(rowData)}>Удалить</MenuItem>
-                    </TableRowButton>
+                    <TableRowButton
+                        onEdit={onEdit(rowData)}
+                        onRemove={onRemove(rowData)}
+                    />
                 )
             },
             {

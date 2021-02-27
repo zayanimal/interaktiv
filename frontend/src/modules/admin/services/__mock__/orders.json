@@ -1,0 +1,27 @@
+{
+    "list": [
+        {
+            "id": 123,
+            "company": "Ай-Линк",
+            "enduser": "Известняки и доломиты",
+            "sum": 1414,
+            "created": "2020-12-30T11:25:58.836Z",
+            "status": 1
+        },
+        {
+            "id": 124,
+            "company": "Ай-Линк",
+            "enduser": "Цвточек аленький",
+            "sum": 5123,
+            "created": "2020-12-30T11:25:58.836Z",
+            "status": 2
+        }
+    ],
+    "meta": {
+        "currentPage": 1,
+        "itemCount": 2,
+        "itemsPerPage": 30,
+        "totalItems": 2,
+        "totalPages": 1
+    }
+}

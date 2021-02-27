@@ -1,6 +1,6 @@
 import { IPaginationMeta } from '@shared/interfaces';
 
-export interface IOrdersInitialState {
+export interface OrdersInitialState {
     list: object[];
     meta: IPaginationMeta;
     orderEditMode: boolean;

@@ -15,6 +15,7 @@ import {
     createBankRequisites
 } from '@admin/effects/company-form.epic';
 import { searchUser } from '@admin/effects/search-user.epic';
+import { getOrdersList } from '@admin/effects/orders.epic';
 
 export const adminEpic: Epic = combineEpics(
     getUsersList,
@@ -29,5 +30,6 @@ export const adminEpic: Epic = combineEpics(
     deleteCompany,
     createRequisites,
     createBankRequisites,
-    searchUser
+    searchUser,
+    getOrdersList
 );

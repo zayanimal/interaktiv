@@ -1,35 +1,30 @@
 import React, { useMemo } from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
-import Chip from '@material-ui/core/Chip';
 import { ColumnProps } from 'react-virtualized';
 import { TableRowButton } from '@shared/components/TableRowButton';
 import { TableVirtual } from '@shared/components/TableVirtual';
 import { ListHeader } from '@admin/components/ListHeader';
-import { UsersProps } from '@admin/containers/Users';
 import { bem } from '@utils/formatters';
-import './UsersList.scss';
+import { OrdersProps } from '@admin/containers/Orders';
+import { ORDER_STATUSES } from '@admin/constants';
+import './OrdersList.scss';
 
-const cn = bem('UsersList');
+const cn = bem('OrdersList');
 
-const UsersList: React.FC<UsersProps> = (props) => {
-    const { list, meta, removeUser, getList, setUserEditName } = props;
+const OrdersList: React.FC<OrdersProps> = (props) => {
+    const { list, meta } = props;
 
     const { path } = useRouteMatch();
     const history = useHistory();
 
-    interface RowData {
-        username: string;
-    }
-
     const columns: ColumnProps[] = useMemo(() => {
-        const onEdit = (rowData: RowData) => () => {
-            setUserEditName(rowData.username);
-            history.push({ pathname: `${path}/edit/${rowData.username}` });
-        };
+        interface RowData {
+            id: string;
+        }
 
-        const onRemove = (rowData: RowData) => () => {
-            removeUser(rowData.username);
-        };
+        const onEdit = (rowData: RowData) => () => {};
+
+        const onRemove = (rowData: RowData) => () => {};
 
         return [
             {
@@ -44,42 +39,52 @@ const UsersList: React.FC<UsersProps> = (props) => {
                 )
             },
             {
-                dataKey: 'username',
-                label: 'Имя пользователя',
+                dataKey: 'id',
+                label: 'ID',
+                width: 100
+            },
+            {
+                dataKey: 'company',
+                label: 'Компания',
                 width: 300
             },
             {
-                dataKey: 'role',
-                label: 'Роль',
-                width: 250
+                dataKey: 'enduser',
+                label: 'Заказчик',
+                width: 300
             },
             {
-                dataKey: 'time',
-                label: 'Дата создания',
+                dataKey: 'sum',
+                label: 'Сумма',
+                width: 200,
+                cellRenderer: ({ cellData }) =>
+                    cellData.toLocaleString('ru-RU', {
+                        style: 'currency',
+                        currency: 'RUB'
+                    })
+            },
+            {
+                dataKey: 'created',
+                label: 'Создан',
                 width: 300,
                 cellRenderer: ({ cellData }) =>
                     new Date(cellData).toLocaleDateString('ru')
             },
             {
-                dataKey: 'isActive',
+                dataKey: 'status',
                 label: 'Статус',
-                width: 250,
-                cellRenderer: ({ cellData }) =>
-                    cellData ? (
-                        <Chip label='Активен' size='small' color='primary' />
-                    ) : (
-                        <Chip label='Не активен' size='small' />
-                    )
+                width: 300,
+                cellRenderer: ({ cellData }) => ORDER_STATUSES.get(cellData)
             }
         ];
-    }, [removeUser, path, history, setUserEditName]);
+    }, []);
 
     return (
         <div className={cn()}>
-            <ListHeader />
+            <ListHeader onAction={() => {}} />
             <TableVirtual
                 list={list}
-                getList={getList}
+                getList={() => {}}
                 columns={columns}
                 meta={meta}
             />
@@ -87,4 +92,4 @@ const UsersList: React.FC<UsersProps> = (props) => {
     );
 };
 
-export { UsersList };
+export { OrdersList };

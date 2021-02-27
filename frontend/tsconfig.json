@@ -20,6 +20,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "sourceMap": true,
+    "declaration": true,
+    "incremental": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true,
@@ -31,5 +33,9 @@
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
   ]
 }
