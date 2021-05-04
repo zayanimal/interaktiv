@@ -52,7 +52,6 @@ node {
             --name react-frontend-dev \
             --log-opt max-size=1g \
             -v /home/zayanimal:/etc/nginx/certs \
-            -v /var/www/certbot:/var/www/certbot \
             -d \
             -p 80:80 \
             -p 443:443 \
