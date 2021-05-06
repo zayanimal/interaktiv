@@ -16,6 +16,6 @@ COPY --from=build-stage /app/build/ /usr/share/nginx/html
 
 COPY /nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY /etc/letsencrypt/live/interaktiv.iskor.ru /etc/nginx/certs
+COPY /etc/letsencrypt/live/interaktiv.iskor.ru/ /etc/nginx/certs
 
 # certbot -d interaktiv.iskor.ru --manual --preferred-challenges http certonly
